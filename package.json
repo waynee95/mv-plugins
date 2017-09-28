@@ -1,30 +1,36 @@
 {
-    "name": "mv-plugins",
-    "version": "0.0.0",
-    "description": "JavaScript Plugin Collection for RPG Maker MV",
-    "main": "/game/index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/waynee95/mv-plugins.git"
-    },
-    "author": "waynee95",
-    "bugs": {
-        "url": "https://github.com/waynee95/mv-plugins/issues"
-    },
-    "homepage": "https://github.com/waynee95/mv-plugins#readme",
-    "devDependencies": {
-        "babel-cli": "^6.26.0",
-        "babel-preset-airbnb": "^2.4.0",
-        "babel-preset-env": "^1.6.0",
-        "eslint": "^4.7.2",
-        "eslint-config-airbnb-base": "^12.0.1",
-        "eslint-plugin-import": "^2.7.0",
-        "eslint-plugin-rpgmaker": "^1.0.2",
-        "gulp": "^3.9.1",
-        "gulp-babel": "^7.0.0",
-        "gulp-watch": "^4.3.11"
-    }
+  "name": "mv-plugins",
+  "version": "0.0.0",
+  "description": "JavaScript Plugin Collection for RPG Maker MV",
+  "main": "/game/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/waynee95/mv-plugins.git"
+  },
+  "author": "waynee95",
+  "bugs": {
+    "url": "https://github.com/waynee95/mv-plugins/issues"
+  },
+  "homepage": "https://github.com/waynee95/mv-plugins#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-es2015-parameters": "^6.24.1",
+    "babel-preset-airbnb": "^2.4.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "eslint": "^4.7.2",
+    "eslint-config-airbnb-base": "^12.0.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-rpgmaker": "^1.0.2",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-watch": "^4.3.11"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0"
+  }
 }
