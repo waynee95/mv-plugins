@@ -1,15 +1,36 @@
 {
-    "extends": "airbnb-base",
     "plugins": [
         "import",
         "rpgmaker"
     ],
+    "extends": "airbnb-base",
     "env": {
         "browser": true,
         "node": true,
         "rpgmaker/mv": true
     },
     "parserOptions": {
-        "ecmaVersion": 6
+        "ecmaVersion": 6,
+        "sourceType": "script"
+    },
+    "rules": {
+        "indent": [2, 4],
+        "prefer-const": 1,
+        "complexity": [1, 5],
+        "quotes": [2, "double", "avoid-escape"],
+        "template-curly-spacing": [2, "always"],
+        "array-bracket-spacing": [2, "always"],
+        "object-curly-spacing": [2, "always"],
+        "computed-property-spacing": [2, "always"],
+        "linebreak-style": ["error", "windows"],
+        "no-unused-expressions": ["error", {
+            "allowShortCircuit": true
+        }],
+        "no-param-reassign": ["error", {
+            "props": false
+        }],
+        "no-use-before-define": [2, {
+            "functions": false
+        }]
     }
 }

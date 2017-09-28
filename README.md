@@ -1,6 +1,5 @@
 # mv-plugins
-waynee95's Plugin Collection for RPG Maker MV 
------------
+> waynee95's Plugin Collection for RPG Maker MV 
 
 ## Terms of Use
 Credit must be given to: waynee95
