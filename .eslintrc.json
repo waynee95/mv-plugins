@@ -1,0 +1,15 @@
+{
+    "extends": "airbnb-base",
+    "plugins": [
+        "import",
+        "rpgmaker"
+    ],
+    "env": {
+        "browser": true,
+        "node": true,
+        "rpgmaker/mv": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 6
+    }
+}

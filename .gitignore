@@ -1,3 +1,6 @@
+# RPG Maker MV Game folder
+game/*
+
 # Logs
 logs
 *.log
