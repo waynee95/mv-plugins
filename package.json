@@ -29,8 +29,5 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
     "gulp-watch": "^4.3.11"
-  },
-  "dependencies": {
-    "babel-polyfill": "^6.26.0"
   }
 }
