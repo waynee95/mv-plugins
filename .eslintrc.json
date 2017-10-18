@@ -23,6 +23,9 @@
         "no-plusplus": 0,
         "no-param-reassign": 0,
         "spaced-comment": 0,
-        "prefer-destructuring": ["error", {"object": true, "array": false}]
+        "prefer-destructuring": ["error", {"object": true, "array": false}],
+        "max-statements": ["error", 10],
+        "no-return-assign": ["error", "except-parens"],
+        "no-cond-assign": ["error", "except-parens"]
     }
 }
