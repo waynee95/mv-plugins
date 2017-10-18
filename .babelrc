@@ -1,4 +1,4 @@
 {
-    "presets": ["es2015", "stage-0"],
+    "presets": ["env", "airbnb"],
     "plugins": ["transform-es2015-parameters"]
 }
