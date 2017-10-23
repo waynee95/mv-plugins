@@ -1,5 +1,6 @@
 {
   "eslint.enable": true,
   "eslint.autoFixOnSave": true,
-  "workbench.editor.enablePreviewFromQuickOpen": false
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+  "editor.formatOnSave": true
 }

@@ -34,5 +34,8 @@ gulp.task('webserver', () => {
         livereload: true,
         fallback: paths.index
     });
-    gulp.src('').pipe(open({ app: 'firefox', uri: 'http://localhost:8888' }));
+    gulp.src('').pipe(open({
+        app: 'firefox',
+        uri: 'http://localhost:8888'
+    }));
 });

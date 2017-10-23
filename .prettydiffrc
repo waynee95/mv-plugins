@@ -1,0 +1,7 @@
+{
+    "methodchain": "chain",
+    "ternaryline": true,
+    "neverflatten": true,
+    "clrf": true,
+    "wrap": 80
+}
