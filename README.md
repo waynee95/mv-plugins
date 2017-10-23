@@ -3,6 +3,7 @@
 
 ## Terms of Use
 Credit must be given to: waynee95
+
 Please don't share my plugins anywhere, except if you have my permissions.
 
-The plugin may be used in commercial and non-commercial products.
+My plugins may be used in commercial and non-commercial products.
