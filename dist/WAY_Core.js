@@ -4,7 +4,7 @@
 /**
  * @file WAY Core is a Utility plugin for RPG Maker MV Plugin Developement.
  * @author waynee95
- * @version 1.0.0
+ * @version 1.1.0
  */
 /*:
 @plugindesc WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
@@ -34,6 +34,7 @@ TODO: Link to website
  ■ Version History
 ==============================================================================
 v1.0.0 - 23.10.2017 : Initial Release
+v1.1.0 - 24.10.2017 : Added Util.extend(obj, name, func) function
 */
 
 'use strict';
@@ -309,6 +310,21 @@ var WAY = WAYCore;
 
                     return executeCode;
                 }(),
+                extend: function () {
+                    function extend(obj, name, func) {
+                        var orig = obj[name];
+                        obj[name] = function () {
+                            for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+                                args[_key3] = arguments[_key3];
+                            }
+
+                            orig.apply(this, args);
+                            func.apply(this, args);
+                        };
+                    }
+
+                    return extend;
+                }(),
                 exists: function () {
                     function exists(value) {
                         return value !== undefined && value !== null;
@@ -564,16 +580,16 @@ var WAY = WAYCore;
                 }(),
                 piper: function () {
                     function piper() {
-                        for (var _len3 = arguments.length, steps = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-                            steps[_key3] = arguments[_key3];
+                        for (var _len4 = arguments.length, steps = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+                            steps[_key4] = arguments[_key4];
                         }
 
                         return function () {
                             function pipe() {
                                 var _this6 = this;
 
-                                for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-                                    args[_key4] = arguments[_key4];
+                                for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+                                    args[_key5] = arguments[_key5];
                                 }
 
                                 var value = steps[0].apply(this, args);
@@ -788,20 +804,14 @@ var WAY = WAYCore;
 
     (function (GameInterpreter, alias) {
         alias.Game_Interpreter_pluginCommand = GameInterpreter.pluginCommand;
-        GameInterpreter.pluginCommand = function () {
-            function pluginCommand(command, args) {
-                var actions = PluginManager.getCommand(command);
-                if (actions) {
-                    var action = actions[args[0]];
-                    if (typeof action === 'function') {
-                        action.apply(this, args.slice(1));
-                    }
-                } else {
-                    alias.Game_Interpreter_pluginCommand.call(this, command, args);
+        WAY.Util.extend(Game_Interpreter.prototype, 'pluginCommand', function (command, args) {
+            var actions = PluginManager.getCommand(command);
+            if (actions) {
+                var action = actions[args[0]];
+                if (typeof action === 'function') {
+                    action.apply(this, args.slice(1));
                 }
             }
-
-            return pluginCommand;
-        }();
-    })(Game_Interpreter.prototype, $.alias);
+        });
+    })(Game_Interpreter, $.alias);
 })(WAYModuleLoader.getModule('WAY_Core'));

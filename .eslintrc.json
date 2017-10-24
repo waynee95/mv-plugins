@@ -47,6 +47,7 @@
         "no-cond-assign": [
             "error",
             "except-parens"
-        ]
+        ],
+        "func-names": 0
     }
 }

@@ -4,7 +4,7 @@
 /**
  * @file WAY Core is a Utility plugin for RPG Maker MV Plugin Developement.
  * @author waynee95
- * @version 1.0.0
+ * @version 1.1.0
  */
 /*:
 @plugindesc WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
@@ -34,6 +34,7 @@ TODO: Link to website
  ■ Version History
 ==============================================================================
 v1.0.0 - 23.10.2017 : Initial Release
+v1.1.0 - 24.10.2017 : Added Util.extend(obj, name, func) function
 */
 
 'use strict';
@@ -191,6 +192,13 @@ const WAY = WAYCore;
                 } catch (e) {
                     throw e.message;
                 }
+            },
+            extend(obj, name, func) {
+                const orig = obj[name];
+                obj[name] = function (...args) {
+                    orig.apply(this, args);
+                    func.apply(this, args);
+                };
             },
             exists(value) {
                 return value !== undefined && value !== null;
@@ -474,16 +482,14 @@ const WAY = WAYCore;
 
     ((GameInterpreter, alias) => {
         alias.Game_Interpreter_pluginCommand = GameInterpreter.pluginCommand;
-        GameInterpreter.pluginCommand = function pluginCommand(command, args) {
+        WAY.Util.extend(Game_Interpreter.prototype, 'pluginCommand', function (command, args) {
             const actions = PluginManager.getCommand(command);
             if (actions) {
                 const action = actions[args[0]];
                 if (typeof action === 'function') {
                     action.apply(this, args.slice(1));
                 }
-            } else {
-                alias.Game_Interpreter_pluginCommand.call(this, command, args);
             }
-        };
-    })(Game_Interpreter.prototype, $.alias);
+        });
+    })(Game_Interpreter, $.alias);
 })(WAYModuleLoader.getModule('WAY_Core'));
