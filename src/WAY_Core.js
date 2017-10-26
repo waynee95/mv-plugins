@@ -4,7 +4,7 @@
 /**
  * @file WAY Core is a Utility plugin for RPG Maker MV Plugin Developement.
  * @author waynee95
- * @version 1.1.1
+ * @version 1.1.2
  */
 /*:
 @plugindesc WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
@@ -86,10 +86,7 @@ const WAYModuleLoader = (function WAYModuleLoader() {
     return {
         checkRequirements(key) {
             let list = '';
-            plugins[key].required.forEach(({
-                name,
-                version
-            }) => {
+            plugins[key].required.forEach(({ name, version }) => {
                 if (!this.isImported(name)) {
                     list += `${name}\n`;
                 } else if (version) {
@@ -142,7 +139,7 @@ const WAYModuleLoader = (function WAYModuleLoader() {
     };
 }());
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.1.1', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.1.2', 'waynee95');
 
 const WAYCore = WAYCore || {};
 
@@ -434,7 +431,7 @@ const WAY = WAYCore;
             });
         };
         alias.DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
-        WAY.Util.extend(DataManager, 'isDatabaseLoaded', function () {
+        DataManager.isDatabaseLoaded = function () {
             if (!alias.DataManager_isDatabaseLoaded.call(this)) {
                 return false;
             }
@@ -449,8 +446,8 @@ const WAY = WAYCore;
                 $dataStates
             ];
             list.forEach((objects, index) => loadNotetags(objects, index));
-            return ImageManager.isReady();
-        });
+            return true;
+        };
     })(DataManager, $.alias);
 
     ((PluginManager) => {
