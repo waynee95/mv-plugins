@@ -4,7 +4,7 @@
 /**
  * @file WAY Core is a Utility plugin for RPG Maker MV Plugin Developement.
  * @author waynee95
- * @version 1.1.0
+ * @version 1.1.1
  */
 /*:
 @plugindesc WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
@@ -24,17 +24,6 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
-
-==============================================================================
- ■ Contact Information
-==============================================================================
-TODO: Link to website
-
-==============================================================================
- ■ Version History
-==============================================================================
-v1.0.0 - 23.10.2017 : Initial Release
-v1.1.0 - 24.10.2017 : Added Util.extend(obj, name, func) function
 */
 
 'use strict';
@@ -153,7 +142,7 @@ const WAYModuleLoader = (function WAYModuleLoader() {
     };
 }());
 
-WAYModuleLoader.registerPlugin('WAY_Core', '0.0.0', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.1.1', 'waynee95');
 
 const WAYCore = WAYCore || {};
 
@@ -172,7 +161,7 @@ const WAY = WAYCore;
                 return arr.reduce((acc, val) => (acc < val ? acc : val));
             },
             clean(arr) {
-                return arr.filter(element => this.exists(element));
+                return arr.filter(element => WAY.Util.exists(element));
             },
             clip(num, lower, upper) {
                 return Math.max(lower, Math.min(num, upper));
@@ -204,7 +193,7 @@ const WAY = WAYCore;
                 return value !== undefined && value !== null;
             },
             filter(obj, func) {
-                if (this.isArray(obj)) {
+                if (WAY.Util.isArray(obj)) {
                     return obj.filter(element => func(element));
                 }
                 return Object.keys(obj).filter(key => func(obj[key])).reduce(
@@ -236,7 +225,7 @@ const WAY = WAYCore;
             getMultiLineNotetag(text, tag, defaultValue, func) {
                 const result = [];
                 const re = /<([^<>]+)>([\s\S]*?)<(\/[^<>]+)>/g;
-                const matches = this.filterText(
+                const matches = WAY.Util.filterText(
                     text,
                     re,
                     match => match[1].toLowerCase() === tag.toLowerCase()
@@ -247,7 +236,7 @@ const WAY = WAYCore;
             getNotetag(text, tag, defaultValue, func) {
                 const result = [];
                 const re = /<([^<>:]+)(:?)([^>]*)>/g;
-                const matches = this.filterText(
+                const matches = WAY.Util.filterText(
                     text,
                     re,
                     match => match[1].toLowerCase() === tag.toLowerCase()
@@ -268,7 +257,7 @@ const WAY = WAYCore;
                 return (value === true || value === false || /^(:?true|false)$/i.test(value));
             },
             isEmpty(obj) {
-                return this.isObj(obj) && Object.keys(obj).length < 1;
+                return WAY.Util.isObj(obj) && Object.keys(obj).length < 1;
             },
             isFloat(value) {
                 return Number(value) === value && value % 1 !== 0;
@@ -288,7 +277,7 @@ const WAY = WAYCore;
                 return true;
             },
             isNumber(value) {
-                return this.isInt(value) || this.isFloat(value);
+                return WAY.Util.isInt(value) || WAY.Util.isFloat(value);
             },
             isObject(obj) {
                 return (obj && Object.prototype.toString.apply(obj) === '[object Object]');
@@ -297,12 +286,12 @@ const WAY = WAYCore;
                 return Utils.isOptionValid('test');
             },
             log(...string) {
-                if (this.isPlaytest()) {
+                if (WAY.Util.isPlaytest()) {
                     console.log(...string); //eslint-disable-line no-console
                 }
             },
             map(obj, func) {
-                if (this.isArray(obj)) {
+                if (WAY.Util.isArray(obj)) {
                     return obj.map(func);
                 }
                 return Object.assign({}, ...Object.keys(obj).map(key => ({
@@ -315,15 +304,15 @@ const WAY = WAYCore;
             parseStruct(params) {
                 const parseKey = (key) => {
                     const value = params[key];
-                    if (this.isNumber(parseInt(value, 10))) {
+                    if (WAY.Util.isNumber(parseInt(value, 10))) {
                         params[key] = Number(value);
-                    } else if (this.isBool(value)) {
-                        params[key] = this.toBool(value);
+                    } else if (WAY.Util.isBool(value)) {
+                        params[key] = WAY.Util.toBool(value);
                     } else {
                         try {
                             const obj = JsonEx.parse(value);
-                            if (this.isObj(obj)) {
-                                params[key] = this.parseStruct(obj);
+                            if (WAY.Util.isObj(obj)) {
+                                params[key] = WAY.Util.parseStruct(obj);
                             }
                         } catch (e) {
                             throw e.message;
@@ -335,7 +324,7 @@ const WAY = WAYCore;
             },
             pick(arr, index) {
                 if (index === undefined) {
-                    return arr[this.floorRand(arr.length)];
+                    return arr[WAY.Util.floorRand(arr.length)];
                 }
                 return arr[index];
             },
@@ -350,7 +339,7 @@ const WAY = WAYCore;
                 return obj => obj[key];
             },
             randomBetween(min, max) {
-                return this.floorRand((max + 1) - min) + min;
+                return WAY.Util.floorRand((max + 1) - min) + min;
             },
             remove(arr, item) {
                 const index = arr.indexOf(item);
@@ -359,8 +348,8 @@ const WAY = WAYCore;
                 }
             },
             showError(msg) {
-                this.log(msg);
-                if (Utils.isNwjs() && this.isPlaytest()) {
+                WAY.Util.log(msg);
+                if (Utils.isNwjs() && WAY.Util.isPlaytest()) {
                     const gui = require('nw.gui'); //eslint-disable-line
                     gui.Window.get().showDevTools();
                 }
@@ -371,7 +360,7 @@ const WAY = WAYCore;
                 let top = arr.length;
                 if (top) {
                     while (top--) {
-                        current = this.floorRand(top + 1);
+                        current = WAY.Util.floorRand(top + 1);
                         temp = arr[current];
                         arr[current] = arr[top];
                         arr[top] = temp;
@@ -388,21 +377,21 @@ const WAY = WAYCore;
                 return null;
             },
             toInt(value) {
-                return this.piper(parseInt, num => num - (num % 1))(value);
+                return WAY.Util.piper(parseInt, num => num - (num % 1))(value);
             },
             toObj(string) {
-                if (this.isJsonString(string)) {
+                if (WAY.Util.isJsonString(string)) {
                     return JsonEx.parse(string);
                 }
                 const createObjProperty = (pair) => {
-                    const [key, value] = pair.split(':').map(this.trim);
-                    if (this.isNumber(parseInt(value, 10))) {
+                    const [key, value] = pair.split(':').map(WAY.Util.trim);
+                    if (WAY.Util.isNumber(parseInt(value, 10))) {
                         return {
                             [key]: Number(value, 10)
                         };
-                    } else if (this.isBool(value)) {
+                    } else if (WAY.Util.isBool(value)) {
                         return {
-                            [key]: this.toBool(value)
+                            [key]: WAY.Util.toBool(value)
                         };
                     }
                     return {
@@ -445,7 +434,7 @@ const WAY = WAYCore;
             });
         };
         alias.DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
-        DataManager.isDatabaseLoaded = function isDatabaseLoaded() {
+        WAY.Util.extend(DataManager, 'isDatabaseLoaded', function () {
             if (!alias.DataManager_isDatabaseLoaded.call(this)) {
                 return false;
             }
@@ -461,7 +450,7 @@ const WAY = WAYCore;
             ];
             list.forEach((objects, index) => loadNotetags(objects, index));
             return ImageManager.isReady();
-        };
+        });
     })(DataManager, $.alias);
 
     ((PluginManager) => {

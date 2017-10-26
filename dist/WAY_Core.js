@@ -4,7 +4,7 @@
 /**
  * @file WAY Core is a Utility plugin for RPG Maker MV Plugin Developement.
  * @author waynee95
- * @version 1.1.0
+ * @version 1.1.1
  */
 /*:
 @plugindesc WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
@@ -24,17 +24,6 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
-
-==============================================================================
- ■ Contact Information
-==============================================================================
-TODO: Link to website
-
-==============================================================================
- ■ Version History
-==============================================================================
-v1.0.0 - 23.10.2017 : Initial Release
-v1.1.0 - 24.10.2017 : Added Util.extend(obj, name, func) function
 */
 
 'use strict';
@@ -222,7 +211,7 @@ var WAYModuleLoader = function () {
     return WAYModuleLoader;
 }()();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '0.0.0', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.1.1', 'waynee95');
 
 var WAYCore = WAYCore || {};
 
@@ -261,10 +250,8 @@ var WAY = WAYCore;
                 }(),
                 clean: function () {
                     function clean(arr) {
-                        var _this2 = this;
-
                         return arr.filter(function (element) {
-                            return _this2.exists(element);
+                            return WAY.Util.exists(element);
                         });
                     }
 
@@ -334,7 +321,7 @@ var WAY = WAYCore;
                 }(),
                 filter: function () {
                     function filter(obj, func) {
-                        if (this.isArray(obj)) {
+                        if (WAY.Util.isArray(obj)) {
                             return obj.filter(function (element) {
                                 return func(element);
                             });
@@ -380,15 +367,15 @@ var WAY = WAYCore;
                 }(),
                 getMultiLineNotetag: function () {
                     function getMultiLineNotetag(text, tag, defaultValue, func) {
-                        var _this3 = this;
+                        var _this2 = this;
 
                         var result = [];
                         var re = /<([^<>]+)>([\s\S]*?)<(\/[^<>]+)>/g;
-                        var matches = this.filterText(text, re, function (match) {
+                        var matches = WAY.Util.filterText(text, re, function (match) {
                             return match[1].toLowerCase() === tag.toLowerCase();
                         });
                         matches.forEach(function (group) {
-                            return result.push(func.call(_this3, group[2]));
+                            return result.push(func.call(_this2, group[2]));
                         });
                         return result.length > 0 ? result[0] : defaultValue;
                     }
@@ -397,15 +384,15 @@ var WAY = WAYCore;
                 }(),
                 getNotetag: function () {
                     function getNotetag(text, tag, defaultValue, func) {
-                        var _this4 = this;
+                        var _this3 = this;
 
                         var result = [];
                         var re = /<([^<>:]+)(:?)([^>]*)>/g;
-                        var matches = this.filterText(text, re, function (match) {
+                        var matches = WAY.Util.filterText(text, re, function (match) {
                             return match[1].toLowerCase() === tag.toLowerCase();
                         });
                         matches.forEach(function (group) {
-                            return result.push(func.call(_this4, group[3]));
+                            return result.push(func.call(_this3, group[3]));
                         });
                         return result.length > 0 ? result[0] : defaultValue;
                     }
@@ -446,7 +433,7 @@ var WAY = WAYCore;
                 }(),
                 isEmpty: function () {
                     function isEmpty(obj) {
-                        return this.isObj(obj) && Object.keys(obj).length < 1;
+                        return WAY.Util.isObj(obj) && Object.keys(obj).length < 1;
                     }
 
                     return isEmpty;
@@ -486,7 +473,7 @@ var WAY = WAYCore;
                 }(),
                 isNumber: function () {
                     function isNumber(value) {
-                        return this.isInt(value) || this.isFloat(value);
+                        return WAY.Util.isInt(value) || WAY.Util.isFloat(value);
                     }
 
                     return isNumber;
@@ -507,7 +494,7 @@ var WAY = WAYCore;
                 }(),
                 log: function () {
                     function log() {
-                        if (this.isPlaytest()) {
+                        if (WAY.Util.isPlaytest()) {
                             var _console;
 
                             (_console = console).log.apply(_console, arguments); //eslint-disable-line no-console
@@ -518,7 +505,7 @@ var WAY = WAYCore;
                 }(),
                 map: function () {
                     function map(obj, func) {
-                        if (this.isArray(obj)) {
+                        if (WAY.Util.isArray(obj)) {
                             return obj.map(func);
                         }
                         return Object.assign.apply(Object, [{}].concat(_toConsumableArray(Object.keys(obj).map(function (key) {
@@ -537,20 +524,18 @@ var WAY = WAYCore;
                 }(),
                 parseStruct: function () {
                     function parseStruct(params) {
-                        var _this5 = this;
-
                         var parseKey = function () {
                             function parseKey(key) {
                                 var value = params[key];
-                                if (_this5.isNumber(parseInt(value, 10))) {
+                                if (WAY.Util.isNumber(parseInt(value, 10))) {
                                     params[key] = Number(value);
-                                } else if (_this5.isBool(value)) {
-                                    params[key] = _this5.toBool(value);
+                                } else if (WAY.Util.isBool(value)) {
+                                    params[key] = WAY.Util.toBool(value);
                                 } else {
                                     try {
                                         var obj = JsonEx.parse(value);
-                                        if (_this5.isObj(obj)) {
-                                            params[key] = _this5.parseStruct(obj);
+                                        if (WAY.Util.isObj(obj)) {
+                                            params[key] = WAY.Util.parseStruct(obj);
                                         }
                                     } catch (e) {
                                         throw e.message;
@@ -571,7 +556,7 @@ var WAY = WAYCore;
                 pick: function () {
                     function pick(arr, index) {
                         if (index === undefined) {
-                            return arr[this.floorRand(arr.length)];
+                            return arr[WAY.Util.floorRand(arr.length)];
                         }
                         return arr[index];
                     }
@@ -586,7 +571,7 @@ var WAY = WAYCore;
 
                         return function () {
                             function pipe() {
-                                var _this6 = this;
+                                var _this4 = this;
 
                                 for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
                                     args[_key5] = arguments[_key5];
@@ -594,7 +579,7 @@ var WAY = WAYCore;
 
                                 var value = steps[0].apply(this, args);
                                 steps.slice(1).forEach(function (step) {
-                                    return value = step.call(_this6, value);
+                                    return value = step.call(_this4, value);
                                 });
                                 return value;
                             }
@@ -616,7 +601,7 @@ var WAY = WAYCore;
                 }(),
                 randomBetween: function () {
                     function randomBetween(min, max) {
-                        return this.floorRand(max + 1 - min) + min;
+                        return WAY.Util.floorRand(max + 1 - min) + min;
                     }
 
                     return randomBetween;
@@ -633,8 +618,8 @@ var WAY = WAYCore;
                 }(),
                 showError: function () {
                     function showError(msg) {
-                        this.log(msg);
-                        if (Utils.isNwjs() && this.isPlaytest()) {
+                        WAY.Util.log(msg);
+                        if (Utils.isNwjs() && WAY.Util.isPlaytest()) {
                             var gui = require('nw.gui'); //eslint-disable-line
                             gui.Window.get().showDevTools();
                         }
@@ -649,7 +634,7 @@ var WAY = WAYCore;
                         var top = arr.length;
                         if (top) {
                             while (top--) {
-                                current = this.floorRand(top + 1);
+                                current = WAY.Util.floorRand(top + 1);
                                 temp = arr[current];
                                 arr[current] = arr[top];
                                 arr[top] = temp;
@@ -674,7 +659,7 @@ var WAY = WAYCore;
                 }(),
                 toInt: function () {
                     function toInt(value) {
-                        return this.piper(parseInt, function (num) {
+                        return WAY.Util.piper(parseInt, function (num) {
                             return num - num % 1;
                         })(value);
                     }
@@ -683,22 +668,20 @@ var WAY = WAYCore;
                 }(),
                 toObj: function () {
                     function toObj(string) {
-                        var _this7 = this;
-
-                        if (this.isJsonString(string)) {
+                        if (WAY.Util.isJsonString(string)) {
                             return JsonEx.parse(string);
                         }
                         var createObjProperty = function () {
                             function createObjProperty(pair) {
-                                var _pair$split$map = pair.split(':').map(_this7.trim),
+                                var _pair$split$map = pair.split(':').map(WAY.Util.trim),
                                     _pair$split$map2 = _slicedToArray(_pair$split$map, 2),
                                     key = _pair$split$map2[0],
                                     value = _pair$split$map2[1];
 
-                                if (_this7.isNumber(parseInt(value, 10))) {
+                                if (WAY.Util.isNumber(parseInt(value, 10))) {
                                     return _defineProperty({}, key, Number(value, 10));
-                                } else if (_this7.isBool(value)) {
-                                    return _defineProperty({}, key, _this7.toBool(value));
+                                } else if (WAY.Util.isBool(value)) {
+                                    return _defineProperty({}, key, WAY.Util.toBool(value));
                                 }
                                 return _defineProperty({}, key, value);
                             }
@@ -758,20 +741,16 @@ var WAY = WAYCore;
             return loadNotetags;
         }();
         alias.DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
-        DataManager.isDatabaseLoaded = function () {
-            function isDatabaseLoaded() {
-                if (!alias.DataManager_isDatabaseLoaded.call(this)) {
-                    return false;
-                }
-                var list = [$dataActors, $dataClasses, $dataSkills, $dataItems, $dataWeapons, $dataArmors, $dataEnemies, $dataStates];
-                list.forEach(function (objects, index) {
-                    return loadNotetags(objects, index);
-                });
-                return ImageManager.isReady();
+        WAY.Util.extend(DataManager, 'isDatabaseLoaded', function () {
+            if (!alias.DataManager_isDatabaseLoaded.call(this)) {
+                return false;
             }
-
-            return isDatabaseLoaded;
-        }();
+            var list = [$dataActors, $dataClasses, $dataSkills, $dataItems, $dataWeapons, $dataArmors, $dataEnemies, $dataStates];
+            list.forEach(function (objects, index) {
+                return loadNotetags(objects, index);
+            });
+            return ImageManager.isReady();
+        });
     })(DataManager, $.alias);
 
     (function (PluginManager) {
