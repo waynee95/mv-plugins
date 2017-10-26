@@ -4,7 +4,7 @@
 /**
  * @file WAY Core is a Utility plugin for RPG Maker MV Plugin Developement.
  * @author waynee95
- * @version 1.1.2
+ * @version 1.1.3
  */
 /*:
 @plugindesc WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
@@ -139,7 +139,7 @@ const WAYModuleLoader = (function WAYModuleLoader() {
     };
 }());
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.1.2', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.1.3', 'waynee95');
 
 const WAYCore = WAYCore || {};
 
@@ -173,8 +173,9 @@ const WAY = WAYCore;
                 return a.filter(element => b.indexOf(element) === -1);
             },
             executeCode(string) {
+                const s = $gameSwitches._data; const v = $gameVariables._data; const p = $gameParty; // eslint-disable-line
                 try {
-                    eval(string); // eslint-disable-line no-eval
+                    eval(string); // eslint-disable-line
                 } catch (e) {
                     throw e.message;
                 }
@@ -221,7 +222,7 @@ const WAY = WAYCore;
             },
             getMultiLineNotetag(text, tag, defaultValue, func) {
                 const result = [];
-                const re = /<([^<>]+)>([\s\S]*?)<(\/[^<>]+)>/g;
+                const re = new RegExp(`<(${tag})>([\\s\\S]*?)<(\\/${tag})>`, 'gi');
                 const matches = WAY.Util.filterText(
                     text,
                     re,
