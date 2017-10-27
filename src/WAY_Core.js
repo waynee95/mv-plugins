@@ -172,14 +172,6 @@ const WAY = WAYCore;
             diffArray(a, b) {
                 return a.filter(element => b.indexOf(element) === -1);
             },
-            executeCode(string) {
-                const s = $gameSwitches._data; const v = $gameVariables._data; const p = $gameParty; // eslint-disable-line
-                try {
-                    eval(string); // eslint-disable-line
-                } catch (e) {
-                    throw e.message;
-                }
-            },
             extend(obj, name, func) {
                 const orig = obj[name];
                 obj[name] = function (...args) {
@@ -346,7 +338,7 @@ const WAY = WAYCore;
                 }
             },
             showError(msg) {
-                WAY.Util.log(msg);
+                console.error(msg); //eslint-disable-line
                 if (Utils.isNwjs() && WAY.Util.isPlaytest()) {
                     const gui = require('nw.gui'); //eslint-disable-line
                     gui.Window.get().showDevTools();

@@ -4,7 +4,7 @@
 /**
  * @file WAY Core is a Utility plugin for RPG Maker MV Plugin Developement.
  * @author waynee95
- * @version 1.1.1
+ * @version 1.1.3
  */
 /*:
 @plugindesc WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
@@ -211,7 +211,7 @@ var WAYModuleLoader = function () {
     return WAYModuleLoader;
 }()();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.1.1', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.1.3', 'waynee95');
 
 var WAYCore = WAYCore || {};
 
@@ -286,17 +286,6 @@ var WAY = WAYCore;
 
                     return diffArray;
                 }(),
-                executeCode: function () {
-                    function executeCode(string) {
-                        try {
-                            eval(string); // eslint-disable-line no-eval
-                        } catch (e) {
-                            throw e.message;
-                        }
-                    }
-
-                    return executeCode;
-                }(),
                 extend: function () {
                     function extend(obj, name, func) {
                         var orig = obj[name];
@@ -370,7 +359,7 @@ var WAY = WAYCore;
                         var _this2 = this;
 
                         var result = [];
-                        var re = /<([^<>]+)>([\s\S]*?)<(\/[^<>]+)>/g;
+                        var re = new RegExp('<(' + String(tag) + ')>([\\s\\S]*?)<(\\/' + String(tag) + ')>', 'gi');
                         var matches = WAY.Util.filterText(text, re, function (match) {
                             return match[1].toLowerCase() === tag.toLowerCase();
                         });
@@ -618,7 +607,7 @@ var WAY = WAYCore;
                 }(),
                 showError: function () {
                     function showError(msg) {
-                        WAY.Util.log(msg);
+                        console.error(msg); //eslint-disable-line
                         if (Utils.isNwjs() && WAY.Util.isPlaytest()) {
                             var gui = require('nw.gui'); //eslint-disable-line
                             gui.Window.get().showDevTools();
@@ -741,7 +730,7 @@ var WAY = WAYCore;
             return loadNotetags;
         }();
         alias.DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
-        WAY.Util.extend(DataManager, 'isDatabaseLoaded', function () {
+        DataManager.isDatabaseLoaded = function () {
             if (!alias.DataManager_isDatabaseLoaded.call(this)) {
                 return false;
             }
@@ -749,8 +738,8 @@ var WAY = WAYCore;
             list.forEach(function (objects, index) {
                 return loadNotetags(objects, index);
             });
-            return ImageManager.isReady();
-        });
+            return true;
+        };
     })(DataManager, $.alias);
 
     (function (PluginManager) {
