@@ -4,7 +4,7 @@
 /**
  * @file WAY Core is a Utility plugin for RPG Maker MV Plugin Developement.
  * @author waynee95
- * @version 1.1.3
+ * @version 1.1.4
  */
 /*:
 @plugindesc WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
@@ -211,7 +211,7 @@ var WAYModuleLoader = function () {
     return WAYModuleLoader;
 }()();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.1.3', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.1.4', 'waynee95');
 
 var WAYCore = WAYCore || {};
 
