@@ -39,33 +39,23 @@ if (WAY === undefined) {
     WAYModuleLoader.registerPlugin('WAY_YEP_EventMiniLabel', '1.0.1', 'waynee95');
 }
 
-(function () {
+(() => {
     PluginManager.addCommand('MiniLabelText', {
-        set: function () {
-            function set(eventId) {
-                var spriteset = SceneManager._scene._spriteset;
-                if (!spriteset) {
-                    return;
-                }
-                var event = $gameMap.event(eventId);
-                if (!event) {
-                    return;
-                }
-                var miniLabel = spriteset._characterSprites.filter(function (sprite) {
-                    return sprite._character === event;
-                })[0]._miniLabel;
-                if (!miniLabel) {
-                    return;
-                }
-
-                for (var _len = arguments.length, miniLabelText = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-                    miniLabelText[_key - 1] = arguments[_key];
-                }
-
-                miniLabel.setText(miniLabelText.toString().replace(/,/g, ' '));
+        set(eventId, ...miniLabelText) {
+            const spriteset = SceneManager._scene._spriteset;
+            if (!spriteset) {
+                return;
             }
-
-            return set;
-        }()
+            const event = $gameMap.event(eventId);
+            if (!event) {
+                return;
+            }
+            const miniLabel = spriteset._characterSprites
+                .filter(sprite => sprite._character === event)[0]._miniLabel;
+            if (!miniLabel) {
+                return;
+            }
+            miniLabel.setText(miniLabelText.toString().replace(/,/g, ' '));
+        }
     });
 })(WAYModuleLoader.getModule('WAY_YEP_EventMiniLabel'));
