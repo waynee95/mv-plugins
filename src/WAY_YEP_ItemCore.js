@@ -5,7 +5,7 @@
 /**
  * @file Addon to Yanfly's Item Core Plugin.
  * @author waynee95
- * @version 1.0.0
+ * @version 1.0.1
  */
 /*:
 @plugindesc Addon to Yanfly's Item Core Plugin. <WAY_YEP_ItemCore>
@@ -68,7 +68,7 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_ItemCore', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_ItemCore', '1.0.1', 'waynee95');
 }
 
 (() => {
@@ -95,7 +95,7 @@ if (WAY === undefined) {
         const evalCustomName = (item) => {
             const { customNameEval } = item;
             if (!customNameEval || customNameEval === '') return item.name;
-            const name = '';
+            let name = ''; // eslint-disable-line prefer-const
             try {
                 eval(customNameEval);
             } catch (e) {
@@ -107,7 +107,7 @@ if (WAY === undefined) {
         const evalCustomTextColor = (item) => {
             const { customTextColorEval } = item;
             if (!customTextColorEval || customTextColorEval === '') return 0;
-            const textColor = 0;
+            let textColor = 0; // eslint-disable-line prefer-const
             try {
                 eval(customTextColorEval);
             } catch (e) {
