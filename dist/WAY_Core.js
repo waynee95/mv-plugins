@@ -363,6 +363,27 @@ var WAY = WAYCore;
 
                     return floorRand;
                 }(),
+                getEventComments: function () {
+                    function getEventComments(eventId) {
+                        var event = $dataMap.events[eventId];
+                        var pages = event.pages;
+
+                        var allComments = '';
+                        pages.forEach(function (page) {
+                            var comments = '';
+                            page.list.forEach(function (command) {
+                                if (command.code === 108 || command.code === 408) {
+                                    comments += String(command.parameters[0]) + '\n';
+                                }
+                            });
+                            allComments += comments;
+                        });
+
+                        return allComments;
+                    }
+
+                    return getEventComments;
+                }(),
                 getMultiLineNotetag: function () {
                     function getMultiLineNotetag(text, tag, defaultValue, func) {
                         var _this2 = this;
