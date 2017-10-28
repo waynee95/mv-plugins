@@ -1,6 +1,8 @@
 # mv-plugins
 > waynee95's Plugin Collection for RPG Maker MV 
 
+You find my plugins in the `dist` folder.
+
 ## Terms of Use
 Credit must be given to: waynee95
 
