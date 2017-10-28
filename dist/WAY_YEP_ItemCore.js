@@ -80,11 +80,15 @@ if (WAY === undefined) {
         toInt = _WAY$Util.toInt;
 
 
-    var parseNotetags = function parseNotetags(obj) {
-        obj.customNameEval = getMultiLineNotetag(obj.note, 'Custom Name Eval', null, trim);
-        obj.customTextColorEval = getMultiLineNotetag(obj.note, 'custom textcolor eval', null, trim);
-        obj.iconBackground = getNotetag(obj.note, 'Icon Background', null, toInt);
-    };
+    var parseNotetags = function () {
+        function parseNotetags(obj) {
+            obj.customNameEval = getMultiLineNotetag(obj.note, 'Custom Name Eval', null, trim);
+            obj.customTextColorEval = getMultiLineNotetag(obj.note, 'custom textcolor eval', null, trim);
+            obj.iconBackground = getNotetag(obj.note, 'Icon Background', null, toInt);
+        }
+
+        return parseNotetags;
+    }();
 
     WAY.EventEmitter.on('load-item-notetags', parseNotetags);
     WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
@@ -92,37 +96,45 @@ if (WAY === undefined) {
     WAY.EventEmitter.on('load-skill-notetags', parseNotetags);
 
     (function (Window_Base) {
-        var evalCustomName = function evalCustomName(item) {
-            var customNameEval = item.customNameEval;
+        var evalCustomName = function () {
+            function evalCustomName(item) {
+                var customNameEval = item.customNameEval;
 
-            if (!customNameEval || customNameEval === '') return item.name;
-            var name = ''; // eslint-disable-line prefer-const
-            var s = $gameSwitches._data;
-            var v = $gameVariables._data;
-            var p = $gameParty;
-            try {
-                eval(customNameEval);
-            } catch (e) {
-                showError(e.message);
+                if (!customNameEval || customNameEval === '') return item.name;
+                var name = ''; // eslint-disable-line prefer-const
+                var s = $gameSwitches._data;
+                var v = $gameVariables._data;
+                var p = $gameParty;
+                try {
+                    eval(customNameEval);
+                } catch (e) {
+                    showError(e.message);
+                }
+                return name;
             }
-            return name;
-        };
 
-        var evalCustomTextColor = function evalCustomTextColor(item) {
-            var customTextColorEval = item.customTextColorEval;
+            return evalCustomName;
+        }();
 
-            if (!customTextColorEval || customTextColorEval === '') return 0;
-            var textColor = 0; // eslint-disable-line prefer-const
-            var s = $gameSwitches._data;
-            var v = $gameVariables._data;
-            var p = $gameParty;
-            try {
-                eval(customTextColorEval);
-            } catch (e) {
-                showError(e.message);
+        var evalCustomTextColor = function () {
+            function evalCustomTextColor(item) {
+                var customTextColorEval = item.customTextColorEval;
+
+                if (!customTextColorEval || customTextColorEval === '') return 0;
+                var textColor = 0; // eslint-disable-line prefer-const
+                var s = $gameSwitches._data;
+                var v = $gameVariables._data;
+                var p = $gameParty;
+                try {
+                    eval(customTextColorEval);
+                } catch (e) {
+                    showError(e.message);
+                }
+                return textColor;
             }
-            return textColor;
-        };
+
+            return evalCustomTextColor;
+        }();
 
         Window_Base.prototype.setItemTextColorEval = function (item) {
             if (!item) return;

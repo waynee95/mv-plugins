@@ -44,7 +44,7 @@ My plugins may be used in commercial and non-commercial products.
 if (WAY === undefined) {
     console.error('You need to install WAY_Core!'); //eslint-disable-line no-console
     if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-		var gui = require('nw.gui'); //eslint-disable-line
+        var gui = require('nw.gui'); //eslint-disable-line
         gui.Window.get().showDevTools();
     }
     SceneManager.stop();
@@ -55,7 +55,7 @@ if (WAY === undefined) {
 (() => {
     const { getMultiLineNotetag, showError, trim } = WAY.Util;
 
-    const parseNotetags = (obj) => {
+    const parseNotetags = obj => {
         obj.customNameEval = getMultiLineNotetag(obj.note, 'Custom Buy Show Eval', null, trim);
     };
 
@@ -79,10 +79,10 @@ if (WAY === undefined) {
         return visible;
     }
 
-    Window_ShopBuy.prototype.makeItemList = function () {
+    Window_ShopBuy.prototype.makeItemList = function() {
         this._data = [];
         this._price = [];
-        this._shopGoods.forEach((goods) => {
+        this._shopGoods.forEach(goods => {
             let item = null;
             switch (goods[0]) {
             case 0:
@@ -94,7 +94,8 @@ if (WAY === undefined) {
             case 2:
                 item = $dataArmors[goods[1]];
                 break;
-            default: break;
+            default:
+                break;
             }
             if (item && meetsCustomBuyShowEval(item)) {
                 this._data.push(item);
@@ -103,4 +104,3 @@ if (WAY === undefined) {
         });
     };
 })(WAYModuleLoader.getModule('WAY_YEP_ShopMenuCore'));
-

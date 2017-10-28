@@ -50,8 +50,9 @@ if (WAY === undefined) {
             if (!event) {
                 return;
             }
-            const miniLabel = spriteset._characterSprites
-                .filter(sprite => sprite._character === event)[0]._miniLabel;
+            const miniLabel = spriteset._characterSprites.filter(
+                sprite => sprite._character === event
+            )[0]._miniLabel;
             if (!miniLabel) {
                 return;
             }

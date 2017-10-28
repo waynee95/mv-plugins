@@ -36,7 +36,7 @@ My plugins may be used in commercial and non-commercial products.
 if (WAY === undefined) {
     console.error('You need to install WAY_Core!'); //eslint-disable-line no-console
     if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-		var gui = require('nw.gui'); //eslint-disable-line
+        var gui = require('nw.gui'); //eslint-disable-line
         gui.Window.get().showDevTools();
     }
     SceneManager.stop();
@@ -44,16 +44,16 @@ if (WAY === undefined) {
     WAYModuleLoader.registerPlugin('WAY_YEP_RegionRestrictions', '1.0.0', 'waynee95');
 }
 
-(($) => {
+($ => {
     const { extend } = WAY.Util;
 
     $.alias.DataManager_extractMetadata = DataManager.extractMetadata;
-    extend(DataManager, 'extractMetadata', (object) => {
+    extend(DataManager, 'extractMetadata', object => {
         if (object === $dataMap) {
             const { events } = $dataMap;
             const re = /<BYPASS RESTRICTION:[ ](\d+(?:\s*,\s*\d+)*)>/i;
 
-            events.forEach((event) => {
+            events.forEach(event => {
                 if (event) {
                     const { note } = event;
                     event._bypassRestriction = [];
@@ -66,24 +66,25 @@ if (WAY === undefined) {
         }
     });
 
-    $.alias.Game_CharacterBase_isEventRegionForbid = Game_CharacterBase.prototype.isEventRegionForbid;
-    Game_CharacterBase.prototype.isEventRegionForbid = function (x, y, d) {
+    $.alias.Game_CharacterBase_isEventRegionForbid =
+        Game_CharacterBase.prototype.isEventRegionForbid;
+    Game_CharacterBase.prototype.isEventRegionForbid = function(x, y, d) {
         const regionId = this.getRegionId(x, y, d);
         const event = this.isEvent() ? this.event() : null;
         if (event && event._bypassRestriction && event._bypassRestriction.contains(regionId)) {
             return false;
         }
-        return $.alias.Game_CharacterBase_isEventRegionForbid.call(this, x, y, d);
+        return $.alias.Game_CharacterBase_isEventRegionForbid.apply(this, arguments);
     };
 
     $.alias.Game_CharacterBase_isEventRegionAllow = Game_CharacterBase.prototype.isEventRegionAllow;
-    Game_CharacterBase.prototype.isEventRegionAllow = function (x, y, d) {
+    Game_CharacterBase.prototype.isEventRegionAllow = function(x, y, d) {
         const regionId = this.getRegionId(x, y, d);
         const event = this.isEvent() ? this.event() : null;
         if (event && event._bypassRestriction && event._bypassRestriction.contains(regionId)) {
             return true;
         }
-        return $.alias.Game_CharacterBase_isEventRegionAllow.call(this, x, y, d);
+        return $.alias.Game_CharacterBase_isEventRegionAllow.apply(this, arguments);
     };
 
     /* Compatability with Galv_EventSpawner */
@@ -101,4 +102,3 @@ if (WAY === undefined) {
         });
     }
 })(WAYModuleLoader.getModule('WAY_YEP_RegionRestrictions'));
-

@@ -45,11 +45,10 @@ if (WAY === undefined) {
 (() => {
     const { getNotetag, toBool } = WAY.Util;
 
-    WAY.EventEmitter.on('load-skill-notetags', (skill) => {
+    WAY.EventEmitter.on('load-skill-notetags', skill => {
         skill.lockSkill = getNotetag(skill.note, 'Lock Skill', false, toBool);
     });
 
     Window_SkillList.prototype.isBattleSkillEnabled = item => item && !item.lockSkill;
     Window_SkillEquip.prototype.isEnabled = item => item && !item.lockSkill;
 })(WAYModuleLoader.getModule('WAY_YEP_EquipBattleSkills'));
-

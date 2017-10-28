@@ -56,10 +56,10 @@ if (WAY === undefined) {
     WAYModuleLoader.registerPlugin('WAY_YEP_EquipCore', '1.1.0', 'waynee95');
 }
 
-(($) => {
+($ => {
     const { extend, getNotetag, toArray } = WAY.Util;
 
-    const parseNotetags = (obj) => {
+    const parseNotetags = obj => {
         obj.restrictSlots = getNotetag(obj.note, 'Restrict Slots', [], toArray);
     };
 
@@ -71,33 +71,33 @@ if (WAY === undefined) {
 
     ((Game_Actor, alias) => {
         alias.Game_Actor_setup = Game_Actor.setup;
-        extend(Game_Actor, 'setup', function () {
+        extend(Game_Actor, 'setup', function() {
             this._sealedEquipSlots = [];
             this.equipSlots().forEach(slot => this._sealedEquipSlots[slot] === false);
         });
 
         alias.Game_Actor_isEquipChangeOk = Game_Actor.isEquipChangeOk;
-        extend(Game_Actor, 'isEquipChangeOk', function (slotId) {
+        extend(Game_Actor, 'isEquipChangeOk', function(slotId) {
             if (this.isEquipSlotSealed(slotId)) {
                 return false;
             }
             return Game_Actor.isEquipChangeOk.call(this, slotId);
         });
 
-        Game_Actor.sealEquipSlot = function (slotId) {
+        Game_Actor.sealEquipSlot = function(slotId) {
             this._sealedEquipSlots[slotId] = true;
         };
 
-        Game_Actor.unsealEquipSlot = function (slotId) {
+        Game_Actor.unsealEquipSlot = function(slotId) {
             this._sealedEquipSlots[slotId] = false;
         };
 
-        Game_Actor.isEquipSlotSealed = function (slotId) {
+        Game_Actor.isEquipSlotSealed = function(slotId) {
             return this._sealedEquipSlots[slotId];
         };
 
         alias.Game_Actor_changeEquip = Game_Actor.changeEquip;
-        Game_Actor.changeEquip = function (slotId, item) {
+        Game_Actor.changeEquip = function(slotId, item) {
             if (isItemRestricted(item, slotId)) {
                 return;
             }
@@ -107,7 +107,7 @@ if (WAY === undefined) {
 
     ((Window_EquipSlot, alias) => {
         alias.Window_EquipSlot_isEnabled = Window_EquipSlot.isEnabled;
-        extend(Window_EquipSlot, 'isEnabled', function (index) {
+        extend(Window_EquipSlot, 'isEnabled', function(index) {
             if (this._actor.isEquipSlotSealed(index)) {
                 return false;
             }
@@ -117,7 +117,7 @@ if (WAY === undefined) {
 
     ((Window_EquipItem, alias) => {
         alias.Window_EquipItem.isEnabled = Window_EquipItem.isEnabled;
-        Window_EquipItem.isEnabled = function (item) {
+        Window_EquipItem.isEnabled = function(item) {
             if (isItemRestricted(item, this._slotId)) {
                 return false;
             }
@@ -125,4 +125,3 @@ if (WAY === undefined) {
         };
     })(Window_EquipItem.prototype, $.alias);
 })(WAYModuleLoader.getModule('WAY_YEP_EquipCore'));
-

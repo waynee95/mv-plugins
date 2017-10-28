@@ -41,11 +41,11 @@ if (WAY === undefined) {
     WAYModuleLoader.registerPlugin('WAY_YEP_TurnOrderDisplay', '1.0.0', 'waynee95');
 }
 
-(($) => {
+($ => {
     const { getNotetag } = WAY.Util;
 
-    WAY.EventEmitter.on('load-enemy-notetags', (enemy) => {
-        getNotetag(enemy.note, 'Turn Order Image', null, (str) => {
+    WAY.EventEmitter.on('load-enemy-notetags', enemy => {
+        getNotetag(enemy.note, 'Turn Order Image', null, str => {
             let [filename, index] = str.split(',');
             filename = filename.trim();
             index = parseInt(index, 10);
@@ -55,7 +55,7 @@ if (WAY === undefined) {
 
     ((Game_Enemy, alias) => {
         alias.Game_Enemy_turnOrderDisplayBitmap = Game_Enemy.turnOrderDisplayBitmap;
-        Game_Enemy.turnOrderDisplayBitmap = function () {
+        Game_Enemy.turnOrderDisplayBitmap = function() {
             if (this.enemy().turnOrderDisplayFace) {
                 return ImageManager.loadFace(this.enemy().turnOrderDisplayFace.fileName);
             }
@@ -65,7 +65,7 @@ if (WAY === undefined) {
 
     ((Window_TurnOrderIcon, alias) => {
         alias.Window_TurnOrderIcon_drawBattler = Window_TurnOrderIcon.drawBattler;
-        Window_TurnOrderIcon.drawBattler = function () {
+        Window_TurnOrderIcon.drawBattler = function() {
             if (this.battler().isEnemy() && this.battler().enemy().turnOrderDisplayFace) {
                 this.drawEnemyFace();
             } else {
@@ -73,14 +73,14 @@ if (WAY === undefined) {
             }
         };
 
-        Window_TurnOrderIcon.drawEnemyFace = function () {
+        Window_TurnOrderIcon.drawEnemyFace = function() {
             const { faceIndex } = this.battler().enemy().turnOrderDisplayFace;
             const sw = Window_Base._faceWidth;
             const sh = Window_Base._faceHeight;
             const dx = Math.floor(sw / 2);
             const dy = Math.floor(sh / 2);
-            const sx = ((faceIndex % 4) * sw) + (sw / 2);
-            const sy = (Math.floor(faceIndex / 4) * sh) + (sh / 2);
+            const sx = (faceIndex % 4) * sw + sw / 2;
+            const sy = Math.floor(faceIndex / 4) * sh + sh / 2;
             const dw = this.contents.width - 8;
             const dh = this.contents.height - 8;
             this.contents.blt(this._image, sx, sy, sw, sh, dx + 4, dy + 4, dw, dh);

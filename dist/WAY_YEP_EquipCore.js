@@ -63,16 +63,24 @@ if (WAY === undefined) {
         toArray = _WAY$Util.toArray;
 
 
-    var parseNotetags = function parseNotetags(obj) {
-        obj.restrictSlots = getNotetag(obj.note, 'Restrict Slots', [], toArray);
-    };
+    var parseNotetags = function () {
+        function parseNotetags(obj) {
+            obj.restrictSlots = getNotetag(obj.note, 'Restrict Slots', [], toArray);
+        }
+
+        return parseNotetags;
+    }();
 
     WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
     WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
 
-    var isItemRestricted = function isItemRestricted(item, slotId) {
-        return item && item.restrictSlots.length > 0 && !item.restrictSlots.contains(slotId);
-    };
+    var isItemRestricted = function () {
+        function isItemRestricted(item, slotId) {
+            return item && item.restrictSlots.length > 0 && !item.restrictSlots.contains(slotId);
+        }
+
+        return isItemRestricted;
+    }();
 
     (function (Game_Actor, alias) {
         alias.Game_Actor_setup = Game_Actor.setup;

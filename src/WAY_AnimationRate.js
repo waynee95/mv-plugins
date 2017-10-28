@@ -46,12 +46,12 @@ if (WAY === undefined) {
     WAYModuleLoader.registerPlugin('WAY_AnimationRate', '1.0.1', 'waynee95');
 }
 
-(($) => {
+($ => {
     ((Sprite_Animation, params, alias) => {
         alias.Sprite_Animation_setRate = Sprite_Animation.setupRate;
 
         /* override */
-        Sprite_Animation.setupRate = function (animation) {
+        Sprite_Animation.setupRate = function(animation) {
             const re = /<(?:RATE): ([0-9]+)>/i;
             if (animation.name.match(re)) {
                 this._rate = Number(RegExp.$1);

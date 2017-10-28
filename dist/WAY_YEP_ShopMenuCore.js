@@ -59,9 +59,13 @@ if (WAY === undefined) {
         trim = _WAY$Util.trim;
 
 
-    var parseNotetags = function parseNotetags(obj) {
-        obj.customNameEval = getMultiLineNotetag(obj.note, 'Custom Buy Show Eval', null, trim);
-    };
+    var parseNotetags = function () {
+        function parseNotetags(obj) {
+            obj.customNameEval = getMultiLineNotetag(obj.note, 'Custom Buy Show Eval', null, trim);
+        }
+
+        return parseNotetags;
+    }();
 
     WAY.EventEmitter.on('load-item-notetags', parseNotetags);
     WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);

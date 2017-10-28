@@ -72,13 +72,16 @@ if (WAY === undefined) {
 }
 
 (() => {
-    const {
-        getNotetag, getMultiLineNotetag, showError, trim, toInt
-    } = WAY.Util;
+    const { getNotetag, getMultiLineNotetag, showError, trim, toInt } = WAY.Util;
 
-    const parseNotetags = (obj) => {
+    const parseNotetags = obj => {
         obj.customNameEval = getMultiLineNotetag(obj.note, 'Custom Name Eval', null, trim);
-        obj.customTextColorEval = getMultiLineNotetag(obj.note, 'custom textcolor eval', null, trim);
+        obj.customTextColorEval = getMultiLineNotetag(
+            obj.note,
+            'custom textcolor eval',
+            null,
+            trim
+        );
         obj.iconBackground = getNotetag(obj.note, 'Icon Background', null, toInt);
     };
 
@@ -87,8 +90,8 @@ if (WAY === undefined) {
     WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
     WAY.EventEmitter.on('load-skill-notetags', parseNotetags);
 
-    ((Window_Base) => {
-        const evalCustomName = (item) => {
+    (Window_Base => {
+        const evalCustomName = item => {
             const { customNameEval } = item;
             if (!customNameEval || customNameEval === '') return item.name;
             let name = ''; // eslint-disable-line prefer-const
@@ -103,7 +106,7 @@ if (WAY === undefined) {
             return name;
         };
 
-        const evalCustomTextColor = (item) => {
+        const evalCustomTextColor = item => {
             const { customTextColorEval } = item;
             if (!customTextColorEval || customTextColorEval === '') return 0;
             let textColor = 0; // eslint-disable-line prefer-const
@@ -118,12 +121,12 @@ if (WAY === undefined) {
             return textColor;
         };
 
-        Window_Base.prototype.setItemTextColorEval = function (item) {
+        Window_Base.prototype.setItemTextColorEval = function(item) {
             if (!item) return;
             this._resetTextColor = evalCustomTextColor(item) || item.textColor;
         };
 
-        Window_Base.prototype.drawItemName = function (item, x, y, width = 312) {
+        Window_Base.prototype.drawItemName = function(item, x, y, width = 312) {
             if (item) {
                 this.setItemTextColor(item);
                 this.setItemTextColorEval(item);

@@ -81,7 +81,7 @@ if (WAY === undefined) {
         if (event && event._bypassRestriction && event._bypassRestriction.contains(regionId)) {
             return false;
         }
-        return $.alias.Game_CharacterBase_isEventRegionForbid.call(this, x, y, d);
+        return $.alias.Game_CharacterBase_isEventRegionForbid.apply(this, arguments);
     };
 
     $.alias.Game_CharacterBase_isEventRegionAllow = Game_CharacterBase.prototype.isEventRegionAllow;
@@ -91,7 +91,7 @@ if (WAY === undefined) {
         if (event && event._bypassRestriction && event._bypassRestriction.contains(regionId)) {
             return true;
         }
-        return $.alias.Game_CharacterBase_isEventRegionAllow.call(this, x, y, d);
+        return $.alias.Game_CharacterBase_isEventRegionAllow.apply(this, arguments);
     };
 
     /* Compatability with Galv_EventSpawner */
