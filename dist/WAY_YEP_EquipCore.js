@@ -5,13 +5,23 @@
 /**
  * @file Addon to Yanfly's Equip Core Plugin.
  * @author waynee95
- * @version 1.0.0
+ * @version 1.1.0
  */
 /*:
 @plugindesc Addon to Yanfly's Equip Core Plugin. <WAY_YEP_EquipCore>
 @author waynee95
 
 @help
+==============================================================================
+ ■ Notetags
+==============================================================================
+-- Weapons and Armors Notetag:
+<Restrict Slot: x>
+<Restrict Slot: x, x, x>
+<Restrict Slot: x to y>
+
+Items with that notetag can only be equipped to the specified slots.
+
 ==============================================================================
  ■ Scriptcalls
 ==============================================================================
@@ -43,12 +53,26 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_EquipCore', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_EquipCore', '1.1.0', 'waynee95');
 }
 
 (function ($) {
-    var extend = WAY.Util.extend;
+    var _WAY$Util = WAY.Util,
+        extend = _WAY$Util.extend,
+        getNotetag = _WAY$Util.getNotetag,
+        toArray = _WAY$Util.toArray;
 
+
+    var parseNotetags = function parseNotetags(obj) {
+        obj.restrictSlots = getNotetag(obj.note, 'Restrict Slots', [], toArray);
+    };
+
+    WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
+    WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
+
+    var isItemRestricted = function isItemRestricted(item, slotId) {
+        return item && item.restrictSlots.length > 0 && !item.restrictSlots.contains(slotId);
+    };
 
     (function (Game_Actor, alias) {
         alias.Game_Actor_setup = Game_Actor.setup;
@@ -80,6 +104,14 @@ if (WAY === undefined) {
         Game_Actor.isEquipSlotSealed = function (slotId) {
             return this._sealedEquipSlots[slotId];
         };
+
+        alias.Game_Actor_changeEquip = Game_Actor.changeEquip;
+        Game_Actor.changeEquip = function (slotId, item) {
+            if (isItemRestricted(item, slotId)) {
+                return;
+            }
+            alias.Game_Actor_changeEquip.call(this, slotId, item);
+        };
     })(Game_Actor.prototype, $.alias);
 
     (function (Window_EquipSlot, alias) {
@@ -91,4 +123,14 @@ if (WAY === undefined) {
             return Window_EquipSlot.isEnabled.call(this, index);
         });
     })(Window_EquipSlot.prototype, $.alias);
+
+    (function (Window_EquipItem, alias) {
+        alias.Window_EquipItem.isEnabled = Window_EquipItem.isEnabled;
+        Window_EquipItem.isEnabled = function (item) {
+            if (isItemRestricted(item, this._slotId)) {
+                return false;
+            }
+            return alias.Window_EquipItem.isEnabled.call(this, item);
+        };
+    })(Window_EquipItem.prototype, $.alias);
 })(WAYModuleLoader.getModule('WAY_YEP_EquipCore'));
