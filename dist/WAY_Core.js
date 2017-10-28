@@ -4,7 +4,7 @@
 /**
  * @file WAY Core is a Utility plugin for RPG Maker MV Plugin Developement.
  * @author waynee95
- * @version 1.1.4
+ * @version 1.2.4
  */
 /*:
 @plugindesc WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
@@ -211,7 +211,7 @@ var WAYModuleLoader = function () {
     return WAYModuleLoader;
 }()();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.1.4', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.2.4', 'waynee95');
 
 var WAYCore = WAYCore || {};
 
@@ -248,6 +248,15 @@ var WAY = WAYCore;
 
                     return arrayMin;
                 }(),
+                average: function () {
+                    function average(arr) {
+                        return arr.reduce(function (acc, val) {
+                            return acc + val;
+                        }) / arr.length;
+                    }
+
+                    return average;
+                }(),
                 clean: function () {
                     function clean(arr) {
                         return arr.filter(function (element) {
@@ -277,14 +286,14 @@ var WAY = WAYCore;
 
                     return concatAll;
                 }(),
-                diffArray: function () {
-                    function diffArray(a, b) {
+                difference: function () {
+                    function difference(a, b) {
                         return a.filter(function (element) {
                             return b.indexOf(element) === -1;
                         });
                     }
 
-                    return diffArray;
+                    return difference;
                 }(),
                 extend: function () {
                     function extend(obj, name, func) {
@@ -359,7 +368,7 @@ var WAY = WAYCore;
                         var _this2 = this;
 
                         var result = [];
-                        var re = new RegExp('<(' + String(tag) + ')>([\\s\\S]*?)<(\\/' + String(tag) + ')>', 'gi');
+                        var re = new RegExp('<(' + String(tag) + ')>([\\s\\S]*?)<(\\/' + String(tag) + ')>', 'g');
                         var matches = WAY.Util.filterText(text, re, function (match) {
                             return match[1].toLowerCase() === tag.toLowerCase();
                         });
@@ -397,14 +406,14 @@ var WAY = WAYCore;
 
                     return insert;
                 }(),
-                intersectArray: function () {
-                    function intersectArray(a, b) {
+                intersect: function () {
+                    function intersect(a, b) {
                         return a.filter(function (element) {
                             return b.indexOf(element) > -1;
                         });
                     }
 
-                    return intersectArray;
+                    return intersect;
                 }(),
                 isArray: function () {
                     function isArray(obj) {
@@ -691,14 +700,14 @@ var WAY = WAYCore;
 
                     return trim;
                 }(),
-                uniqueArray: function () {
-                    function uniqueArray(arr) {
+                unique: function () {
+                    function unique(arr) {
                         return arr.filter(function (element, index) {
                             return arr.indexOf(element) === index;
                         });
                     }
 
-                    return uniqueArray;
+                    return unique;
                 }()
             };
         }

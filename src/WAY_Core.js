@@ -4,7 +4,7 @@
 /**
  * @file WAY Core is a Utility plugin for RPG Maker MV Plugin Developement.
  * @author waynee95
- * @version 1.1.4
+ * @version 1.2.4
  */
 /*:
 @plugindesc WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
@@ -139,7 +139,7 @@ const WAYModuleLoader = (function WAYModuleLoader() {
     };
 }());
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.1.4', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.2.4', 'waynee95');
 
 const WAYCore = WAYCore || {};
 
@@ -157,6 +157,9 @@ const WAY = WAYCore;
             arrayMin(arr) {
                 return arr.reduce((acc, val) => (acc < val ? acc : val));
             },
+            average(arr) {
+                return arr.reduce((acc, val) => acc + val) / arr.length;
+            },
             clean(arr) {
                 return arr.filter(element => WAY.Util.exists(element));
             },
@@ -169,7 +172,7 @@ const WAY = WAYCore;
                     ...val
                 ]);
             },
-            diffArray(a, b) {
+            difference(a, b) {
                 return a.filter(element => b.indexOf(element) === -1);
             },
             extend(obj, name, func) {
@@ -214,7 +217,7 @@ const WAY = WAYCore;
             },
             getMultiLineNotetag(text, tag, defaultValue, func) {
                 const result = [];
-                const re = new RegExp(`<(${tag})>([\\s\\S]*?)<(\\/${tag})>`, 'gi');
+                const re = new RegExp(`<(${tag})>([\\s\\S]*?)<(\\/${tag})>`, 'g');
                 const matches = WAY.Util.filterText(
                     text,
                     re,
@@ -237,7 +240,7 @@ const WAY = WAYCore;
             insert(arr, item, index = arr.length) {
                 arr.splice(index, 0, item);
             },
-            intersectArray(a, b) {
+            intersect(a, b) {
                 return a.filter(element => b.indexOf(element) > -1);
             },
             isArray(obj) {
@@ -393,7 +396,7 @@ const WAY = WAYCore;
             trim(string) {
                 return string.trim();
             },
-            uniqueArray(arr) {
+            unique(arr) {
                 return arr.filter((element, index) => arr.indexOf(element) === index);
             }
         };
