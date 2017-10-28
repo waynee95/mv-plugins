@@ -1,55 +1,36 @@
 {
-    "plugins": [
-        "import",
-        "rpgmaker"
+  "env": {
+    "browser": true,
+    "node": true,
+    "rpgmaker/mv": true
+  },
+  "extends": ["airbnb-base", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "script"
+  },
+  "plugins": ["import", "rpgmaker"],
+  "rules": {
+    "camelcase": 0,
+    "comma-dangle": ["error", "never"],
+    "func-names": ["error", "never"],
+    "indent": ["error", 4],
+    "linebreak-style": ["error", "windows"],
+    "max-len": ["error", 100],
+    "max-statements": ["error", 10],
+    "no-cond-assign": ["error", "except-parens"],
+    "no-param-reassign": ["error", { "props": false }],
+    "no-plusplus": 0,
+    "no-return-assign": ["error", "except-parens"],
+    "no-underscore-dangle": 0,
+    "prefer-destructuring": [
+      "error",
+      {
+        "array": false,
+        "object": true
+      }
     ],
-    "extends": [
-        "airbnb-base"
-    ],
-    "env": {
-        "browser": true,
-        "node": true,
-        "rpgmaker/mv": true
-    },
-    "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "script"
-    },
-    "rules": {
-        "indent": [
-            "error",
-            4
-        ],
-        "linebreak-style": [
-            "error",
-            "windows"
-        ],
-        "no-use-before-define": 0,
-        "comma-dangle": 0,
-        "no-plusplus": 0,
-        "no-param-reassign": 0,
-        "spaced-comment": 0,
-        "prefer-destructuring": [
-            "error",
-            {
-                "object": true,
-                "array": false
-            }
-        ],
-        "max-statements": [
-            "error",
-            10
-        ],
-        "no-return-assign": [
-            "error",
-            "except-parens"
-        ],
-        "no-cond-assign": [
-            "error",
-            "except-parens"
-        ],
-        "func-names": 0,
-        "no-underscore-dangle": 0,
-        "camelcase": 0
-    }
+    "spaced-comment": 0,
+    "quotes": ["error", "single"]
+  }
 }

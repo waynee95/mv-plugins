@@ -2,5 +2,7 @@
   "eslint.enable": true,
   "eslint.autoFixOnSave": true,
   "workbench.editor.enablePreviewFromQuickOpen": false,
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+
+  "prettier.eslintIntegration": true
 }
