@@ -88,14 +88,13 @@ if (WAY === undefined) {
     WAY.EventEmitter.on('load-skill-notetags', parseNotetags);
 
     ((Window_Base) => {
-        const s = $gameSwitches._data;
-        const v = $gameVariables._data;
-        const p = $gameParty;
-
         const evalCustomName = (item) => {
             const { customNameEval } = item;
             if (!customNameEval || customNameEval === '') return item.name;
             let name = ''; // eslint-disable-line prefer-const
+            const s = $gameSwitches._data;
+            const v = $gameVariables._data;
+            const p = $gameParty;
             try {
                 eval(customNameEval);
             } catch (e) {
@@ -108,6 +107,9 @@ if (WAY === undefined) {
             const { customTextColorEval } = item;
             if (!customTextColorEval || customTextColorEval === '') return 0;
             let textColor = 0; // eslint-disable-line prefer-const
+            const s = $gameSwitches._data;
+            const v = $gameVariables._data;
+            const p = $gameParty;
             try {
                 eval(customTextColorEval);
             } catch (e) {

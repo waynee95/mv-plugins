@@ -13,7 +13,7 @@
 
 @help
 ===============================================================================
- ■ Plugin Commands
+ ■ Notetags
 ===============================================================================
 -- Enemy
 
@@ -33,7 +33,7 @@ My plugins may be used in commercial and non-commercial products.
 if (WAY === undefined) {
     console.error('You need to install WAY_Core!'); //eslint-disable-line no-console
     if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-		var gui = require('nw.gui'); //eslint-disable-line
+        var gui = require('nw.gui'); //eslint-disable-line
         gui.Window.get().showDevTools();
     }
     SceneManager.stop();
