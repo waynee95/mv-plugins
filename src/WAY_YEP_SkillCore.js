@@ -5,7 +5,7 @@
 /**
  * @file Addon to Yanfly's Skill Core Plugin.
  * @author waynee95
- * @version 1.0.0
+ * @version 1.0.1
  */
 /*:
 @plugindesc Addon to Yanfly's Skill Core Plugin. <WAY_YEP_SkillCore>
@@ -75,12 +75,17 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_SkillCore', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_SkillCore', '1.0.1', 'waynee95');
 }
 
 (($) => {
     const {
-        getMultiLineNotetag, getNotetag, toArray, trim, difference, showError
+        getMultiLineNotetag,
+        getNotetag,
+        toArray,
+        trim,
+        difference,
+        showError
     } = WAY.Util;
 
     WAY.EventEmitter.on('load-actor-notetags', (actor) => {
@@ -88,9 +93,24 @@ if (WAY === undefined) {
     });
 
     WAY.EventEmitter.on('load-skill-notetags', (skill) => {
-        skill.customHpCostTextEval = getMultiLineNotetag(skill.note, 'Custom HP Cost Text Eval', null, trim);
-        skill.customMpCostTextEval = getMultiLineNotetag(skill.note, 'Custom MP Cost Text Eval', null, trim);
-        skill.customTpCostTextEval = getMultiLineNotetag(skill.note, 'Custom TP Cost Text Eval', null, trim);
+        skill.customHpCostTextEval = getMultiLineNotetag(
+            skill.note,
+            'Custom HP Cost Text Eval',
+            '',
+            trim
+        );
+        skill.customMpCostTextEval = getMultiLineNotetag(
+            skill.note,
+            'Custom MP Cost Text Eval',
+            '',
+            trim
+        );
+        skill.customTpCostTextEval = getMultiLineNotetag(
+            skill.note,
+            'Custom TP Cost Text Eval',
+            '',
+            trim
+        );
     });
 
     ((Window_ActorCommand, alias) => {
@@ -109,7 +129,7 @@ if (WAY === undefined) {
     })(Window_ActorCommand.prototype, $.alias);
 
     ((Window_SkillList, alias) => {
-        Window_SkillList.prototype.drawCustomCostText = function (text, wx, wy, dw) {
+        Window_SkillList.drawCustomCostText = function (text, wx, wy, dw) {
             const width = this.textWidthEx(text);
             this.drawTextEx(text, (wx - width) + dw, wy);
             const returnWidth = dw - width - Yanfly.Param.SCCCostPadding;
@@ -117,47 +137,46 @@ if (WAY === undefined) {
             return returnWidth;
         };
 
-        alias.Window_SkillList_drawHpCost = Window_SkillList.prototype.drawHpCost;
-        Window_SkillList.prototype.drawHpCost = function (skill, wx, wy, dw) {
+        alias.Window_SkillList_drawHpCost = Window_SkillList.drawHpCost;
+        Window_SkillList.drawHpCost = function (skill, wx, wy, dw) {
             const cost = this._actor.skillHpCost(skill);
             const code = skill.customHpCostTextEval;
             if (cost > 0 && code !== '') {
-                const text = this.customCostTextEval(skill, cost, code);
+                const text = customCostTextEval(skill, cost, code, this._actor);
                 return this.drawCustomCostText(text, wx, wy, dw);
             }
 
             return alias.Window_SkillList_drawHpCost.call(this, skill, wx, wy, dw);
         };
 
-        const _Window_SkillList_drawMpCost = Window_SkillList.prototype.drawMpCost;
-        Window_SkillList.prototype.drawMpCost = function (skill, wx, wy, dw) {
+        alias.Window_SkillList_drawMpCost = Window_SkillList.drawMpCost;
+        Window_SkillList.drawMpCost = function (skill, wx, wy, dw) {
             const cost = this._actor.skillMpCost(skill);
             const code = skill.customMpCostTextEval;
             if (cost > 0 && code !== '') {
-                const text = this.customCostTextEval(skill, cost, code);
+                const text = customCostTextEval(skill, cost, code, this._actor);
                 return this.drawCustomCostText(text, wx, wy, dw);
             }
 
-            return _Window_SkillList_drawMpCost.call(this, skill, wx, wy, dw);
+            return alias.Window_SkillList_drawMpCost.call(this, skill, wx, wy, dw);
         };
 
-        const _Window_SkillList_drawTpCost = Window_SkillList.prototype.drawTpCost;
-        Window_SkillList.prototype.drawTpCost = function (skill, wx, wy, dw) {
+        alias.Window_SkillList_drawTpCost = Window_SkillList.drawTpCost;
+        Window_SkillList.drawTpCost = function (skill, wx, wy, dw) {
             const cost = this._actor.skillTpCost(skill);
             const code = skill.customTpCostTextEval;
             if (cost > 0 && code !== '') {
-                const text = this.customCostTextEval(skill, cost, code);
+                const text = customCostTextEval(skill, cost, code, this._actor);
                 return this.drawCustomCostText(text, wx, wy, dw);
             }
 
-            return _Window_SkillList_drawTpCost.call(this, skill, wx, wy, dw);
+            return alias.Window_SkillList_drawTpCost.call(this, skill, wx, wy, dw);
         };
 
-        Window_SkillList.prototype.customCostTextEval = function (skill, cost, code) {
+        const customCostTextEval = function (skill, cost, code, a) {
             const text = '';
-            const a = this._actor;
-            const user = this._actor;
-            const subject = this._actor;
+            const user = a;
+            const subject = a;
             const s = $gameSwitches._data;
             const v = $gameVariables._data;
             const p = $gameParty;
