@@ -5,7 +5,7 @@
 /**
  * @file Allows you to set the animation rate for each animation individually.
  * @author waynee95
- * @version 1.0.0
+ * @version 1.0.1
  */
 /*:
 @plugindesc Allows you to set the animation rate for each animation individually.
@@ -38,32 +38,19 @@ My plugins may be used in commercial and non-commercial products.
 if (WAY === undefined) {
     console.error('You need to install WAY_Core!'); //eslint-disable-line no-console
     if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-		var gui = require('nw.gui'); //eslint-disable-line
+        var gui = require('nw.gui'); //eslint-disable-line
         gui.Window.get().showDevTools();
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_AnimationRate', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_AnimationRate', '1.0.1', 'waynee95');
 }
 
 (($) => {
     ((Sprite_Animation, params, alias) => {
-        alias.Sprite_Animation_setup = Sprite_Animation.setup;
-        Sprite_Animation.setup = function (target, animation, mirror, delay) {
-            this._target = target;
-            this._animation = animation;
-            this._mirror = mirror;
-            this._delay = delay;
-            if (this._animation) {
-                this.remove();
-                this.setupRate(animation);
-                this.setupDuration();
-                this.loadBitmaps();
-                this.createSprites();
-            }
-        };
-
         alias.Sprite_Animation_setRate = Sprite_Animation.setupRate;
+
+        /* override */
         Sprite_Animation.setupRate = function (animation) {
             const re = /<(?:RATE): ([0-9]+)>/i;
             if (animation.name.match(re)) {

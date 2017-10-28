@@ -5,7 +5,7 @@
 /**
  * @file Allows you to set the animation rate for each animation individually.
  * @author waynee95
- * @version 1.0.0
+ * @version 1.0.1
  */
 /*:
 @plugindesc Allows you to set the animation rate for each animation individually.
@@ -43,27 +43,14 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_AnimationRate', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_AnimationRate', '1.0.1', 'waynee95');
 }
 
 (function ($) {
     (function (Sprite_Animation, params, alias) {
-        alias.Sprite_Animation_setup = Sprite_Animation.setup;
-        Sprite_Animation.setup = function (target, animation, mirror, delay) {
-            this._target = target;
-            this._animation = animation;
-            this._mirror = mirror;
-            this._delay = delay;
-            if (this._animation) {
-                this.remove();
-                this.setupRate(animation);
-                this.setupDuration();
-                this.loadBitmaps();
-                this.createSprites();
-            }
-        };
-
         alias.Sprite_Animation_setRate = Sprite_Animation.setupRate;
+
+        /* override */
         Sprite_Animation.setupRate = function (animation) {
             var re = /<(?:RATE): ([0-9]+)>/i;
             if (animation.name.match(re)) {
