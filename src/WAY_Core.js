@@ -1,10 +1,11 @@
+/* eslint no-use-before-define: 0 */
 // ===========================================================================
 // WAY_Core.js
 // ===========================================================================
 /**
  * @file WAY Core is a Utility plugin for RPG Maker MV Plugin Developement.
  * @author waynee95
- * @version 1.4.4
+ * @version 1.4.5
  */
 /*:
 @plugindesc WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
@@ -30,9 +31,8 @@ My plugins may be used in commercial and non-commercial products.
 
 const Imported = Imported || {};
 
-const WAYModuleLoader = (function WAYModuleLoader() {
+const WAYModuleLoader = (function() {
     const plugins = {};
-
     function parseStruct(params) {
         if (WAY === undefined) {
             return params;
@@ -42,24 +42,24 @@ const WAYModuleLoader = (function WAYModuleLoader() {
 
     function compareVersions(currentVersion, operator = '==', requiredVersion) {
         const length = Math.max(currentVersion.length, requiredVersion.length);
+        let compare = 0;
         const operation = {
-            '<': function less() {
+            '<': function() {
                 return compare < 0;
             },
-            '<=': function lessEqual() {
+            '<=': function() {
                 return compare <= 0;
             },
-            '==': function equal() {
+            '==': function() {
                 return compare === 0;
             },
-            '>': function greater() {
+            '>': function() {
                 return compare > 0;
             },
-            '>=': function greaterEqual() {
+            '>=': function() {
                 return compare >= 0;
             }
         };
-        let compare = 0;
         for (let i = 0; i < length; i += 1) {
             if (currentVersion[i] < requiredVersion[i]) {
                 compare = -1;
@@ -114,7 +114,8 @@ const WAYModuleLoader = (function WAYModuleLoader() {
             return false;
         },
         getPluginParameters(key) {
-            return window.$plugins.filter(p => p.description.indexOf(`<${key}>`) > -1)[0].parameters;
+            return window.$plugins.filter(p => p.description.indexOf(`<${key}>`) > -1)[0]
+                .parameters;
         },
         isImported(key) {
             return typeof plugins[key] !== 'undefined';
@@ -137,19 +138,19 @@ const WAYModuleLoader = (function WAYModuleLoader() {
             return true;
         }
     };
-}());
+})();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.4.4', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.4.5', 'waynee95');
 
 const WAYCore = WAYCore || {};
-
 const WAY = WAYCore;
 
-(($) => {
-    const Utilities = function Utilities() {
+($ => {
+    const Utilities = function() {
         return {
             arrayFromRange(start, end) {
-                return Array.apply(null, { length: (end - start) + 1 }).map((e, index) => start + index); // eslint-disable-line
+                return Array.apply(null, { length: end - start + 1 }) // eslint-disable-line
+                    .map((e, index) => start + index);
             },
             arrayMax(arr) {
                 return arr.reduce((acc, val) => (acc > val ? acc : val));
@@ -167,17 +168,14 @@ const WAY = WAYCore;
                 return Math.max(lower, Math.min(num, upper));
             },
             concatAll(...args) {
-                return args.reduce((acc, val) => [
-                    ...acc,
-                    ...val
-                ]);
+                return args.reduce((acc, val) => [...acc, ...val]);
             },
             difference(a, b) {
                 return a.filter(element => b.indexOf(element) === -1);
             },
             extend(obj, name, func) {
                 const orig = obj[name];
-                obj[name] = function (...args) {
+                obj[name] = (...args) => {
                     orig.apply(this, args);
                     func.apply(this, args);
                 };
@@ -189,15 +187,15 @@ const WAY = WAYCore;
                 if (WAY.Util.isArray(obj)) {
                     return obj.filter(element => func(element));
                 }
-                return Object.keys(obj).filter(key => func(obj[key])).reduce(
-                    (res, key) => Object.assign(
-                        res,
-                        {
-                            [key]: obj[key]
-                        }
-                    ),
-                    {}
-                );
+                return Object.keys(obj)
+                    .filter(key => func(obj[key]))
+                    .reduce(
+                        (res, key) =>
+                            Object.assign(res, {
+                                [key]: obj[key]
+                            }),
+                        {}
+                    );
             },
             filterText(text, re, action) {
                 const result = [];
@@ -219,9 +217,9 @@ const WAY = WAYCore;
                 const event = $dataMap.events[eventId];
                 const { pages } = event;
                 let allComments = '';
-                pages.forEach((page) => {
+                pages.forEach(page => {
                     let comments = '';
-                    page.list.forEach((command) => {
+                    page.list.forEach(command => {
                         if (command.code === 108 || command.code === 408) {
                             comments += `${command.parameters[0]}\n`;
                         }
@@ -263,7 +261,7 @@ const WAY = WAYCore;
                 return Object.prototype.toString.apply(obj) === '[object Array]';
             },
             isBool(value) {
-                return (value === true || value === false || /^(:?true|false)$/i.test(value));
+                return value === true || value === false || /^(:?true|false)$/i.test(value);
             },
             isEmpty(obj) {
                 return WAY.Util.isObj(obj) && Object.keys(obj).length < 1;
@@ -289,7 +287,7 @@ const WAY = WAYCore;
                 return WAY.Util.isInt(value) || WAY.Util.isFloat(value);
             },
             isObject(obj) {
-                return (obj && Object.prototype.toString.apply(obj) === '[object Object]');
+                return obj && Object.prototype.toString.apply(obj) === '[object Object]';
             },
             isPlaytest() {
                 return Utils.isOptionValid('test');
@@ -303,15 +301,18 @@ const WAY = WAYCore;
                 if (WAY.Util.isArray(obj)) {
                     return obj.map(func);
                 }
-                return Object.assign({}, ...Object.keys(obj).map(key => ({
-                    [key]: func(obj[key])
-                })));
+                return Object.assign(
+                    {},
+                    ...Object.keys(obj).map(key => ({
+                        [key]: func(obj[key])
+                    }))
+                );
             },
             negate(num) {
                 return num * -1;
             },
             parseStruct(params) {
-                const parseKey = (key) => {
+                const parseKey = key => {
                     const value = params[key];
                     if (WAY.Util.isNumber(parseInt(value, 10))) {
                         params[key] = Number(value);
@@ -338,7 +339,7 @@ const WAY = WAYCore;
                 return arr[index];
             },
             piper(...steps) {
-                return function pipe(...args) {
+                return function(...args) {
                     let value = steps[0].apply(this, args);
                     steps.slice(1).forEach(step => (value = step.call(this, value)));
                     return value;
@@ -348,7 +349,7 @@ const WAY = WAYCore;
                 return obj => obj[key];
             },
             randomBetween(min, max) {
-                return WAY.Util.floorRand((max + 1) - min) + min;
+                return WAY.Util.floorRand(max + 1 - min) + min;
             },
             remove(arr, item) {
                 const index = arr.indexOf(item);
@@ -395,13 +396,13 @@ const WAY = WAYCore;
                 return null;
             },
             toInt(value) {
-                return WAY.Util.piper(parseInt, num => num - (num % 1))(value);
+                return WAY.Util.piper(parseInt, num => num - num % 1)(value);
             },
             toObj(string) {
                 if (WAY.Util.isJsonString(string)) {
                     return JsonEx.parse(string);
                 }
-                const createObjProperty = (pair) => {
+                const createObjProperty = pair => {
                     const [key, value] = pair.split(':').map(WAY.Util.trim);
                     if (WAY.Util.isNumber(parseInt(value, 10))) {
                         return {
@@ -416,7 +417,14 @@ const WAY = WAYCore;
                         [key]: value
                     };
                 };
-                return Object.assign({}, ...string.replace(/,/g, '\n').split(/[\r\n]+/).filter(key => key !== '').map(createObjProperty));
+                return Object.assign(
+                    {},
+                    ...string
+                        .replace(/,/g, '\n')
+                        .split(/[\r\n]+/)
+                        .filter(key => key !== '')
+                        .map(createObjProperty)
+                );
             },
             trim(string) {
                 return string.trim();
@@ -428,13 +436,13 @@ const WAY = WAYCore;
     };
     WAY.Util = Utilities();
 
-    const EventEmitter = function EventEmitter() {
+    const EventEmitter = function() {
         return new PIXI.utils.EventEmitter();
     };
     WAY.EventEmitter = EventEmitter();
 
     ((DataManager, alias) => {
-        const loadNotetags = function loadNotetags(objects, index) {
+        const loadNotetags = function(objects, index) {
             const strings = [
                 'actor',
                 'class',
@@ -445,14 +453,14 @@ const WAY = WAYCore;
                 'enemy',
                 'state'
             ];
-            objects.forEach((data) => {
+            objects.forEach(data => {
                 if (data) {
                     WAY.EventEmitter.emit(`load-${strings[index]}-notetags`, data);
                 }
             });
         };
         alias.DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
-        DataManager.isDatabaseLoaded = function () {
+        DataManager.isDatabaseLoaded = function() {
             if (!alias.DataManager_isDatabaseLoaded.call(this)) {
                 return false;
             }
@@ -471,15 +479,15 @@ const WAY = WAYCore;
         };
     })(DataManager, $.alias);
 
-    ((PluginManager) => {
+    (PluginManager => {
         const commands = {};
-        PluginManager.addCommand = function addCommand(command, actions) {
+        PluginManager.addCommand = function(command, actions) {
             commands[command] = actions;
         };
-        PluginManager.isCommand = function isCommand(command) {
+        PluginManager.isCommand = function(command) {
             return typeof commands[command] !== 'undefined';
         };
-        PluginManager.getCommand = function getCommand(command) {
+        PluginManager.getCommand = function(command) {
             if (this.isCommand(command)) {
                 return commands[command];
             }
@@ -489,7 +497,7 @@ const WAY = WAYCore;
 
     ((GameInterpreter, alias) => {
         alias.Game_Interpreter_pluginCommand = GameInterpreter.pluginCommand;
-        WAY.Util.extend(Game_Interpreter.prototype, 'pluginCommand', function (command, args) {
+        WAY.Util.extend(Game_Interpreter.prototype, 'pluginCommand', (command, args) => {
             const actions = PluginManager.getCommand(command);
             if (actions) {
                 const action = actions[args[0]];

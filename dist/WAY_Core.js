@@ -1,10 +1,11 @@
+/* eslint no-use-before-define: 0 */
 // ===========================================================================
 // WAY_Core.js
 // ===========================================================================
 /**
  * @file WAY Core is a Utility plugin for RPG Maker MV Plugin Developement.
  * @author waynee95
- * @version 1.3.4
+ * @version 1.4.5
  */
 /*:
 @plugindesc WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
@@ -37,184 +38,178 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 var Imported = Imported || {};
 
 var WAYModuleLoader = function () {
-    function WAYModuleLoader() {
-        var plugins = {};
-
-        function parseStruct(params) {
-            if (WAY === undefined) {
-                return params;
-            }
-            return WAY.Util.parseStruct(params);
+    var plugins = {};
+    function parseStruct(params) {
+        if (WAY === undefined) {
+            return params;
         }
-
-        function compareVersions(currentVersion) {
-            var operator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '==';
-            var requiredVersion = arguments[2];
-
-            var length = Math.max(currentVersion.length, requiredVersion.length);
-            var operation = {
-                '<': function () {
-                    function less() {
-                        return compare < 0;
-                    }
-
-                    return less;
-                }(),
-                '<=': function () {
-                    function lessEqual() {
-                        return compare <= 0;
-                    }
-
-                    return lessEqual;
-                }(),
-                '==': function () {
-                    function equal() {
-                        return compare === 0;
-                    }
-
-                    return equal;
-                }(),
-                '>': function () {
-                    function greater() {
-                        return compare > 0;
-                    }
-
-                    return greater;
-                }(),
-                '>=': function () {
-                    function greaterEqual() {
-                        return compare >= 0;
-                    }
-
-                    return greaterEqual;
-                }()
-            };
-            var compare = 0;
-            for (var i = 0; i < length; i += 1) {
-                if (currentVersion[i] < requiredVersion[i]) {
-                    compare = -1;
-                    break;
-                } else if (currentVersion[i] > requiredVersion[i]) {
-                    compare = 1;
-                    break;
-                }
-            }
-            return operation[operator]();
-        }
-
-        function printError(msg, key) {
-            var strA = 'Error loading' + String(key) + '\n\n';
-            var strB = 'The following plugins are required:\n' + String(msg) + '\n';
-            var strC = 'Place the required plugins above ' + String(key) + '!';
-            console.error(strA + strB + strC); //eslint-disable-line no-console
-            if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-                var gui = require('nw.gui'); //eslint-disable-line
-                gui.Window.get().showDevTools();
-            }
-            SceneManager.stop();
-        }
-        return {
-            checkRequirements: function () {
-                function checkRequirements(key) {
-                    var _this = this;
-
-                    var list = '';
-                    plugins[key].required.forEach(function (_ref) {
-                        var name = _ref.name,
-                            version = _ref.version;
-
-                        if (!_this.isImported(name)) {
-                            list += String(name) + '\n';
-                        } else if (version) {
-                            var _version$split$revers = version.split(' ').reverse(),
-                                _version$split$revers2 = _slicedToArray(_version$split$revers, 2),
-                                requiredVersion = _version$split$revers2[0],
-                                operator = _version$split$revers2[1];
-
-                            if (!_this.checkVersion(name, operator, requiredVersion)) {
-                                list += String(name) + ' needs to be ' + String(operator) + ' version ' + String(requiredVersion) + '!\n';
-                            }
-                        }
-                    });
-                    if (list) {
-                        printError(list, key);
-                    }
-                }
-
-                return checkRequirements;
-            }(),
-            checkVersion: function () {
-                function checkVersion(key, operator, requiredVersion) {
-                    if (this.isImported(key)) {
-                        var currentVersion = plugins[key].version;
-                        return compareVersions(currentVersion, operator, requiredVersion);
-                    }
-                    return false;
-                }
-
-                return checkVersion;
-            }(),
-            getModule: function () {
-                function getModule(key) {
-                    if (this.isImported(key)) {
-                        return plugins[key];
-                    }
-                    return false;
-                }
-
-                return getModule;
-            }(),
-            getPluginParameters: function () {
-                function getPluginParameters(key) {
-                    return window.$plugins.filter(function (p) {
-                        return p.description.indexOf('<' + String(key) + '>') > -1;
-                    })[0].parameters;
-                }
-
-                return getPluginParameters;
-            }(),
-            isImported: function () {
-                function isImported(key) {
-                    return typeof plugins[key] !== 'undefined';
-                }
-
-                return isImported;
-            }(),
-            registerPlugin: function () {
-                function registerPlugin(key, version, author) {
-                    for (var _len = arguments.length, required = Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
-                        required[_key - 3] = arguments[_key];
-                    }
-
-                    if (this.isImported(key)) {
-                        return false;
-                    }
-                    plugins[key] = {
-                        alias: {},
-                        author: author,
-                        parameters: parseStruct(this.getPluginParameters(key)),
-                        required: required,
-                        version: version
-                    };
-                    Imported[key] = version;
-                    if (required) {
-                        this.checkRequirements(key);
-                    }
-                    return true;
-                }
-
-                return registerPlugin;
-            }()
-        };
+        return WAY.Util.parseStruct(params);
     }
 
-    return WAYModuleLoader;
-}()();
+    function compareVersions(currentVersion) {
+        var operator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '==';
+        var requiredVersion = arguments[2];
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.3.4', 'waynee95');
+        var length = Math.max(currentVersion.length, requiredVersion.length);
+        var compare = 0;
+        var operation = {
+            '<': function () {
+                function _() {
+                    return compare < 0;
+                }
+
+                return _;
+            }(),
+            '<=': function () {
+                function _() {
+                    return compare <= 0;
+                }
+
+                return _;
+            }(),
+            '==': function () {
+                function _() {
+                    return compare === 0;
+                }
+
+                return _;
+            }(),
+            '>': function () {
+                function _() {
+                    return compare > 0;
+                }
+
+                return _;
+            }(),
+            '>=': function () {
+                function _() {
+                    return compare >= 0;
+                }
+
+                return _;
+            }()
+        };
+        for (var i = 0; i < length; i += 1) {
+            if (currentVersion[i] < requiredVersion[i]) {
+                compare = -1;
+                break;
+            } else if (currentVersion[i] > requiredVersion[i]) {
+                compare = 1;
+                break;
+            }
+        }
+        return operation[operator]();
+    }
+
+    function printError(msg, key) {
+        var strA = 'Error loading' + String(key) + '\n\n';
+        var strB = 'The following plugins are required:\n' + String(msg) + '\n';
+        var strC = 'Place the required plugins above ' + String(key) + '!';
+        console.error(strA + strB + strC); //eslint-disable-line no-console
+        if (Utils.isNwjs() && Utils.isOptionValid('test')) {
+            var gui = require('nw.gui'); //eslint-disable-line
+            gui.Window.get().showDevTools();
+        }
+        SceneManager.stop();
+    }
+    return {
+        checkRequirements: function () {
+            function checkRequirements(key) {
+                var _this = this;
+
+                var list = '';
+                plugins[key].required.forEach(function (_ref) {
+                    var name = _ref.name,
+                        version = _ref.version;
+
+                    if (!_this.isImported(name)) {
+                        list += String(name) + '\n';
+                    } else if (version) {
+                        var _version$split$revers = version.split(' ').reverse(),
+                            _version$split$revers2 = _slicedToArray(_version$split$revers, 2),
+                            requiredVersion = _version$split$revers2[0],
+                            operator = _version$split$revers2[1];
+
+                        if (!_this.checkVersion(name, operator, requiredVersion)) {
+                            list += String(name) + ' needs to be ' + String(operator) + ' version ' + String(requiredVersion) + '!\n';
+                        }
+                    }
+                });
+                if (list) {
+                    printError(list, key);
+                }
+            }
+
+            return checkRequirements;
+        }(),
+        checkVersion: function () {
+            function checkVersion(key, operator, requiredVersion) {
+                if (this.isImported(key)) {
+                    var currentVersion = plugins[key].version;
+                    return compareVersions(currentVersion, operator, requiredVersion);
+                }
+                return false;
+            }
+
+            return checkVersion;
+        }(),
+        getModule: function () {
+            function getModule(key) {
+                if (this.isImported(key)) {
+                    return plugins[key];
+                }
+                return false;
+            }
+
+            return getModule;
+        }(),
+        getPluginParameters: function () {
+            function getPluginParameters(key) {
+                return window.$plugins.filter(function (p) {
+                    return p.description.indexOf('<' + String(key) + '>') > -1;
+                })[0].parameters;
+            }
+
+            return getPluginParameters;
+        }(),
+        isImported: function () {
+            function isImported(key) {
+                return typeof plugins[key] !== 'undefined';
+            }
+
+            return isImported;
+        }(),
+        registerPlugin: function () {
+            function registerPlugin(key, version, author) {
+                for (var _len = arguments.length, required = Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
+                    required[_key - 3] = arguments[_key];
+                }
+
+                if (this.isImported(key)) {
+                    return false;
+                }
+                plugins[key] = {
+                    alias: {},
+                    author: author,
+                    parameters: parseStruct(this.getPluginParameters(key)),
+                    required: required,
+                    version: version
+                };
+                Imported[key] = version;
+                if (required) {
+                    this.checkRequirements(key);
+                }
+                return true;
+            }
+
+            return registerPlugin;
+        }()
+    };
+}();
+
+WAYModuleLoader.registerPlugin('WAY_Core', '1.4.5', 'waynee95');
 
 var WAYCore = WAYCore || {};
-
 var WAY = WAYCore;
 
 (function ($) {
@@ -223,9 +218,10 @@ var WAY = WAYCore;
             return {
                 arrayFromRange: function () {
                     function arrayFromRange(start, end) {
-                        return Array.apply(null, { length: end - start + 1 }).map(function (e, index) {
+                        return Array.apply(null, { length: end - start + 1 }) // eslint-disable-line
+                        .map(function (e, index) {
                             return start + index;
-                        }); // eslint-disable-line
+                        });
                     }
 
                     return arrayFromRange;
@@ -297,14 +293,16 @@ var WAY = WAYCore;
                 }(),
                 extend: function () {
                     function extend(obj, name, func) {
+                        var _this2 = this;
+
                         var orig = obj[name];
                         obj[name] = function () {
                             for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
                                 args[_key3] = arguments[_key3];
                             }
 
-                            orig.apply(this, args);
-                            func.apply(this, args);
+                            orig.apply(_this2, args);
+                            func.apply(_this2, args);
                         };
                     }
 
@@ -386,7 +384,7 @@ var WAY = WAYCore;
                 }(),
                 getMultiLineNotetag: function () {
                     function getMultiLineNotetag(text, tag, defaultValue, func) {
-                        var _this2 = this;
+                        var _this3 = this;
 
                         var result = [];
                         var re = new RegExp('<(' + String(tag) + ')>([\\s\\S]*?)<(\\/' + String(tag) + ')>', 'g');
@@ -394,7 +392,7 @@ var WAY = WAYCore;
                             return match[1].toLowerCase() === tag.toLowerCase();
                         });
                         matches.forEach(function (group) {
-                            return result.push(func.call(_this2, group[2]));
+                            return result.push(func.call(_this3, group[2]));
                         });
                         return result.length > 0 ? result[0] : defaultValue;
                     }
@@ -403,7 +401,7 @@ var WAY = WAYCore;
                 }(),
                 getNotetag: function () {
                     function getNotetag(text, tag, defaultValue, func) {
-                        var _this3 = this;
+                        var _this4 = this;
 
                         var result = [];
                         var re = /<([^<>:]+)(:?)([^>]*)>/g;
@@ -411,7 +409,7 @@ var WAY = WAYCore;
                             return match[1].toLowerCase() === tag.toLowerCase();
                         });
                         matches.forEach(function (group) {
-                            return result.push(func.call(_this3, group[3]));
+                            return result.push(func.call(_this4, group[3]));
                         });
                         return result.length > 0 ? result[0] : defaultValue;
                     }
@@ -589,22 +587,18 @@ var WAY = WAYCore;
                         }
 
                         return function () {
-                            function pipe() {
-                                var _this4 = this;
+                            var _this5 = this;
 
-                                for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-                                    args[_key5] = arguments[_key5];
-                                }
-
-                                var value = steps[0].apply(this, args);
-                                steps.slice(1).forEach(function (step) {
-                                    return value = step.call(_this4, value);
-                                });
-                                return value;
+                            for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+                                args[_key5] = arguments[_key5];
                             }
 
-                            return pipe;
-                        }();
+                            var value = steps[0].apply(this, args);
+                            steps.slice(1).forEach(function (step) {
+                                return value = step.call(_this5, value);
+                            });
+                            return value;
+                        };
                     }
 
                     return piper;
@@ -791,30 +785,18 @@ var WAY = WAYCore;
 
     (function (PluginManager) {
         var commands = {};
-        PluginManager.addCommand = function () {
-            function addCommand(command, actions) {
-                commands[command] = actions;
+        PluginManager.addCommand = function (command, actions) {
+            commands[command] = actions;
+        };
+        PluginManager.isCommand = function (command) {
+            return typeof commands[command] !== 'undefined';
+        };
+        PluginManager.getCommand = function (command) {
+            if (this.isCommand(command)) {
+                return commands[command];
             }
-
-            return addCommand;
-        }();
-        PluginManager.isCommand = function () {
-            function isCommand(command) {
-                return typeof commands[command] !== 'undefined';
-            }
-
-            return isCommand;
-        }();
-        PluginManager.getCommand = function () {
-            function getCommand(command) {
-                if (this.isCommand(command)) {
-                    return commands[command];
-                }
-                return false;
-            }
-
-            return getCommand;
-        }();
+            return false;
+        };
     })(PluginManager);
 
     (function (GameInterpreter, alias) {
@@ -824,7 +806,7 @@ var WAY = WAYCore;
             if (actions) {
                 var action = actions[args[0]];
                 if (typeof action === 'function') {
-                    action.apply(this, args.slice(1));
+                    action.apply(undefined, args.slice(1));
                 }
             }
         });
