@@ -4,7 +4,7 @@
 /**
  * @file WAY Core is a Utility plugin for RPG Maker MV Plugin Developement.
  * @author waynee95
- * @version 1.2.4
+ * @version 1.3.4
  */
 /*:
 @plugindesc WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
@@ -139,7 +139,7 @@ const WAYModuleLoader = (function WAYModuleLoader() {
     };
 }());
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.2.4', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.3.4', 'waynee95');
 
 const WAYCore = WAYCore || {};
 
@@ -149,7 +149,7 @@ const WAY = WAYCore;
     const Utilities = function Utilities() {
         return {
             arrayFromRange(start, end) {
-                return Array.from(Array((end + 1) - start), (e, index) => start + index);
+                return Array.apply(null, { length: (end - start) + 1 }).map((e, index) => start + index); // eslint-disable-line
             },
             arrayMax(arr) {
                 return arr.reduce((acc, val) => (acc > val ? acc : val));
@@ -360,6 +360,15 @@ const WAY = WAYCore;
                     }
                 }
                 return arr;
+            },
+            toArray(str) {
+                if (str.contains('to')) {
+                    let [from, to] = str.split('to');
+                    to = parseInt(to, 10);
+                    from = parseInt(from, 10);
+                    return WAY.Util.arrayFromRange(from, to);
+                }
+                return JSON.parse(`[${str}]`);
             },
             toBool(string) {
                 if (/^(:?true)$/i.test(string)) {

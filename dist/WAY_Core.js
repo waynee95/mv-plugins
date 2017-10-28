@@ -4,7 +4,7 @@
 /**
  * @file WAY Core is a Utility plugin for RPG Maker MV Plugin Developement.
  * @author waynee95
- * @version 1.2.4
+ * @version 1.3.4
  */
 /*:
 @plugindesc WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
@@ -211,7 +211,7 @@ var WAYModuleLoader = function () {
     return WAYModuleLoader;
 }()();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.2.4', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.3.4', 'waynee95');
 
 var WAYCore = WAYCore || {};
 
@@ -223,9 +223,9 @@ var WAY = WAYCore;
             return {
                 arrayFromRange: function () {
                     function arrayFromRange(start, end) {
-                        return Array.from(Array(end + 1 - start), function (e, index) {
+                        return Array.apply(null, { length: end - start + 1 }).map(function (e, index) {
                             return start + index;
-                        });
+                        }); // eslint-disable-line
                     }
 
                     return arrayFromRange;
@@ -642,6 +642,23 @@ var WAY = WAYCore;
                     }
 
                     return shuffle;
+                }(),
+                toArray: function () {
+                    function toArray(str) {
+                        if (str.contains('to')) {
+                            var _str$split = str.split('to'),
+                                _str$split2 = _slicedToArray(_str$split, 2),
+                                from = _str$split2[0],
+                                to = _str$split2[1];
+
+                            to = parseInt(to, 10);
+                            from = parseInt(from, 10);
+                            return WAY.Util.arrayFromRange(from, to);
+                        }
+                        return JSON.parse('[' + String(str) + ']');
+                    }
+
+                    return toArray;
                 }(),
                 toBool: function () {
                     function toBool(string) {
