@@ -5,7 +5,7 @@
 /**
  * @file Addon to Yanfly's Equip Battle Skills Plugin.
  * @author waynee95
- * @version 1.0.0
+ * @version 1.0.1
  */
 /*:
 @plugindesc Addon to Yanfly's Equip Battle Skills Plugin. <WAY_YEP_EquipBattleSkills>
@@ -34,12 +34,12 @@ My plugins may be used in commercial and non-commercial products.
 if (WAY === undefined) {
     console.error('You need to install WAY_Core!'); //eslint-disable-line no-console
     if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-		var gui = require('nw.gui'); //eslint-disable-line
+        var gui = require('nw.gui'); //eslint-disable-line
         gui.Window.get().showDevTools();
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_EquipBattleSkills', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_EquipBattleSkills', '1.0.1', 'waynee95');
 }
 
 (() => {
@@ -49,18 +49,7 @@ if (WAY === undefined) {
         skill.lockSkill = getNotetag(skill.note, 'Lock Skill', false, toBool);
     });
 
-    Window_SkillList.prototype.isBattleSkillEnabled = function (item) {
-        if (item && item.lockSkill) {
-            return false;
-        }
-        return true;
-    };
-
-    Window_SkillEquip.prototype.isEnabled = function (item) {
-        if (item && item.lockSkill) {
-            return false;
-        }
-        return true;
-    };
+    Window_SkillList.prototype.isBattleSkillEnabled = item => item && !item.lockSkill;
+    Window_SkillEquip.prototype.isEnabled = item => item && !item.lockSkill;
 })(WAYModuleLoader.getModule('WAY_YEP_EquipBattleSkills'));
 

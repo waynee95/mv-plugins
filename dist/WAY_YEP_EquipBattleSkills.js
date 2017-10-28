@@ -5,7 +5,7 @@
 /**
  * @file Addon to Yanfly's Equip Battle Skills Plugin.
  * @author waynee95
- * @version 1.0.0
+ * @version 1.0.1
  */
 /*:
 @plugindesc Addon to Yanfly's Equip Battle Skills Plugin. <WAY_YEP_EquipBattleSkills>
@@ -39,7 +39,7 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_EquipBattleSkills', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_EquipBattleSkills', '1.0.1', 'waynee95');
 }
 
 (function () {
@@ -53,16 +53,9 @@ if (WAY === undefined) {
     });
 
     Window_SkillList.prototype.isBattleSkillEnabled = function (item) {
-        if (item && item.lockSkill) {
-            return false;
-        }
-        return true;
+        return item && !item.lockSkill;
     };
-
     Window_SkillEquip.prototype.isEnabled = function (item) {
-        if (item && item.lockSkill) {
-            return false;
-        }
-        return true;
+        return item && !item.lockSkill;
     };
 })(WAYModuleLoader.getModule('WAY_YEP_EquipBattleSkills'));
