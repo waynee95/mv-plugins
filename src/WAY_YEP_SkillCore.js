@@ -2,13 +2,8 @@
 // ============================================================================
 // WAY_YEP_SkillCore.js
 // ============================================================================
-/**
- * @file Addon to Yanfly's Skill Core Plugin.
- * @author waynee95
- * @version 1.0.1
- */
 /*:
-@plugindesc Addon to Yanfly's Skill Core Plugin. <WAY_YEP_SkillCore>
+@plugindesc v1.0.1 Addon to Yanfly's Skill Core Plugin. <WAY_YEP_SkillCore>
 @author waynee95
 
 @help

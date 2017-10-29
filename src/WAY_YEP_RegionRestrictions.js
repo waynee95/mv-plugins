@@ -2,13 +2,8 @@
 // ============================================================================
 // WAY_YEP_RegionRestrictions.js
 // ============================================================================
-/**
- * @file Addon to Yanfly's RegionRestrictions Plugin.
- * @author waynee95
- * @version 1.0.0
- */
 /*:
-@plugindesc Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
+@plugindesc v1.0.0 Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
 @author waynee95
 
 @help

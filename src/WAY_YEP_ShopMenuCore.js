@@ -2,13 +2,8 @@
 // ============================================================================
 // WAY_YEP_ShopMenuCore.js
 // ============================================================================
-/**
- * @file Addon to Yanfly's Shop Menu Core Plugin.
- * @author waynee95
- * @version 1.0.0
- */
 /*:
-@plugindesc Addon to Yanfly's Shop Menu Core Plugin. <WAY_YEP_ShopMenuCore>
+@plugindesc v1.0.0 Addon to Yanfly's Shop Menu Core Plugin. <WAY_YEP_ShopMenuCore>
 @author waynee95
 
 @help

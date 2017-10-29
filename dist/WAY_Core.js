@@ -2,13 +2,8 @@
 // ===========================================================================
 // WAY_Core.js
 // ===========================================================================
-/**
- * @file WAY Core is a Utility plugin for RPG Maker MV Plugin Developement.
- * @author waynee95
- * @version 1.4.5
- */
 /*:
-@plugindesc WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.4.5 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -812,3 +807,6 @@ var WAY = WAYCore;
         });
     })(Game_Interpreter, $.alias);
 })(WAYModuleLoader.getModule('WAY_Core'));
+
+// Load data from save files
+// Persist data through save files

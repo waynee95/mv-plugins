@@ -2,13 +2,8 @@
 // ============================================================================
 // WAY_YEP_EventMiniLabel.js
 // ============================================================================
-/**
- * @file Addon to Yanfly's Event Mini Label Plugin.
- * @author waynee95
- * @version 1.0.1
- */
 /*:
-@plugindesc Addon to Yanfly's Event Mini Label Plugin. <WAY_YEP_EventMiniLabel>
+@plugindesc v1.0.1 Addon to Yanfly's Event Mini Label Plugin. <WAY_YEP_EventMiniLabel>
 @author waynee95
 
 @help

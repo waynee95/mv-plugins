@@ -2,13 +2,8 @@
 // ============================================================================
 // WAY_AnimationRate.js
 // ============================================================================
-/**
- * @file Allows you to set the animation rate for each animation individually.
- * @author waynee95
- * @version 1.0.1
- */
 /*:
-@plugindesc Allows you to set the animation rate for each animation individually.
+@plugindesc v1.0.1 Allows you to set the animation rate for each animation individually.
 <WAY_AnimationRate>
 @author waynee95
 

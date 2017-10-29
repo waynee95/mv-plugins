@@ -2,13 +2,8 @@
 // ============================================================================
 // WAY_YEP_TurnOrderDisplay.js
 // ============================================================================
-/**
- * @file Addon to Yanfly's Turn Order Display Plugin.
- * @author waynee95
- * @version 1.0.3
- */
 /*:
-@plugindesc Addon to Yanfly's Turn Order Display Plugin. <WAY_YEP_TurnOrderDisplay>
+@plugindesc v1.0.3 Addon to Yanfly's Turn Order Display Plugin. <WAY_YEP_TurnOrderDisplay>
 @author waynee95
 
 @help

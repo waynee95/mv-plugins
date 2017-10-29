@@ -2,13 +2,8 @@
 // ============================================================================
 // WAY_YEP_EquipBattleSkills.js
 // ============================================================================
-/**
- * @file Addon to Yanfly's Equip Battle Skills Plugin.
- * @author waynee95
- * @version 1.0.1
- */
 /*:
-@plugindesc Addon to Yanfly's Equip Battle Skills Plugin. <WAY_YEP_EquipBattleSkills>
+@plugindesc v1.0.1 Addon to Yanfly's Equip Battle Skills Plugin. <WAY_YEP_EquipBattleSkills>
 @author waynee95
 
 @help

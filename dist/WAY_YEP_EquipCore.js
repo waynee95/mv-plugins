@@ -2,13 +2,8 @@
 // ============================================================================
 // WAY_YEP_EquipCore.js
 // ============================================================================
-/**
- * @file Addon to Yanfly's Equip Core Plugin.
- * @author waynee95
- * @version 1.1.0
- */
 /*:
-@plugindesc Addon to Yanfly's Equip Core Plugin. <WAY_YEP_EquipCore>
+@plugindesc v1.1.0 Addon to Yanfly's Equip Core Plugin. <WAY_YEP_EquipCore>
 @author waynee95
 
 @help

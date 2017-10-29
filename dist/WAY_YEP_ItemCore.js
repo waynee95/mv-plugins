@@ -2,13 +2,8 @@
 // ===========================================================================
 // WAY_YEP_ItemCore.js
 // ===========================================================================
-/**
- * @file Addon to Yanfly's Item Core Plugin.
- * @author waynee95
- * @version 1.0.1
- */
 /*:
-@plugindesc Addon to Yanfly's Item Core Plugin. <WAY_YEP_ItemCore>
+@plugindesc v1.0.1 Addon to Yanfly's Item Core Plugin. <WAY_YEP_ItemCore>
 @author waynee95
 
 @help
