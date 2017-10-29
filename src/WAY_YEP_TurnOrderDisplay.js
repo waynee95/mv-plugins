@@ -5,7 +5,7 @@
 /**
  * @file Addon to Yanfly's Turn Order Display Plugin.
  * @author waynee95
- * @version 1.0.2
+ * @version 1.0.3
  */
 /*:
 @plugindesc Addon to Yanfly's Turn Order Display Plugin. <WAY_YEP_TurnOrderDisplay>
@@ -38,7 +38,7 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_TurnOrderDisplay', '1.0.2', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_TurnOrderDisplay', '1.0.3', 'waynee95');
 }
 
 ($ => {
@@ -77,16 +77,12 @@ if (WAY === undefined) {
             const { filename, faceIndex } = this.battler().enemy().turnOrderImage;
             const bitmap = ImageManager.loadFace(filename);
             bitmap.addLoadListener(() => {
-                const width = Window_Base._faceWidth;
-                const height = Window_Base._faceHeight;
-                const pw = Window_Base._faceWidth;
-                const ph = Window_Base._faceHeight;
-                const sw = Math.min(width, pw);
-                const sh = Math.min(height, ph);
-                const dx = Math.floor(Math.max(width - pw, 0) / 2);
-                const dy = Math.floor(Math.max(height - ph, 0) / 2);
-                const sx = (faceIndex % 4) * pw + (pw - sw) / 2;
-                const sy = Math.floor(faceIndex / 4) * ph + (ph - sh) / 2;
+                const sw = Window_Base._faceWidth;
+                const sh = Window_Base._faceHeight;
+                const dx = 0;
+                const dy = 0;
+                const sx = (faceIndex % 4) * sw;
+                const sy = Math.floor(faceIndex / 4) * sh;
                 const dw = this.contents.width - 8;
                 const dh = this.contents.height - 8;
                 this.contents.blt(bitmap, sx, sy, sw, sh, dx + 4, dy + 4, dw, dh);

@@ -5,7 +5,7 @@
 /**
  * @file Addon to Yanfly's Turn Order Display Plugin.
  * @author waynee95
- * @version 1.0.2
+ * @version 1.0.3
  */
 /*:
 @plugindesc Addon to Yanfly's Turn Order Display Plugin. <WAY_YEP_TurnOrderDisplay>
@@ -40,7 +40,7 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_TurnOrderDisplay', '1.0.2', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_TurnOrderDisplay', '1.0.3', 'waynee95');
 }
 
 (function ($) {
@@ -89,16 +89,12 @@ if (WAY === undefined) {
 
             var bitmap = ImageManager.loadFace(filename);
             bitmap.addLoadListener(function () {
-                var width = Window_Base._faceWidth;
-                var height = Window_Base._faceHeight;
-                var pw = Window_Base._faceWidth;
-                var ph = Window_Base._faceHeight;
-                var sw = Math.min(width, pw);
-                var sh = Math.min(height, ph);
-                var dx = Math.floor(Math.max(width - pw, 0) / 2);
-                var dy = Math.floor(Math.max(height - ph, 0) / 2);
-                var sx = faceIndex % 4 * pw + (pw - sw) / 2;
-                var sy = Math.floor(faceIndex / 4) * ph + (ph - sh) / 2;
+                var sw = Window_Base._faceWidth;
+                var sh = Window_Base._faceHeight;
+                var dx = 0;
+                var dy = 0;
+                var sx = faceIndex % 4 * sw;
+                var sy = Math.floor(faceIndex / 4) * sh;
                 var dw = _this.contents.width - 8;
                 var dh = _this.contents.height - 8;
                 _this.contents.blt(bitmap, sx, sy, sw, sh, dx + 4, dy + 4, dw, dh);
