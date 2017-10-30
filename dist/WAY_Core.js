@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.4.5 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.4.6 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -202,7 +202,7 @@ var WAYModuleLoader = function () {
     };
 }();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.4.5', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.4.6', 'waynee95');
 
 var WAYCore = WAYCore || {};
 var WAY = WAYCore;
@@ -288,16 +288,14 @@ var WAY = WAYCore;
                 }(),
                 extend: function () {
                     function extend(obj, name, func) {
-                        var _this2 = this;
-
                         var orig = obj[name];
                         obj[name] = function () {
                             for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
                                 args[_key3] = arguments[_key3];
                             }
 
-                            orig.apply(_this2, args);
-                            func.apply(_this2, args);
+                            orig.apply(obj, args);
+                            func.apply(obj, args);
                         };
                     }
 
@@ -379,7 +377,7 @@ var WAY = WAYCore;
                 }(),
                 getMultiLineNotetag: function () {
                     function getMultiLineNotetag(text, tag, defaultValue, func) {
-                        var _this3 = this;
+                        var _this2 = this;
 
                         var result = [];
                         var re = new RegExp('<(' + String(tag) + ')>([\\s\\S]*?)<(\\/' + String(tag) + ')>', 'g');
@@ -387,7 +385,7 @@ var WAY = WAYCore;
                             return match[1].toLowerCase() === tag.toLowerCase();
                         });
                         matches.forEach(function (group) {
-                            return result.push(func.call(_this3, group[2]));
+                            return result.push(func.call(_this2, group[2]));
                         });
                         return result.length > 0 ? result[0] : defaultValue;
                     }
@@ -396,7 +394,7 @@ var WAY = WAYCore;
                 }(),
                 getNotetag: function () {
                     function getNotetag(text, tag, defaultValue, func) {
-                        var _this4 = this;
+                        var _this3 = this;
 
                         var result = [];
                         var re = /<([^<>:]+)(:?)([^>]*)>/g;
@@ -404,7 +402,7 @@ var WAY = WAYCore;
                             return match[1].toLowerCase() === tag.toLowerCase();
                         });
                         matches.forEach(function (group) {
-                            return result.push(func.call(_this4, group[3]));
+                            return result.push(func.call(_this3, group[3]));
                         });
                         return result.length > 0 ? result[0] : defaultValue;
                     }
@@ -582,7 +580,7 @@ var WAY = WAYCore;
                         }
 
                         return function () {
-                            var _this5 = this;
+                            var _this4 = this;
 
                             for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
                                 args[_key5] = arguments[_key5];
@@ -590,7 +588,7 @@ var WAY = WAYCore;
 
                             var value = steps[0].apply(this, args);
                             steps.slice(1).forEach(function (step) {
-                                return value = step.call(_this5, value);
+                                return value = step.call(_this4, value);
                             });
                             return value;
                         };
@@ -801,7 +799,7 @@ var WAY = WAYCore;
             if (actions) {
                 var action = actions[args[0]];
                 if (typeof action === 'function') {
-                    action.apply(undefined, args.slice(1));
+                    action.apply(this, args.slice(1));
                 }
             }
         });
