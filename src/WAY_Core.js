@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.4.6 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.5.0 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -135,7 +135,7 @@ const WAYModuleLoader = (function() {
     };
 })();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.4.6', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.5.0', 'waynee95');
 
 const WAYCore = WAYCore || {};
 const WAY = WAYCore;
@@ -286,6 +286,9 @@ const WAY = WAYCore;
             },
             isPlaytest() {
                 return Utils.isOptionValid('test');
+            },
+            isScene(scene) {
+                return SceneManager._scene instanceof scene;
             },
             log(...string) {
                 if (WAY.Util.isPlaytest()) {
