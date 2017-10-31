@@ -3,7 +3,7 @@
 // WAY_YEP_ShopMenuCore.js
 // ============================================================================
 /*:
-@plugindesc v1.0.0 Addon to Yanfly's Shop Menu Core Plugin. <WAY_YEP_ShopMenuCore>
+@plugindesc v1.0.1 Addon to Yanfly's Shop Menu Core Plugin. <WAY_YEP_ShopMenuCore>
 @author waynee95
 
 @help
@@ -16,11 +16,7 @@ is met. Use the following Lunatic Code:
 
 Item Notetag:
 <Custom Buy Show Eval>
-if (!$gameParty.hasItem(item)) {
-visible = true;
-} else {
-visible = false;
-}
+visible = !$gameParty.hasItem(item);
 </Custom Buy Show Eval>
 
 If the visible is set to false, the item will not appear in the shop.
@@ -44,58 +40,55 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_ShopMenuCore', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_ShopMenuCore', '1.0.1', 'waynee95');
 }
 
-(() => {
-    const { getMultiLineNotetag, showError, trim } = WAY.Util;
+($ => {
+    const { extend, getMultiLineNotetag, showError, trim } = WAY.Util;
 
     const parseNotetags = obj => {
-        obj.customNameEval = getMultiLineNotetag(obj.note, 'Custom Buy Show Eval', null, trim);
+        obj.customBuyShowEval = getMultiLineNotetag(obj.note, 'Custom Buy Show Eval', null, trim);
     };
 
     WAY.EventEmitter.on('load-item-notetags', parseNotetags);
     WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
     WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
 
-    function meetsCustomBuyShowEval(item) {
-        if (!item || item.customBuyShowEval === '') {
-            return true;
-        }
-        let visible = true; // eslint-disable-line prefer-const
-        const s = $gameSwitches._data;
-        const v = $gameVariables._data;
-        const p = $gameParty;
-        try {
-            eval(item.customBuyShowEval);
-        } catch (e) {
-            showError(e.message);
-        }
-        return visible;
-    }
+    ((Window_ShopBuy, alias) => {
+        const meetsCustomBuyShowEval = item => {
+            if (!item || item.customBuyShowEval === '') {
+                return true;
+            }
+            const visible = true;
+            const s = $gameSwitches._data;
+            const v = $gameVariables._data;
+            const p = $gameParty;
+            try {
+                eval(item.customBuyShowEval);
+            } catch (e) {
+                showError(e.message);
+            }
+            return visible;
+        };
 
-    Window_ShopBuy.prototype.makeItemList = function() {
-        this._data = [];
-        this._price = [];
-        this._shopGoods.forEach(goods => {
-            let item = null;
-            switch (goods[0]) {
+        const getContainer = num => {
+            switch (num) {
             case 0:
-                item = $dataItems[goods[1]];
-                break;
+                return $dataItems;
             case 1:
-                item = $dataWeapons[goods[1]];
-                break;
+                return $dataWeapons;
             case 2:
-                item = $dataArmors[goods[1]];
-                break;
+                return $dataArmors;
             default:
-                break;
+                return [];
             }
-            if (item && meetsCustomBuyShowEval(item)) {
-                this._data.push(item);
-                this._price.push(goods[2] === 0 ? item.price : goods[3]);
-            }
+        };
+
+        alias.Window_ShopBuy_makeItemList = Window_ShopBuy.makeItemList;
+        extend(Window_ShopBuy, 'initialize', function() {
+            this._shopGoods = this._shopGoods.filter(([itemType, itemId]) =>
+                meetsCustomBuyShowEval(getContainer(itemType)[itemId])
+            );
         });
-    };
+    })(Window_ShopBuy.prototype, $.alias);
 })(WAYModuleLoader.getModule('WAY_YEP_ShopMenuCore'));
