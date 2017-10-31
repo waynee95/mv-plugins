@@ -1,7 +1,12 @@
 # mv-plugins
 > waynee95's Plugin Collection for RPG Maker MV 
 
-You find my plugins in the `dist` folder.
+## How to download
+- Go to the `dist` folder
+- Click on the plugin, you want to download
+- Right-click on `raw`
+- Then `save as`
+- Make sure that you save it as a `.js` file
 
 ## Terms of Use
 Credit must be given to: waynee95
