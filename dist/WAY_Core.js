@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.5.1 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.5.2 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -24,6 +24,8 @@ My plugins may be used in commercial and non-commercial products.
 
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -34,11 +36,11 @@ var Imported = Imported || {};
 
 var WAYModuleLoader = function () {
     var plugins = {};
-    function parseStruct(params) {
+    function parseParameters(params) {
         if (WAY === undefined) {
             return params;
         }
-        return WAY.Util.parseStruct(params);
+        return WAY.Util.parseParameters(params);
     }
 
     function compareVersions(currentVersion) {
@@ -186,7 +188,7 @@ var WAYModuleLoader = function () {
                 plugins[key] = {
                     alias: {},
                     author: author,
-                    parameters: parseStruct(this.getPluginParameters(key)),
+                    parameters: parseParameters(this.getPluginParameters(key)),
                     required: required,
                     version: version
                 };
@@ -202,7 +204,7 @@ var WAYModuleLoader = function () {
     };
 }();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.5.1', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.5.2', 'waynee95');
 
 var WAYCore = WAYCore || {};
 var WAY = WAYCore;
@@ -429,7 +431,7 @@ var WAY = WAYCore;
                 }(),
                 isArray: function () {
                     function isArray(obj) {
-                        return Object.prototype.toString.apply(obj) === '[object Array]';
+                        return obj && Array.isArray(obj);
                     }
 
                     return isArray;
@@ -457,7 +459,7 @@ var WAY = WAYCore;
                 }(),
                 isFunction: function () {
                     function isFunction(obj) {
-                        return obj && {}.toString.call(obj) === '[object Function]';
+                        return obj && typeof obj === 'function';
                     }
 
                     return isFunction;
@@ -488,12 +490,12 @@ var WAY = WAYCore;
 
                     return isNumber;
                 }(),
-                isObject: function () {
-                    function isObject(obj) {
-                        return obj && Object.prototype.toString.apply(obj) === '[object Object]';
+                isObj: function () {
+                    function isObj(obj) {
+                        return obj && (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object';
                     }
 
-                    return isObject;
+                    return isObj;
                 }(),
                 isPlaytest: function () {
                     function isPlaytest() {
@@ -539,36 +541,29 @@ var WAY = WAYCore;
 
                     return negate;
                 }(),
-                parseStruct: function () {
-                    function parseStruct(params) {
-                        var parseKey = function () {
-                            function parseKey(key) {
-                                var value = params[key];
-                                if (WAY.Util.isNumber(parseInt(value, 10))) {
-                                    params[key] = Number(value);
-                                } else if (WAY.Util.isBool(value)) {
-                                    params[key] = WAY.Util.toBool(value);
-                                } else {
-                                    try {
-                                        var obj = JsonEx.parse(value);
-                                        if (WAY.Util.isObj(obj)) {
-                                            params[key] = WAY.Util.parseStruct(obj);
-                                        }
-                                    } catch (e) {
-                                        throw e.message;
-                                    }
-                                }
-                            }
+                parseParameters: function () {
+                    function parseParameters(params) {
+                        var obj = void 0;
+                        try {
+                            obj = JsonEx.parse(WAY.Util.isObj(params) ? JsonEx.stringify(params) : params);
+                        } catch (e) {
+                            return params;
+                        }
+                        if (WAY.Util.isObj(obj)) {
+                            Object.keys(obj).forEach(function (key) {
+                                obj[key] = WAY.Util.parseParameters(obj[key]);
 
-                            return parseKey;
-                        }();
-                        Object.keys(params).forEach(function (key) {
-                            return parseKey(key);
-                        });
-                        return params;
+                                // If the parameter has no value, meaning it's an empty string,
+                                // just set it to null
+                                if (obj[key] === '') {
+                                    obj[key] = null;
+                                }
+                            });
+                        }
+                        return obj;
                     }
 
-                    return parseStruct;
+                    return parseParameters;
                 }(),
                 pick: function () {
                     function pick(arr, index) {

@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.5.1 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.5.2 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -28,11 +28,11 @@ const Imported = Imported || {};
 
 const WAYModuleLoader = (function() {
     const plugins = {};
-    function parseStruct(params) {
+    function parseParameters(params) {
         if (WAY === undefined) {
             return params;
         }
-        return WAY.Util.parseStruct(params);
+        return WAY.Util.parseParameters(params);
     }
 
     function compareVersions(currentVersion, operator = '==', requiredVersion) {
@@ -122,7 +122,7 @@ const WAYModuleLoader = (function() {
             plugins[key] = {
                 alias: {},
                 author,
-                parameters: parseStruct(this.getPluginParameters(key)),
+                parameters: parseParameters(this.getPluginParameters(key)),
                 required,
                 version
             };
@@ -135,7 +135,7 @@ const WAYModuleLoader = (function() {
     };
 })();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.5.1', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.5.2', 'waynee95');
 
 const WAYCore = WAYCore || {};
 const WAY = WAYCore;
@@ -253,7 +253,7 @@ const WAY = WAYCore;
                 return a.filter(element => b.indexOf(element) > -1);
             },
             isArray(obj) {
-                return Object.prototype.toString.apply(obj) === '[object Array]';
+                return obj && Array.isArray(obj);
             },
             isBool(value) {
                 return value === true || value === false || /^(:?true|false)$/i.test(value);
@@ -265,7 +265,7 @@ const WAY = WAYCore;
                 return Number(value) === value && value % 1 !== 0;
             },
             isFunction(obj) {
-                return obj && {}.toString.call(obj) === '[object Function]';
+                return obj && typeof obj === 'function';
             },
             isInt(value) {
                 return Number(value) === value && Math.floor(value) === value;
@@ -281,8 +281,8 @@ const WAY = WAYCore;
             isNumber(value) {
                 return WAY.Util.isInt(value) || WAY.Util.isFloat(value);
             },
-            isObject(obj) {
-                return obj && Object.prototype.toString.apply(obj) === '[object Object]';
+            isObj(obj) {
+                return obj && typeof obj === 'object';
             },
             isPlaytest() {
                 return Utils.isOptionValid('test');
@@ -309,26 +309,25 @@ const WAY = WAYCore;
             negate(num) {
                 return num * -1;
             },
-            parseStruct(params) {
-                const parseKey = key => {
-                    const value = params[key];
-                    if (WAY.Util.isNumber(parseInt(value, 10))) {
-                        params[key] = Number(value);
-                    } else if (WAY.Util.isBool(value)) {
-                        params[key] = WAY.Util.toBool(value);
-                    } else {
-                        try {
-                            const obj = JsonEx.parse(value);
-                            if (WAY.Util.isObj(obj)) {
-                                params[key] = WAY.Util.parseStruct(obj);
-                            }
-                        } catch (e) {
-                            throw e.message;
+            parseParameters(params) {
+                let obj;
+                try {
+                    obj = JsonEx.parse(WAY.Util.isObj(params) ? JsonEx.stringify(params) : params);
+                } catch (e) {
+                    return params;
+                }
+                if (WAY.Util.isObj(obj)) {
+                    Object.keys(obj).forEach(key => {
+                        obj[key] = WAY.Util.parseParameters(obj[key]);
+
+                        // If the parameter has no value, meaning it's an empty string,
+                        // just set it to null
+                        if (obj[key] === '') {
+                            obj[key] = null;
                         }
-                    }
-                };
-                Object.keys(params).forEach(key => parseKey(key));
-                return params;
+                    });
+                }
+                return obj;
             },
             pick(arr, index) {
                 if (index === undefined) {
