@@ -9,11 +9,10 @@ const clean = require('gulp-clean');
 const sourcemaps = require('gulp-sourcemaps');
 const watch = require('gulp-watch');
 
-const PRODUCTION = false;
-
 const PATH = {
     src: './src/**/',
-    build: PRODUCTION ? './dist' : './game/js/plugins/'
+    build: './game/js/plugins/',
+    deploy: './dist'
 };
 
 const browserSyncConfig = {
@@ -55,6 +54,18 @@ gulp.task('build', () => {
             })
         )
         .pipe(gulp.dest(PATH.build));
+});
+
+gulp.task('build', () => {
+    gulp
+        .src(PATH.src)
+        .pipe(
+            babel({
+                presets: ['env', 'airbnb'],
+                plugins: ['transform-es2015-parameters']
+            })
+        )
+        .pipe(gulp.dest(PATH.deploy));
 });
 
 gulp.task('clean', () =>
