@@ -56,7 +56,7 @@ gulp.task('build', () => {
         .pipe(gulp.dest(PATH.build));
 });
 
-gulp.task('build', () => {
+gulp.task('deploy', () => {
     gulp
         .src(PATH.src)
         .pipe(
