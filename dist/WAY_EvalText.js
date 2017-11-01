@@ -3,7 +3,7 @@
 // WAY_EvalText.js
 // ============================================================================
 /*:
-@plugindesc v1.0.1 Use JavaScript Code in textboxes. <WAY_EvalText>
+@plugindesc v1.0.2 Use JavaScript Code in textboxes. <WAY_EvalText>
 @author waynee95
 
 @help
@@ -39,7 +39,7 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_EvalText', '1.0.1', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_EvalText', '1.0.2', 'waynee95');
 }
 
 (function ($) {
@@ -52,9 +52,9 @@ if (WAY === undefined) {
                 var a = $gameParty.leader();
                 var item = isScene(Scene_ItemBase) ? SceneManager._scene.item() : a;
                 var skill = item;
-                if (SceneManager._scene instanceof Scene_MenuBase) {
+                if (isScene(Scene_MenuBase)) {
                     a = $gameParty.menuActor();
-                } else if (SceneManager._scene instanceof Scene_Battle) {
+                } else if (isScene(Scene_Battle)) {
                     a = BattleManager.actor();
                 }
                 var s = $gameSwitches._data;
