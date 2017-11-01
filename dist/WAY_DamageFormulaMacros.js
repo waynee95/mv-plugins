@@ -3,7 +3,7 @@
 // WAY_DamageFormulaMacros.js
 // ============================================================================
 /*:
-@plugindesc v1.0.0 Define macros for damage formulas. <WAY_DamageFormulaMacros>
+@plugindesc v1.0.1 Define macros for damage formulas. <WAY_DamageFormulaMacros>
 @author waynee95
 
 @param macros
@@ -52,7 +52,7 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_DamageFormulaMacros', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_DamageFormulaMacros', '1.0.1', 'waynee95');
 }
 
 (function ($) {
@@ -60,12 +60,15 @@ if (WAY === undefined) {
 
     var replaceMacros = function () {
         function replaceMacros(obj) {
-            for (var i = 0; i < $dataMacros.length; i++) {
-                if (obj.damage.formula.indexOf($dataMacros[i].name) > -1) {
-                    var regex = new RegExp($dataMacros[i].name, 'g');
-                    obj.damage.formula = obj.damage.formula.replace(regex, $dataMacros[i].formula);
+            $dataMacros.forEach(function (_ref) {
+                var name = _ref.name,
+                    formula = _ref.formula;
+
+                if (obj.damage.formula.indexOf(name) > -1) {
+                    var regex = new RegExp(name, 'g');
+                    obj.damage.formula = obj.damage.formula.replace(regex, formula);
                 }
-            }
+            });
         }
 
         return replaceMacros;
