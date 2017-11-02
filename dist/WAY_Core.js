@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.5.2 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.6.0 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -24,9 +24,17 @@ My plugins may be used in commercial and non-commercial products.
 
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -204,7 +212,7 @@ var WAYModuleLoader = function () {
     };
 }();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.5.2', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.6.0', 'waynee95');
 
 var WAYCore = WAYCore || {};
 var WAY = WAYCore;
@@ -752,6 +760,65 @@ var WAY = WAYCore;
     }();
     WAY.EventEmitter = EventEmitter();
 
+    var Windows = function () {
+        function Windows() {
+            var TitleWindow = function (_Window_Base) {
+                _inherits(TitleWindow, _Window_Base);
+
+                function TitleWindow() {
+                    var _ref6 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                        _ref6$x = _ref6.x,
+                        x = _ref6$x === undefined ? 0 : _ref6$x,
+                        _ref6$y = _ref6.y,
+                        y = _ref6$y === undefined ? 0 : _ref6$y,
+                        _ref6$width = _ref6.width,
+                        width = _ref6$width === undefined ? Graphics.boxWidth : _ref6$width,
+                        _ref6$height = _ref6.height,
+                        height = _ref6$height === undefined ? 72 : _ref6$height;
+
+                    _classCallCheck(this, TitleWindow);
+
+                    var _this5 = _possibleConstructorReturn(this, (TitleWindow.__proto__ || Object.getPrototypeOf(TitleWindow)).call(this, x, y, width, height));
+
+                    _this5._title = '';
+                    return _this5;
+                }
+
+                _createClass(TitleWindow, [{
+                    key: 'setTitle',
+                    value: function () {
+                        function setTitle(title) {
+                            this._title = title;
+                        }
+
+                        return setTitle;
+                    }()
+                }, {
+                    key: 'refresh',
+                    value: function () {
+                        function refresh() {
+                            this.contents.clear();
+                            var text = this._title;
+                            var dw = this.contents.width + this.textPadding();
+                            var tw = this.textWidthEx(text);
+                            var dx = Math.floor(Math.max(0, dw - tw) / 2);
+                            this.drawTextEx(text, this.textPadding() + dx, 0);
+                        }
+
+                        return refresh;
+                    }()
+                }]);
+
+                return TitleWindow;
+            }(Window_Base);
+
+            return { TitleWindow: TitleWindow };
+        }
+
+        return Windows;
+    }();
+    WAY.Window = Windows();
+
     (function (DataManager, alias) {
         var loadNotetags = function () {
             function loadNotetags(objects, index) {
@@ -806,7 +873,14 @@ var WAY = WAYCore;
             }
         });
     })(Game_Interpreter, $.alias);
+
+    (function (Window_Base) {
+        Window_Base.textWidthEx = function (text) {
+            return this.drawTextEx(text, 0, this.contents.height);
+        };
+    })(Window_Base.prototype);
 })(WAYModuleLoader.getModule('WAY_Core'));
 
 // Load data from save files
 // Persist data through save files
+// Create game obects stuff, load save stuff

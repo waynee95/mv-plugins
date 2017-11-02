@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.5.2 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.6.0 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -135,7 +135,7 @@ const WAYModuleLoader = (function() {
     };
 })();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.5.2', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.6.0', 'waynee95');
 
 const WAYCore = WAYCore || {};
 const WAY = WAYCore;
@@ -438,6 +438,29 @@ const WAY = WAYCore;
     };
     WAY.EventEmitter = EventEmitter();
 
+    const Windows = function() {
+        class TitleWindow extends Window_Base {
+            constructor({ x = 0, y = 0, width = Graphics.boxWidth, height = 72 } = {}) {
+                super(x, y, width, height);
+                this._title = '';
+            }
+            setTitle(title) {
+                this._title = title;
+            }
+            refresh() {
+                this.contents.clear();
+                const text = this._title;
+                const dw = this.contents.width + this.textPadding();
+                const tw = this.textWidthEx(text);
+                const dx = Math.floor(Math.max(0, dw - tw) / 2);
+                this.drawTextEx(text, this.textPadding() + dx, 0);
+            }
+        }
+
+        return { TitleWindow };
+    };
+    WAY.Window = Windows();
+
     ((DataManager, alias) => {
         const loadNotetags = function(objects, index) {
             const strings = [
@@ -504,7 +527,14 @@ const WAY = WAYCore;
             }
         });
     })(Game_Interpreter, $.alias);
+
+    (Window_Base => {
+        Window_Base.textWidthEx = function(text) {
+            return this.drawTextEx(text, 0, this.contents.height);
+        };
+    })(Window_Base.prototype);
 })(WAYModuleLoader.getModule('WAY_Core'));
 
 // Load data from save files
 // Persist data through save files
+// Create game obects stuff, load save stuff
