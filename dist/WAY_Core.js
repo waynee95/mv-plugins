@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.6.0 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.6.1 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -212,7 +212,7 @@ var WAYModuleLoader = function () {
     };
 }();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.6.0', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.6.1', 'waynee95');
 
 var WAYCore = WAYCore || {};
 var WAY = WAYCore;
@@ -766,15 +766,10 @@ var WAY = WAYCore;
                 _inherits(TitleWindow, _Window_Base);
 
                 function TitleWindow() {
-                    var _ref6 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-                        _ref6$x = _ref6.x,
-                        x = _ref6$x === undefined ? 0 : _ref6$x,
-                        _ref6$y = _ref6.y,
-                        y = _ref6$y === undefined ? 0 : _ref6$y,
-                        _ref6$width = _ref6.width,
-                        width = _ref6$width === undefined ? Graphics.boxWidth : _ref6$width,
-                        _ref6$height = _ref6.height,
-                        height = _ref6$height === undefined ? 72 : _ref6$height;
+                    var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+                    var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+                    var width = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : Graphics.boxWidth;
+                    var height = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 72;
 
                     _classCallCheck(this, TitleWindow);
 

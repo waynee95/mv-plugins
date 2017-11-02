@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.6.0 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.6.1 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -135,7 +135,7 @@ const WAYModuleLoader = (function() {
     };
 })();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.6.0', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.6.1', 'waynee95');
 
 const WAYCore = WAYCore || {};
 const WAY = WAYCore;
@@ -440,7 +440,7 @@ const WAY = WAYCore;
 
     const Windows = function() {
         class TitleWindow extends Window_Base {
-            constructor({ x = 0, y = 0, width = Graphics.boxWidth, height = 72 } = {}) {
+            constructor(x = 0, y = 0, width = Graphics.boxWidth, height = 72) {
                 super(x, y, width, height);
                 this._title = '';
             }
