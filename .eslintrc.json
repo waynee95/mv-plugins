@@ -17,7 +17,7 @@
     "indent": ["error", 4],
     "linebreak-style": ["error", "windows"],
     "max-len": ["error", 100],
-    "max-statements": ["error", 10],
+    "max-statements": ["error", 10, { "ignoreTopLevelFunctions": true }],
     "no-cond-assign": ["error", "except-parens"],
     "no-param-reassign": ["error", { "props": false }],
     "no-plusplus": 0,
