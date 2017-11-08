@@ -40,7 +40,9 @@ if (WAY === undefined) {
 const $gameStorageSystems = {};
 
 ($ => {
-    const { getNotetag, toArray, toBool, toInt, negate, piper } = WAY.Util;
+    const { getNotetag, toArray, toBool, toInt, negate, map, piper, tryEval } = WAY.Util;
+    const { TitleWindow } = WAY.Window.TitleWindow;
+
     const $dataStorage = $.parameters.storages;
 
     const parseNotetags = obj => {
@@ -106,9 +108,6 @@ const $gameStorageSystems = {};
             this._lastActive = 0;
         }
         get(storageId) {
-            if (typeof $dataStorage[storageId] !== 'object') {
-                return null;
-            }
             if ($dataStorage[storageId]) {
                 if (!this._data[storageId]) {
                     this._data[storageId] = new StorageSystem(storageId);
@@ -120,9 +119,9 @@ const $gameStorageSystems = {};
         current() {
             return this.get(this._lastActive);
         }
-        open(storageId = this._lastActive) {
-            if (!this.current()) {
-                return;
+        open(storageId) {
+            if (storageId) {
+                this._lastActive = storageId;
             }
             SceneManager.push(Scene_Storage);
         }
@@ -130,20 +129,31 @@ const $gameStorageSystems = {};
 
     class StorageSystem {
         constructor(storageId) {
-            const storage = $dataStorage[storageId];
-            this.storageId = storageId;
-            this.title = storage.titleText;
-            this.allowedTypes = storage.allowedTypes;
-            this.maxCapacity = storage.maxCapacity;
-            this.stackSize = storage.stackSize !== 'none' ? toInt(storage.stackSize) : 'none';
+            this._storageId = storageId;
             this.clear();
+        }
+        storageId() {
+            return this._storageId;
+        }
+        title() {
+            return $dataStorage[this._storageId].title;
+        }
+        allowedTypes() {
+            return $dataStorage[this._storageId].allowedTypes;
+        }
+        maxCapacity() {
+            return $dataStorage[this._storageId].maxCapacity;
+        }
+        stackSize() {
+            const { stackSize } = $dataStorage[this._storageId];
+            return stackSize !== 'none' ? toInt(stackSize) : 'none';
         }
         changeMaxCapacity(capacity) {
             this.maxCapacity = capacity;
         }
         getCapacity() {
             let sum = 0;
-            if (this._stackSize === 'none') {
+            if (this.stackSize() === 'none') {
                 sum = this.getAllItems()
                     .map(item => this.numItems(item))
                     .reduce((total, current) => total + current, 0);
@@ -201,10 +211,10 @@ const $gameStorageSystems = {};
             return container ? container[item.id] || 0 : 0;
         }
         maxItems(item) {
-            if (this._stackSize === 'none') {
+            if (this.stackSize() === 'none') {
                 return this.maxCapacity() - this.capacity();
             } else if (this.numItems(item) > 0 || this.maxCapacity() - this.capacity() > 0) {
-                return this._stackSize - this.numItems(item);
+                return this.stackSize() - this.numItems(item);
             } else if (this.maxCapacity() - this.capacity() < 0) {
                 return 0;
             }
@@ -221,6 +231,209 @@ const $gameStorageSystems = {};
                 return this._armors;
             }
             return null;
+        }
+    }
+
+    class StorageCommadWindow {}
+    class StorageCategoryWindow {}
+    class StorageInfoWindow {}
+    class StorageNumberWindow {}
+    class StorageListWindow {}
+
+    class SceneStorage extends Scene_MenuBase {
+        constructor() {
+            super();
+            this._storage = $gameStorageSystems.current();
+        }
+        setup() {
+            const {
+                background,
+                displayCategories,
+                help,
+                title,
+                command,
+                category,
+                info,
+                item,
+                number
+            } = $gameStorageSystems.current().data();
+            this._background = background;
+            this._displayCategories = displayCategories;
+            this._helpData = help;
+            this._titleData = title;
+            this._commandData = command;
+            this._categoryData = category;
+            this._infoData = info;
+            this._itemData = item;
+            this._numberData = number;
+        }
+        createBackground() {
+            if (this._background !== '') {
+                this._backgroundSprite = new Sprite();
+                this._backgroundSprite.bitmap = ImageManager.loadPicture(this._background);
+                this.addChild(this._backgroundSprite);
+            }
+        }
+        create() {
+            super.create();
+            this.createHelpWindow();
+            this.createTitleWindow();
+            this.createCommandWindow();
+            if (this._displayCategories) {
+                this.createCategoryWindow();
+            }
+            this.createInfoWindow();
+            this.createItemWindow();
+            this.createNumberWindow();
+        }
+        createHelpWindow() {
+            this._helpWindow = new Window_Help();
+            this.addWindow(this._helpWindow);
+            const { x, y, width, height } = map(this._helpData, tryEval);
+            this._helpWindow.x = x;
+            this._helpWindow.y = y;
+            this._helpWindow.width = width;
+            this._helpWindow.height = height;
+        }
+        createTitleWindow() {
+            const { x, y, width, height } = map(this._titleData, tryEval);
+            this._titleWindow = new TitleWindow(x, y, width, height);
+            this.addWindow(this._titleWindow);
+        }
+        setCommandHandlers() {
+            if (this._displayCategories) {
+                this._commandWindow.setHandler('add', this.onCommandOk.bind(this));
+                this._commandWindow.setHandler('remove', this.onCommandOk.bind(this));
+            } else {
+                this._commandWindow.setHandler('add', this.onCategoryOk.bind(this));
+                this._commandWindow.setHandler('remove', this.onCategoryOk.bind(this));
+            }
+            this._commandWindow.setHandler('cancel', this.popScene.bind(this));
+        }
+        createCommandWindow() {
+            const { x, y } = map(this._commandData, tryEval);
+            this._commandWindow = new StorageCommadWindow(x, y);
+            this.setCommandHandlers();
+            this.addWindow(this._commandWindow);
+        }
+        setCategoryHandlers() {
+            this._categoryWindow.setHandler('ok', this.onCategoryOk.bind(this));
+            this._categoryWindow.setHandler('cancel', this.onCategoryCancel.bind(this));
+        }
+        createCategoryWindow() {
+            const { x, y } = map(tryEval, this._categoryData);
+            this._categoryWindow = new StorageCategoryWindow(x, y);
+            this.setCategoryHandlers();
+            this._categoryWindow.deactivate();
+            this._categoryWindow.hide();
+            this.addWindow(this._categoryWindow);
+        }
+        createInfoWindow() {
+            const { x, y, width } = map(this._infoData, tryEval);
+            this._infoWindow = new StorageInfoWindow(x, y, width, 80);
+            this.addWindow(this._infoWindow);
+        }
+        setListHandlers() {
+            this._itemWindow.setHelpWindow(this._helpWindow);
+            if (this._displayCategories) {
+                this._categoryWindow.setItemWindow(this._itemWindow);
+            }
+            this._itemWindow.setHandler('ok', this.onItemOk.bind(this));
+            this._itemWindow.setHandler('cancel', this.onItemCancel.bind(this));
+        }
+        createItemWindow() {
+            const { x, y, width, height } = map(this._itemData, tryEval);
+            this._itemWindow = new StorageListWindow(x, y, width, height);
+            this.setListHandlers();
+            this.addWindow(this._itemWindow);
+        }
+        setNumberHandlers() {
+            this._numberWindow.setHandler('ok', this.onNumberOk.bind(this));
+            this._numberWindow.setHandler('cancel', this.onNumberCancel.bind(this));
+        }
+        createNumberWindow() {
+            const { x, y, width, height } = map(this._numberData, tryEval);
+            this._numberWindow = new StorageNumberWindow(x, y, width, height);
+            this.setNumberHandlers();
+            this._numberWindow.hide();
+            this.addWindow(this._numberWindow);
+        }
+        activateItemWindow() {
+            this._infoWindow.refresh();
+            this._itemWindow.refresh();
+            this._itemWindow.activate();
+        }
+        item() {
+            return this._itemWindow.item();
+        }
+        onCommandOk() {
+            this._itemWindow.setMode(this._commandWindow.currentSymbol());
+            this._commandWindow.deactivate();
+            this._commandWindow.hide();
+            this._categoryWindow.activate();
+            this._categoryWindow.select(0);
+            this._categoryWindow.show();
+        }
+        onCategoryOk() {
+            this._itemWindow.activate();
+            this._itemWindow.selectLast();
+            if (!this._displayCategories) {
+                this._itemWindow.setMode(this._commandWindow.currentSymbol());
+                this._itemWindow.setCategory('AllItems');
+                this._itemWindow.refresh();
+            }
+        }
+        onCategoryCancel() {
+            this._categoryWindow.deselect();
+            this._categoryWindow.deactivate();
+            this._categoryWindow.hide();
+            this._commandWindow.show();
+            this._commandWindow.activate();
+        }
+        onItemOk() {
+            this._item = this._itemWindow.item();
+            this._itemWindow.deactivate();
+            this._numberWindow.setup(this._item, this._itemWindow.mode());
+            this._numberWindow.show();
+            this._numberWindow.activate();
+        }
+        storeItem(amount) {
+            this._storage.addItem(this.item(), amount);
+            $gameParty.loseItem(this.item(), amount);
+        }
+        depositItem(amount) {
+            this._storage.removeItem(this.item(), amount);
+            $gameParty.gainItem(this.item(), amount);
+        }
+        onItemCancel() {
+            this._itemWindow.deselect();
+            this._helpWindow.clear();
+            if (this._displayCategories) {
+                this._categoryWindow.activate();
+            } else {
+                this._itemWindow.setCategory('none');
+                this._commandWindow.activate();
+            }
+        }
+        onNumberOk() {
+            SoundManager.playShop();
+            const mode = this._itemWindow.mode();
+            if (mode === 'add') {
+                this.storeItem(this._numberWindow.number());
+            } else if (mode === 'remove') {
+                this.depositItem(this._numberWindow.number());
+            }
+            this.endNumberInput();
+        }
+        endNumberInput() {
+            this._numberWindow.hide();
+            this._itemWindow.refresh();
+            this._infoWindow.refresh();
+            this._itemWindow.activate();
+        }
+        onNumberCancel() {
+            SoundManager.playCancel();
+            this.endNumberInput();
         }
     }
 })(WAYModuleLoader.getModule('WAY_StorageSystem'));
