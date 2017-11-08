@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.6.1 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.7.0 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -52,10 +52,9 @@ var WAYModuleLoader = function () {
     }
 
     function compareVersions(currentVersion) {
-        var operator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '==';
+        var operator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '>=';
         var requiredVersion = arguments[2];
 
-        var length = Math.max(currentVersion.length, requiredVersion.length);
         var compare = 0;
         var operation = {
             '<': function () {
@@ -94,15 +93,17 @@ var WAYModuleLoader = function () {
                 return _;
             }()
         };
-        for (var i = 0; i < length; i += 1) {
+        var array = currentVersion.length > requiredVersion.length ? currentVersion : requiredVersion;
+        array.split('.').every(function (num, i) {
             if (currentVersion[i] < requiredVersion[i]) {
                 compare = -1;
-                break;
+                return false;
             } else if (currentVersion[i] > requiredVersion[i]) {
                 compare = 1;
-                break;
+                return false;
             }
-        }
+            return true;
+        });
         return operation[operator]();
     }
 
@@ -212,7 +213,7 @@ var WAYModuleLoader = function () {
     };
 }();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.6.1', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.7.0', 'waynee95');
 
 var WAYCore = WAYCore || {};
 var WAY = WAYCore;
@@ -542,6 +543,65 @@ var WAY = WAYCore;
 
                     return map;
                 }(),
+                mvVersion: function () {
+                    function mvVersion(requiredVersion) {
+                        var operator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '>=';
+
+                        var currentVersion = Utils.RPGMAKER_VERSION;
+                        var compare = 0;
+                        var operation = {
+                            '<': function () {
+                                function _() {
+                                    return compare < 0;
+                                }
+
+                                return _;
+                            }(),
+                            '<=': function () {
+                                function _() {
+                                    return compare <= 0;
+                                }
+
+                                return _;
+                            }(),
+                            '==': function () {
+                                function _() {
+                                    return compare === 0;
+                                }
+
+                                return _;
+                            }(),
+                            '>': function () {
+                                function _() {
+                                    return compare > 0;
+                                }
+
+                                return _;
+                            }(),
+                            '>=': function () {
+                                function _() {
+                                    return compare >= 0;
+                                }
+
+                                return _;
+                            }()
+                        };
+                        var array = currentVersion.length > requiredVersion.length ? currentVersion : requiredVersion;
+                        array.split('.').every(function (num, i) {
+                            if (currentVersion[i] < requiredVersion[i]) {
+                                compare = -1;
+                                return false;
+                            } else if (currentVersion[i] > requiredVersion[i]) {
+                                compare = 1;
+                                return false;
+                            }
+                            return true;
+                        });
+                        return operation[operator]();
+                    }
+
+                    return mvVersion;
+                }(),
                 negate: function () {
                     function negate(num) {
                         return num * -1;
@@ -632,6 +692,27 @@ var WAY = WAYCore;
 
                     return remove;
                 }(),
+                repeat: function () {
+                    function repeat(times, func) {
+                        var n = times;
+                        while (n-- > 0) {
+                            func();
+                        }
+                    }
+
+                    return repeat;
+                }(),
+                tryEval: function () {
+                    function tryEval(text) {
+                        try {
+                            return eval(text); // eslint-disable-line
+                        } catch (err) {
+                            return null;
+                        }
+                    }
+
+                    return tryEval;
+                }(),
                 showError: function () {
                     function showError(msg) {
                         console.error(msg); //eslint-disable-line
@@ -660,6 +741,22 @@ var WAY = WAYCore;
                     }
 
                     return shuffle;
+                }(),
+                textWidthEx: function () {
+                    function textWidthEx(text) {
+                        var x = 0;
+                        var y = 0;
+                        var win = new Window_Base();
+                        var textState = { index: 0, x: x, y: y, left: x };
+                        textState.text = win.convertEscapeCharacters(text);
+                        textState.height = win.calcTextHeight(textState, false);
+                        while (textState.index < textState.text.length) {
+                            win.processCharacter(textState);
+                        }
+                        return Math.ceil(textState.x - x);
+                    }
+
+                    return textWidthEx;
                 }(),
                 toArray: function () {
                     function toArray(str) {
@@ -879,3 +976,8 @@ var WAY = WAYCore;
 // Load data from save files
 // Persist data through save files
 // Create game obects stuff, load save stuff
+// Add filter to parseParameter so "headers" are not parsed
+
+/*paramRef = {'mhp': 0,'mmp': 1,'atk': 2,'def': 3,'mat': 4,'mdf': 5,'agi': 6,'luk': 7};
+xparamRef = {'hit': 0,'eva': 1,'cri': 2,'cev': 3,'mev': 4,'mrf': 5,'cnt': 6,'hrg': 7,'mrg': 8,'trg': 9};
+sparamRef = {'tgr': 0,'grd': 1,'rec': 2,'pha': 3,'mcr': 4,'tcr': 5,'pdr': 6,'mdr': 7,'fdr': 8,'exr': 9};*/

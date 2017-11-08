@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.6.1 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.7.0 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -35,8 +35,7 @@ const WAYModuleLoader = (function() {
         return WAY.Util.parseParameters(params);
     }
 
-    function compareVersions(currentVersion, operator = '==', requiredVersion) {
-        const length = Math.max(currentVersion.length, requiredVersion.length);
+    function compareVersions(currentVersion, operator = '>=', requiredVersion) {
         let compare = 0;
         const operation = {
             '<': function() {
@@ -55,15 +54,18 @@ const WAYModuleLoader = (function() {
                 return compare >= 0;
             }
         };
-        for (let i = 0; i < length; i += 1) {
+        const array =
+            currentVersion.length > requiredVersion.length ? currentVersion : requiredVersion;
+        array.split('.').every((num, i) => {
             if (currentVersion[i] < requiredVersion[i]) {
                 compare = -1;
-                break;
+                return false;
             } else if (currentVersion[i] > requiredVersion[i]) {
                 compare = 1;
-                break;
+                return false;
             }
-        }
+            return true;
+        });
         return operation[operator]();
     }
 
@@ -135,7 +137,7 @@ const WAYModuleLoader = (function() {
     };
 })();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.6.1', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.7.0', 'waynee95');
 
 const WAYCore = WAYCore || {};
 const WAY = WAYCore;
@@ -306,6 +308,42 @@ const WAY = WAYCore;
                     }))
                 );
             },
+            mvVersion(requiredVersion, operator = '>=') {
+                const currentVersion = Utils.RPGMAKER_VERSION;
+                let compare = 0;
+                const operation = {
+                    '<': function() {
+                        return compare < 0;
+                    },
+                    '<=': function() {
+                        return compare <= 0;
+                    },
+                    '==': function() {
+                        return compare === 0;
+                    },
+                    '>': function() {
+                        return compare > 0;
+                    },
+                    '>=': function() {
+                        return compare >= 0;
+                    }
+                };
+                const array =
+                    currentVersion.length > requiredVersion.length
+                        ? currentVersion
+                        : requiredVersion;
+                array.split('.').every((num, i) => {
+                    if (currentVersion[i] < requiredVersion[i]) {
+                        compare = -1;
+                        return false;
+                    } else if (currentVersion[i] > requiredVersion[i]) {
+                        compare = 1;
+                        return false;
+                    }
+                    return true;
+                });
+                return operation[operator]();
+            },
             negate(num) {
                 return num * -1;
             },
@@ -354,6 +392,19 @@ const WAY = WAYCore;
                     arr.splice(index, 1);
                 }
             },
+            repeat(times, func) {
+                let n = times;
+                while (n-- > 0) {
+                    func();
+                }
+            },
+            tryEval(text) {
+                try {
+                    return eval(text); // eslint-disable-line
+                } catch (err) {
+                    return null;
+                }
+            },
             showError(msg) {
                 console.error(msg); //eslint-disable-line
                 if (Utils.isNwjs() && WAY.Util.isPlaytest()) {
@@ -374,6 +425,18 @@ const WAY = WAYCore;
                     }
                 }
                 return arr;
+            },
+            textWidthEx(text) {
+                const x = 0;
+                const y = 0;
+                const win = new Window_Base();
+                const textState = { index: 0, x, y, left: x };
+                textState.text = win.convertEscapeCharacters(text);
+                textState.height = win.calcTextHeight(textState, false);
+                while (textState.index < textState.text.length) {
+                    win.processCharacter(textState);
+                }
+                return Math.ceil(textState.x - x);
             },
             toArray(str) {
                 if (str.contains('to')) {
@@ -538,3 +601,8 @@ const WAY = WAYCore;
 // Load data from save files
 // Persist data through save files
 // Create game obects stuff, load save stuff
+// Add filter to parseParameter so "headers" are not parsed
+
+/*paramRef = {'mhp': 0,'mmp': 1,'atk': 2,'def': 3,'mat': 4,'mdf': 5,'agi': 6,'luk': 7};
+xparamRef = {'hit': 0,'eva': 1,'cri': 2,'cev': 3,'mev': 4,'mrf': 5,'cnt': 6,'hrg': 7,'mrg': 8,'trg': 9};
+sparamRef = {'tgr': 0,'grd': 1,'rec': 2,'pha': 3,'mcr': 4,'tcr': 5,'pdr': 6,'mdr': 7,'fdr': 8,'exr': 9};*/
