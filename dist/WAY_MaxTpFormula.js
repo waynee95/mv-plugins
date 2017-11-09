@@ -9,7 +9,7 @@
 @param defaultFormula
 @text Default Max TP Formula
 @type note
-@default maxTp = user.level * 150;
+@default "maxTp = user.level * 150;"
 
 @help
 ==============================================================================
