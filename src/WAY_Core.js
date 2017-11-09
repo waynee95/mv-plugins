@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.7.0 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.7.1 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -137,7 +137,7 @@ const WAYModuleLoader = (function() {
     };
 })();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.7.0', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.7.1', 'waynee95');
 
 const WAYCore = WAYCore || {};
 const WAY = WAYCore;
@@ -228,7 +228,7 @@ const WAY = WAYCore;
             },
             getMultiLineNotetag(text, tag, defaultValue, func) {
                 const result = [];
-                const re = new RegExp(`<(${tag})>([\\s\\S]*?)<(\\/${tag})>`, 'g');
+                const re = new RegExp(`<(${tag})>([\\s\\S]*?)<(\\/${tag})>`, 'gi');
                 const matches = WAY.Util.filterText(
                     text,
                     re,
