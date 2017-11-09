@@ -3,7 +3,7 @@
 // WAY_MaxTpFormula.js
 // ============================================================================
 /*:
-@plugindesc v1.0.0 Specify custom formulas for battler's Max TP. <WAY_MaxTpFormula>
+@plugindesc v1.0.1 Specify custom formulas for battler's Max TP. <WAY_MaxTpFormula>
 @author waynee95
 
 @param defaultFormula
@@ -52,7 +52,7 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_MaxTpFormula', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_MaxTpFormula', '1.0.1', 'waynee95');
 }
 
 (function ($) {
@@ -65,7 +65,7 @@ if (WAY === undefined) {
 
     var parseNotetags = function () {
         function parseNotetags(obj) {
-            obj.tpFormula = getMultiLineNotetag(obj.note, 'Max TP Formula', defaultFormula.trim(), trim);
+            obj.tpFormula = getMultiLineNotetag(obj.note, 'Max TP Formula', null, trim);
         }
 
         return parseNotetags;
@@ -110,11 +110,11 @@ if (WAY === undefined) {
 
     /* Override */
     Game_Actor.prototype.maxTp = function () {
-        return evalFormula(this, this.actor().tpFormula);
+        return evalFormula(this, this.currentClass().tpFormula || this.actor().tpFormula || defaultFormula);
     };
 
     /* Override */
     Game_Enemy.prototype.maxTp = function () {
-        return evalFormula(this, this.enemy().tpFormula);
+        return evalFormula(this, this.enemy().tpFormula || defaultFormula);
     };
 })(WAYModuleLoader.getModule('WAY_MaxTpFormula'));
