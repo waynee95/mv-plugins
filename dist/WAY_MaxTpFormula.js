@@ -3,13 +3,13 @@
 // WAY_MaxTpFormula.js
 // ============================================================================
 /*:
-@plugindesc v1.0.1 Specify custom formulas for battler's Max TP. <WAY_MaxTpFormula>
+@plugindesc v1.0.2 Specify custom formulas for battler's Max TP. <WAY_MaxTpFormula>
 @author waynee95
 
 @param defaultFormula
 @text Default Max TP Formula
 @type note
-@default "maxTp = user.level * 150;"
+@default "maxTp = user.isActor() ? user.level * 150 : 150;"
 
 @help
 ==============================================================================
@@ -52,7 +52,7 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_MaxTpFormula', '1.0.1', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_MaxTpFormula', '1.0.2', 'waynee95');
 }
 
 (function ($) {
