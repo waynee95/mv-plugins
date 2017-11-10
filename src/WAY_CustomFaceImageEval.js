@@ -61,7 +61,7 @@ if (WAY === undefined) {
 }
 
 ($ => {
-    const { getMultiLineNotetag, safeEval, showError, trim } = WAY.Util;
+    const { extend, getMultiLineNotetag, trim } = WAY.Util;
 
     WAY.EventEmitter.on('load-actor-notetags', actor => {
         actor.customFaceImageEval = getMultiLineNotetag(
@@ -90,17 +90,15 @@ if (WAY === undefined) {
 
     ((Game_Actor, alias) => {
         alias.Game_Actor_initImages = Game_Actor.initImages;
-        Game_Actor.initImages = function() {
-            alias.Game_Actor_initImages.call(this);
+        extend(Game_Actor, 'initImages', function() {
             this._defaultFaceName = this._faceName;
             this._defaultFaceIndex = this._faceIndex;
-        };
+        });
 
         alias.Game_Actor_refresh = Game_Actor.refresh;
-        Game_Actor.refresh = function() {
-            alias.Game_Actor_refresh.call(this);
+        extend(Game_Actor, 'refresh', function() {
             const { faceName, faceIndex } = evalCode(this, this.actor().customFaceImageEval);
             this.setFaceImage(faceName, faceIndex);
-        };
+        });
     })(Game_Actor.prototype, $.alias);
 })(WAYModuleLoader.getModule('WAY_CustomFaceImageEval'));

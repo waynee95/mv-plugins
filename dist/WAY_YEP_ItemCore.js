@@ -131,11 +131,13 @@ if (WAY === undefined) {
             return evalCustomTextColor;
         }();
 
+        /* Override */
         Window_Base.prototype.setItemTextColorEval = function (item) {
             if (!item) return;
             this._resetTextColor = evalCustomTextColor(item) || item.textColor;
         };
 
+        /* Override */
         Window_Base.prototype.drawItemName = function (item, x, y) {
             var width = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 312;
 

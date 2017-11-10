@@ -59,7 +59,7 @@ if (WAY === undefined) {
 }
 
 ($ => {
-    const { getMultiLineNotetag, trim } = WAY.Util;
+    const { extend, getMultiLineNotetag, trim } = WAY.Util;
     const CUSTOM_ON_EQUIP_EVAL = 'customOnEquipEval';
     const CUSTOM_ON_REMOVE_EQUIP_EVAL = 'customOnRemoveEquipEval';
 
@@ -95,6 +95,8 @@ if (WAY === undefined) {
 
     ((Game_Actor, alias) => {
         alias.Game_Actor_changeEquip = Game_Actor.changeEquip;
+
+        /* Override */
         Game_Actor.changeEquip = function(...args) {
             const equips = this.equips();
             alias.Game_Actor_changeEquip.apply(this, args);
@@ -108,20 +110,18 @@ if (WAY === undefined) {
 
         if (!window.Imported.YEP_EquipCore) {
             alias.Game_Actor_initEquips = Game_Actor.initEquips;
-            Game_Actor.initEquips = function(equips) {
-                alias.Game_Actor_initEquips.call(this, equips);
+            extend(Game_Actor, 'initEquips', function() {
                 this.equips().forEach(item => {
                     evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
                 });
-            };
+            });
         } else {
-            const _Game_Actor_equipInitEquips = Game_Actor.equipInitEquips;
-            Game_Actor.equipInitEquips = function(equips) {
-                _Game_Actor_equipInitEquips.call(this, equips);
+            alias.Game_Actor_equipInitEquips = Game_Actor.equipInitEquips;
+            extend(Game_Actor, 'equipInitEquips', function() {
                 this.equips().forEach(item => {
                     evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
                 });
-            };
+            });
         }
     })(Game_Actor.prototype, $.alias);
 })(WAYModuleLoader.getModule('WAY_CustomOnEquipEval'));

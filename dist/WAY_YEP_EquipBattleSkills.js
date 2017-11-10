@@ -47,6 +47,7 @@ if (WAY === undefined) {
         skill.lockSkill = getNotetag(skill.note, 'Lock Skill', false, toBool);
     });
 
+    /* Override */
     Window_SkillList.prototype.isBattleSkillEnabled = function (item) {
         return item && !item.lockSkill;
     };

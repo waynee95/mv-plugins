@@ -45,7 +45,7 @@ if (WAY === undefined) {
 }
 
 ($ => {
-    const { getMultiLineNotetag, trim } = WAY.Util;
+    const { extend, getMultiLineNotetag, trim } = WAY.Util;
 
     const parseNotetags = obj => {
         obj.customOnDeathEval = getMultiLineNotetag(obj.note, 'Custom On Death Eval', null, trim);
@@ -118,11 +118,10 @@ if (WAY === undefined) {
 
     ((Game_Action, alias) => {
         alias.Game_Action_executeHpDamage = Game_Action.executeHpDamage;
-        Game_Action.executeHpDamage = function(target, value) {
-            alias.Game_Action_executeHpDamage.call(this, target, value);
+        extend(Game_Action, 'executeHpDamage', function(target) {
             if (target.hp < 1 || target.isDead()) {
                 target.evalCustomOnDeathEval(target, this.subject());
             }
-        };
+        });
     })(Game_Action.prototype, $.alias);
 })(WAYModuleLoader.getModule('WAY_CustomOnDeathEval'));

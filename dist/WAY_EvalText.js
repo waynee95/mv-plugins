@@ -73,6 +73,8 @@ if (WAY === undefined) {
         }();
 
         alias.WindowBase_convertEscapeCharacters = Window_Base.convertEscapeCharacters;
+
+        /* Override */
         Window_Base.convertEscapeCharacters = function (text) {
             return alias.WindowBase_convertEscapeCharacters.call(this, evalText(text));
         };

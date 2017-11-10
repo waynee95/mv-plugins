@@ -62,9 +62,8 @@ if (WAY === undefined) {
 
 (function ($) {
     var _WAY$Util = WAY.Util,
+        extend = _WAY$Util.extend,
         getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
-        safeEval = _WAY$Util.safeEval,
-        showError = _WAY$Util.showError,
         trim = _WAY$Util.trim;
 
 
@@ -94,21 +93,18 @@ if (WAY === undefined) {
 
     (function (Game_Actor, alias) {
         alias.Game_Actor_initImages = Game_Actor.initImages;
-        Game_Actor.initImages = function () {
-            alias.Game_Actor_initImages.call(this);
+        extend(Game_Actor, 'initImages', function () {
             this._defaultFaceName = this._faceName;
             this._defaultFaceIndex = this._faceIndex;
-        };
+        });
 
         alias.Game_Actor_refresh = Game_Actor.refresh;
-        Game_Actor.refresh = function () {
-            alias.Game_Actor_refresh.call(this);
-
+        extend(Game_Actor, 'refresh', function () {
             var _evalCode = evalCode(this, this.actor().customFaceImageEval),
                 faceName = _evalCode.faceName,
                 faceIndex = _evalCode.faceIndex;
 
             this.setFaceImage(faceName, faceIndex);
-        };
+        });
     })(Game_Actor.prototype, $.alias);
 })(WAYModuleLoader.getModule('WAY_CustomFaceImageEval'));
