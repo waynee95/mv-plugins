@@ -58,8 +58,7 @@ if (WAY === undefined) {
 (function ($) {
     var _WAY$Util = WAY.Util,
         getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
-        trim = _WAY$Util.trim,
-        showError = _WAY$Util.showError;
+        trim = _WAY$Util.trim;
     var defaultFormula = $.parameters.defaultFormula;
 
 
@@ -100,7 +99,7 @@ if (WAY === undefined) {
             try {
                 eval(formula); // eslint-disable-line
             } catch (e) {
-                showError(e);
+                throw e;
             }
             return maxTp;
         }

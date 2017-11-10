@@ -405,13 +405,6 @@ const WAY = WAYCore;
                     return null;
                 }
             },
-            showError(msg) {
-                console.error(msg); //eslint-disable-line
-                if (Utils.isNwjs() && WAY.Util.isPlaytest()) {
-                    const gui = require('nw.gui'); //eslint-disable-line
-                    gui.Window.get().showDevTools();
-                }
-            },
             shuffle(arr) {
                 let temp;
                 let current;

@@ -44,7 +44,7 @@ if (WAY === undefined) {
 }
 
 ($ => {
-    const { extend, getMultiLineNotetag, showError, trim } = WAY.Util;
+    const { extend, getMultiLineNotetag, trim } = WAY.Util;
 
     const parseNotetags = obj => {
         obj.customBuyShowEval = getMultiLineNotetag(obj.note, 'Custom Buy Show Eval', null, trim);
@@ -66,7 +66,7 @@ if (WAY === undefined) {
             try {
                 eval(item.customBuyShowEval);
             } catch (e) {
-                showError(e.message);
+                throw e;
             }
             return visible;
         };

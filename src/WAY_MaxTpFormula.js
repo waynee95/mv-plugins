@@ -56,7 +56,7 @@ if (WAY === undefined) {
 }
 
 ($ => {
-    const { getMultiLineNotetag, trim, showError } = WAY.Util;
+    const { getMultiLineNotetag, trim } = WAY.Util;
     const { defaultFormula } = $.parameters;
 
     const parseNotetags = obj => {
@@ -86,7 +86,7 @@ if (WAY === undefined) {
         try {
             eval(formula); // eslint-disable-line
         } catch (e) {
-            showError(e);
+            throw e;
         }
         return maxTp;
     };

@@ -59,7 +59,7 @@ if (WAY === undefined) {
 }
 
 ($ => {
-    const { getMultiLineNotetag, showError, trim } = WAY.Util;
+    const { getMultiLineNotetag, trim } = WAY.Util;
     const CUSTOM_ON_EQUIP_EVAL = 'customOnEquipEval';
     const CUSTOM_ON_REMOVE_EQUIP_EVAL = 'customOnRemoveEquipEval';
 
@@ -86,7 +86,7 @@ if (WAY === undefined) {
             try {
                 return eval(code);
             } catch (e) {
-                showError(e);
+                throw e;
             }
         }
 

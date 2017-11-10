@@ -49,7 +49,6 @@ if (WAY === undefined) {
     var _WAY$Util = WAY.Util,
         extend = _WAY$Util.extend,
         getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
-        showError = _WAY$Util.showError,
         trim = _WAY$Util.trim;
 
 
@@ -78,7 +77,7 @@ if (WAY === undefined) {
                 try {
                     eval(item.customBuyShowEval);
                 } catch (e) {
-                    showError(e.message);
+                    throw e;
                 }
                 return visible;
             }

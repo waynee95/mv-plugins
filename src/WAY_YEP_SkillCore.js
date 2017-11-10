@@ -74,7 +74,7 @@ if (WAY === undefined) {
 }
 
 ($ => {
-    const { getMultiLineNotetag, getNotetag, toArray, trim, difference, showError } = WAY.Util;
+    const { getMultiLineNotetag, getNotetag, toArray, trim, difference } = WAY.Util;
 
     WAY.EventEmitter.on('load-actor-notetags', actor => {
         actor.hiddenSTypes = getNotetag(actor.note, 'Hide SType', [], toArray);
@@ -135,7 +135,7 @@ if (WAY === undefined) {
             try {
                 eval(code);
             } catch (e) {
-                showError(e.message);
+                throw e;
             }
             return text;
         };

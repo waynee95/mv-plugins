@@ -45,7 +45,7 @@ if (WAY === undefined) {
 }
 
 ($ => {
-    const { getMultiLineNotetag, showError, trim } = WAY.Util;
+    const { getMultiLineNotetag, trim } = WAY.Util;
 
     const parseNotetags = obj => {
         obj.customOnDeathEval = getMultiLineNotetag(obj.note, 'Custom On Death Eval', null, trim);
@@ -80,7 +80,7 @@ if (WAY === undefined) {
             try {
                 eval(code);
             } catch (e) {
-                showError(e);
+                throw e;
             }
         };
     })(Game_Battler.prototype);

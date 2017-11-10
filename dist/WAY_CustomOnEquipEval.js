@@ -61,7 +61,6 @@ if (WAY === undefined) {
 (function ($) {
     var _WAY$Util = WAY.Util,
         getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
-        showError = _WAY$Util.showError,
         trim = _WAY$Util.trim;
 
     var CUSTOM_ON_EQUIP_EVAL = 'customOnEquipEval';
@@ -90,7 +89,7 @@ if (WAY === undefined) {
                 try {
                     return eval(code);
                 } catch (e) {
-                    showError(e);
+                    throw e;
                 }
             }
 

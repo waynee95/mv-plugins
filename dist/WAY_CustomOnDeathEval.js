@@ -47,7 +47,6 @@ if (WAY === undefined) {
 (function ($) {
     var _WAY$Util = WAY.Util,
         getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
-        showError = _WAY$Util.showError,
         trim = _WAY$Util.trim;
 
 
@@ -88,7 +87,7 @@ if (WAY === undefined) {
             try {
                 eval(code);
             } catch (e) {
-                showError(e);
+                throw e;
             }
         };
     })(Game_Battler.prototype);

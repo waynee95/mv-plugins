@@ -713,17 +713,6 @@ var WAY = WAYCore;
 
                     return tryEval;
                 }(),
-                showError: function () {
-                    function showError(msg) {
-                        console.error(msg); //eslint-disable-line
-                        if (Utils.isNwjs() && WAY.Util.isPlaytest()) {
-                            var gui = require('nw.gui'); //eslint-disable-line
-                            gui.Window.get().showDevTools();
-                        }
-                    }
-
-                    return showError;
-                }(),
                 shuffle: function () {
                     function shuffle(arr) {
                         var temp = void 0;

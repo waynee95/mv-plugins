@@ -79,8 +79,7 @@ if (WAY === undefined) {
         getNotetag = _WAY$Util.getNotetag,
         toArray = _WAY$Util.toArray,
         trim = _WAY$Util.trim,
-        difference = _WAY$Util.difference,
-        showError = _WAY$Util.showError;
+        difference = _WAY$Util.difference;
 
 
     WAY.EventEmitter.on('load-actor-notetags', function (actor) {
@@ -134,7 +133,7 @@ if (WAY === undefined) {
                 try {
                     eval(code);
                 } catch (e) {
-                    showError(e.message);
+                    throw e;
                 }
                 return text;
             }
