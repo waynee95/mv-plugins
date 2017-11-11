@@ -4,5 +4,8 @@
   "workbench.editor.enablePreviewFromQuickOpen": false,
   "editor.formatOnSave": true,
 
-  "prettier.eslintIntegration": true
+  "prettier.eslintIntegration": true,
+
+  "todo.timekeeping.started.format": "DD-MM-YY HH:mm",
+  "todo.timekeeping.finished.format": "DD-MM-YY HH:mm"
 }
