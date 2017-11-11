@@ -3,7 +3,7 @@
 // WAY_CustomOnDeathEval.js
 // ============================================================================
 /*:
-@plugindesc v1.0.0 Run code when a battler dies. <WAY_CustomOnDeathEval>
+@plugindesc v1.0.1 Run code when a battler dies. <WAY_CustomOnDeathEval>
 @author waynee95
 
 @help
@@ -41,7 +41,7 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_CustomOnDeathEval', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_CustomOnDeathEval', '1.0.1', 'waynee95');
 }
 
 ($ => {
@@ -71,9 +71,10 @@ if (WAY === undefined) {
 
         Game_Battler.evalCustomOnDeathEval = function(subject, target) {
             const code = this.customOnDeathEval();
+            const user = subject;
+            const killer = target;
             const a = subject;
             const b = target;
-            const killer = target;
             const s = $gameSwitches._data;
             const v = $gameVariables._data;
             const p = $gameParty;
