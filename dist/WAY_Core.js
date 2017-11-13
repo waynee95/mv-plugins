@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.7.2 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.8.0 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -213,7 +213,7 @@ var WAYModuleLoader = function () {
     };
 }();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.7.2', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.8.0', 'waynee95');
 
 var WAYCore = WAYCore || {};
 var WAY = WAYCore;
@@ -419,6 +419,23 @@ var WAY = WAYCore;
                     }
 
                     return getNotetag;
+                }(),
+                getNotetagList: function () {
+                    function getNotetagList(text, tag, func) {
+                        var _this4 = this;
+
+                        var result = [];
+                        var re = /<([^<>:]+)(:?)([^>]*)>/g;
+                        var matches = WAY.Util.filterText(text, re, function (match) {
+                            return match[1].toLowerCase() === tag.toLowerCase();
+                        });
+                        matches.forEach(function (group) {
+                            return result.push(func.call(_this4, group[3]));
+                        });
+                        return result;
+                    }
+
+                    return getNotetagList;
                 }(),
                 insert: function () {
                     function insert(arr, item) {
@@ -650,7 +667,7 @@ var WAY = WAYCore;
                         }
 
                         return function () {
-                            var _this4 = this;
+                            var _this5 = this;
 
                             for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
                                 args[_key5] = arguments[_key5];
@@ -658,7 +675,7 @@ var WAY = WAYCore;
 
                             var value = steps[0].apply(this, args);
                             steps.slice(1).forEach(function (step) {
-                                return value = step.call(_this4, value);
+                                return value = step.call(_this5, value);
                             });
                             return value;
                         };
@@ -859,10 +876,10 @@ var WAY = WAYCore;
 
                     _classCallCheck(this, TitleWindow);
 
-                    var _this5 = _possibleConstructorReturn(this, (TitleWindow.__proto__ || Object.getPrototypeOf(TitleWindow)).call(this, x, y, width, height));
+                    var _this6 = _possibleConstructorReturn(this, (TitleWindow.__proto__ || Object.getPrototypeOf(TitleWindow)).call(this, x, y, width, height));
 
-                    _this5._title = '';
-                    return _this5;
+                    _this6._title = '';
+                    return _this6;
                 }
 
                 _createClass(TitleWindow, [{
@@ -924,6 +941,13 @@ var WAY = WAYCore;
             });
             return true;
         };
+
+        alias.DataManager_onLoad = DataManager.onLoad;
+        WAY.Util.extend(DataManager, 'onLoad', function (object) {
+            if (object === $dataMap) {
+                WAY.EventEmitter.emit('load-map-notetags', $dataMap);
+            }
+        });
     })(DataManager, $.alias);
 
     (function (PluginManager) {

@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.7.2 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.8.0 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -137,7 +137,7 @@ const WAYModuleLoader = (function() {
     };
 })();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.7.2', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.8.0', 'waynee95');
 
 const WAYCore = WAYCore || {};
 const WAY = WAYCore;
@@ -247,6 +247,17 @@ const WAY = WAYCore;
                 );
                 matches.forEach(group => result.push(func.call(this, group[3])));
                 return result.length > 0 ? result[0] : defaultValue;
+            },
+            getNotetagList(text, tag, func) {
+                const result = [];
+                const re = /<([^<>:]+)(:?)([^>]*)>/g;
+                const matches = WAY.Util.filterText(
+                    text,
+                    re,
+                    match => match[1].toLowerCase() === tag.toLowerCase()
+                );
+                matches.forEach(group => result.push(func.call(this, group[3])));
+                return result;
             },
             insert(arr, item, index = arr.length) {
                 arr.splice(index, 0, item);
@@ -553,6 +564,13 @@ const WAY = WAYCore;
             list.forEach((objects, index) => loadNotetags(objects, index));
             return true;
         };
+
+        alias.DataManager_onLoad = DataManager.onLoad;
+        WAY.Util.extend(DataManager, 'onLoad', object => {
+            if (object === $dataMap) {
+                WAY.EventEmitter.emit('load-map-notetags', $dataMap);
+            }
+        });
     })(DataManager, $.alias);
 
     (PluginManager => {
