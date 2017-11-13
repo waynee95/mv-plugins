@@ -70,7 +70,7 @@ const WAYModuleLoader = (function() {
     }
 
     function printError(msg, key) {
-        const strA = `Error loading${key}\n\n`;
+        const strA = `Error loading ${key}\n\n`;
         const strB = `The following plugins are required:\n${msg}\n`;
         const strC = `Place the required plugins above ${key}!`;
         console.error(strA + strB + strC); //eslint-disable-line no-console
