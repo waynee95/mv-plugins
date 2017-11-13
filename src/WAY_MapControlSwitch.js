@@ -38,7 +38,10 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_MapControlSwitch', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_MapControlSwitch', '1.0.0', 'waynee95', {
+        name: 'WAY_Core',
+        version: '>= 1.8.0'
+    });
 }
 
 (() => {
