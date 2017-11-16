@@ -24,7 +24,7 @@ My plugins may be used in commercial and non-commercial products.
 
 'use strict';
 
-const Imported = Imported || {};
+const Imported = window.Imported || {};
 
 const WAYModuleLoader = (function() {
     const plugins = {};
@@ -139,7 +139,7 @@ const WAYModuleLoader = (function() {
 
 WAYModuleLoader.registerPlugin('WAY_Core', '1.8.0', 'waynee95');
 
-const WAYCore = WAYCore || {};
+const WAYCore = window.WAYCore || {};
 const WAY = WAYCore;
 
 ($ => {
@@ -452,9 +452,9 @@ const WAY = WAYCore;
                 return JSON.parse(`[${str}]`);
             },
             toBool(string) {
-                if (/^(:?true)$/i.test(string)) {
+                if (/^true$/i.test(string)) {
                     return true;
-                } else if (/^(:?false)$/i.test(string)) {
+                } else if (/^false$/i.test(string)) {
                     return false;
                 }
                 return null;
@@ -503,7 +503,7 @@ const WAY = WAYCore;
     const EventEmitter = function() {
         return new PIXI.utils.EventEmitter();
     };
-    WAY.EventEmitter = EventEmitter();
+    WAY.EventEmitter = WAY.EventEmitter || EventEmitter();
 
     const Windows = function() {
         class TitleWindow extends Window_Base {

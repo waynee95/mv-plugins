@@ -40,7 +40,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var Imported = Imported || {};
+var Imported = window.Imported || {};
 
 var WAYModuleLoader = function () {
     var plugins = {};
@@ -215,7 +215,7 @@ var WAYModuleLoader = function () {
 
 WAYModuleLoader.registerPlugin('WAY_Core', '1.8.0', 'waynee95');
 
-var WAYCore = WAYCore || {};
+var WAYCore = window.WAYCore || {};
 var WAY = WAYCore;
 
 (function ($) {
@@ -783,9 +783,9 @@ var WAY = WAYCore;
                 }(),
                 toBool: function () {
                     function toBool(string) {
-                        if (/^(:?true)$/i.test(string)) {
+                        if (/^true$/i.test(string)) {
                             return true;
-                        } else if (/^(:?false)$/i.test(string)) {
+                        } else if (/^false$/i.test(string)) {
                             return false;
                         }
                         return null;
@@ -861,7 +861,7 @@ var WAY = WAYCore;
 
         return EventEmitter;
     }();
-    WAY.EventEmitter = EventEmitter();
+    WAY.EventEmitter = WAY.EventEmitter || EventEmitter();
 
     var Windows = function () {
         function Windows() {
