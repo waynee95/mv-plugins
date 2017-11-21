@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.8.0 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.8.1 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -213,7 +213,7 @@ var WAYModuleLoader = function () {
     };
 }();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.8.0', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.8.1', 'waynee95');
 
 var WAYCore = window.WAYCore || {};
 var WAY = WAYCore;
@@ -387,8 +387,12 @@ var WAY = WAYCore;
                     return getEventComments;
                 }(),
                 getMultiLineNotetag: function () {
-                    function getMultiLineNotetag(text, tag, defaultValue, func) {
+                    function getMultiLineNotetag(text, tag, defaultValue) {
                         var _this2 = this;
+
+                        var func = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {
+                            return true;
+                        };
 
                         var result = [];
                         var re = new RegExp('<(' + String(tag) + ')>([\\s\\S]*?)<(\\/' + String(tag) + ')>', 'gi');
@@ -404,8 +408,12 @@ var WAY = WAYCore;
                     return getMultiLineNotetag;
                 }(),
                 getNotetag: function () {
-                    function getNotetag(text, tag, defaultValue, func) {
+                    function getNotetag(text, tag, defaultValue) {
                         var _this3 = this;
+
+                        var func = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {
+                            return true;
+                        };
 
                         var result = [];
                         var re = /<([^<>:]+)(:?)([^>]*)>/g;
