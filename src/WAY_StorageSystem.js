@@ -41,7 +41,7 @@ const $gameStorageSystems = {};
 
 ($ => {
     const { getNotetag, toArray, toBool, toInt, negate, map, piper, tryEval } = WAY.Util;
-    const { TitleWindow } = WAY.Window.TitleWindow;
+    const { TitleWindow } = WAY.Window;
 
     const $dataStorage = $.parameters.storages;
 
