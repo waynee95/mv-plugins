@@ -4,6 +4,7 @@
     "description": "JavaScript Plugin Collection for RPG Maker MV",
     "main": "/game/index.js",
     "scripts": {
+        "serve": "cd ./game && live-server",
         "clean:dist": "rimraf -rf ./dist/WAY_*",
         "clean:game": "rimraf -rf ./game/js/plugins/WAY_*",
         "clean": "npm run clean:game && npm run clean:dist",
@@ -35,6 +36,7 @@
         "eslint-config-prettier": "^2.6.0",
         "eslint-plugin-import": "^2.7.0",
         "eslint-plugin-rpgmaker": "^1.0.2",
+        "live-server": "^1.2.0",
         "rimraf": "^2.6.2"
     },
     "dependencies": {
