@@ -31,5 +31,8 @@
     "gulp-sourcemaps": "^2.6.1",
     "gulp-watch": "^4.3.11",
     "vinyl-buffer": "^1.0.0"
+  },
+  "dependencies": {
+    "eslint-import-resolver-node": "^0.3.1"
   }
 }

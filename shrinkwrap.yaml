@@ -1,3 +1,5 @@
+dependencies:
+  eslint-import-resolver-node: 0.3.1
 devDependencies:
   babel-cli: 6.26.0
   babel-plugin-transform-es2015-parameters: 6.24.1
@@ -1412,7 +1414,6 @@ packages:
   /debug/2.6.9:
     dependencies:
       ms: 2.0.0
-    dev: true
     resolution:
       integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==
   /debug/3.1.0:
@@ -1697,7 +1698,6 @@ packages:
     dependencies:
       debug: 2.6.9
       resolve: 1.5.0
-    dev: true
     resolution:
       integrity: sha512-yUtXS15gIcij68NmXmP9Ni77AQuCN0itXbCc/jWd8C6/yKZaSNXicpC8cgvjnxVdmfsosIXrjpzFq7GcDryb6A==
   /eslint-module-utils/2.1.1:
@@ -3532,7 +3532,6 @@ packages:
     resolution:
       integrity: sha1-Wa3NIu3FQ/e1OBhi0xOHsfS8lHM=
   /ms/2.0.0:
-    dev: true
     resolution:
       integrity: sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=
   /multipipe/0.1.2:
@@ -3879,7 +3878,6 @@ packages:
     resolution:
       integrity: sha1-NlQX3t5EQw0cEa9hAn+s8HS9/FM=
   /path-parse/1.0.5:
-    dev: true
     resolution:
       integrity: sha1-PBrfhx6pzWyUMbbqK9dKD/BVxME=
   /path-root-regex/0.1.2:
@@ -4287,7 +4285,6 @@ packages:
   /resolve/1.5.0:
     dependencies:
       path-parse: 1.0.5
-    dev: true
     resolution:
       integrity: sha512-hgoSGrc3pjzAPHNBg+KnFcK2HwlHTs/YrAGUr6qgTVUZmXv1UEXXl0bZNBKMA9fud6lRYFdPGz0xXxycPzmmiw==
   /resp-modifier/6.0.2:
@@ -5195,6 +5192,7 @@ specifiers:
   eslint: ^4.9.0
   eslint-config-airbnb-base: ^12.1.0
   eslint-config-prettier: ^2.6.0
+  eslint-import-resolver-node: ^0.3.1
   eslint-plugin-import: ^2.7.0
   eslint-plugin-rpgmaker: ^1.0.2
   gulp: ^3.9.1
