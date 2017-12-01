@@ -122,24 +122,20 @@ if (WAY === undefined) {
             return returnWidth;
         };
 
-        var customCostTextEval = function () {
-            function customCostTextEval(skill, cost, code, a) {
-                var text = '';
-                var user = a;
-                var subject = a;
-                var s = $gameSwitches._data;
-                var v = $gameVariables._data;
-                var p = $gameParty;
-                try {
-                    eval(code);
-                } catch (e) {
-                    throw e;
-                }
-                return text;
+        var customCostTextEval = function customCostTextEval(skill, cost, code, a) {
+            var text = '';
+            var user = a;
+            var subject = a;
+            var s = $gameSwitches._data;
+            var v = $gameVariables._data;
+            var p = $gameParty;
+            try {
+                eval(code);
+            } catch (e) {
+                throw e;
             }
-
-            return customCostTextEval;
-        }();
+            return text;
+        };
 
         alias.Window_SkillList_drawHpCost = Window_SkillList.drawHpCost;
         Window_SkillList.drawHpCost = function (skill, wx, wy, dw) {

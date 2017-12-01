@@ -51,13 +51,9 @@ if (WAY === undefined) {
         trim = _WAY$Util.trim;
 
 
-    var parseNotetags = function () {
-        function parseNotetags(obj) {
-            obj.customOnDeathEval = getMultiLineNotetag(obj.note, 'Custom On Death Eval', null, trim);
-        }
-
-        return parseNotetags;
-    }();
+    var parseNotetags = function parseNotetags(obj) {
+        obj.customOnDeathEval = getMultiLineNotetag(obj.note, 'Custom On Death Eval', null, trim);
+    };
 
     WAY.EventEmitter.on('load-actor-notetags', parseNotetags);
     WAY.EventEmitter.on('load-class-notetags', parseNotetags);

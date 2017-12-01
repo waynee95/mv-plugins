@@ -67,38 +67,30 @@ if (WAY === undefined) {
     var CUSTOM_ON_EQUIP_EVAL = 'customOnEquipEval';
     var CUSTOM_ON_REMOVE_EQUIP_EVAL = 'customOnRemoveEquipEval';
 
-    var parseNotetags = function () {
-        function parseNotetags(obj) {
-            obj.customOnEquipEval = getMultiLineNotetag(obj.note, 'Custom On Equip Eval', null, trim);
-            obj.customOnRemoveEquipEval = getMultiLineNotetag(obj.note, 'Custom On Remove Equip Eval', null, trim);
-        }
-
-        return parseNotetags;
-    }();
+    var parseNotetags = function parseNotetags(obj) {
+        obj.customOnEquipEval = getMultiLineNotetag(obj.note, 'Custom On Equip Eval', null, trim);
+        obj.customOnRemoveEquipEval = getMultiLineNotetag(obj.note, 'Custom On Remove Equip Eval', null, trim);
+    };
 
     WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
     WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
 
-    var evalCode = function () {
-        function evalCode(user, item, type) {
-            if (item && item[type]) {
-                var a = user;
-                var s = $gameSwitches._data;
-                var v = $gameVariables._data;
-                var p = $gameParty;
-                var code = item[type];
-                try {
-                    return eval(code);
-                } catch (e) {
-                    throw e;
-                }
+    var evalCode = function evalCode(user, item, type) {
+        if (item && item[type]) {
+            var a = user;
+            var s = $gameSwitches._data;
+            var v = $gameVariables._data;
+            var p = $gameParty;
+            var code = item[type];
+            try {
+                return eval(code);
+            } catch (e) {
+                throw e;
             }
-
-            return false;
         }
 
-        return evalCode;
-    }();
+        return false;
+    };
 
     (function (Game_Actor, alias) {
         alias.Game_Actor_changeEquip = Game_Actor.changeEquip;

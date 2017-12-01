@@ -52,55 +52,43 @@ if (WAY === undefined) {
         trim = _WAY$Util.trim;
 
 
-    var parseNotetags = function () {
-        function parseNotetags(obj) {
-            obj.customBuyShowEval = getMultiLineNotetag(obj.note, 'Custom Buy Show Eval', null, trim);
-        }
-
-        return parseNotetags;
-    }();
+    var parseNotetags = function parseNotetags(obj) {
+        obj.customBuyShowEval = getMultiLineNotetag(obj.note, 'Custom Buy Show Eval', null, trim);
+    };
 
     WAY.EventEmitter.on('load-item-notetags', parseNotetags);
     WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
     WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
 
     (function (Window_ShopBuy, alias) {
-        var meetsCustomBuyShowEval = function () {
-            function meetsCustomBuyShowEval(item) {
-                if (!item || item.customBuyShowEval === '') {
-                    return true;
-                }
-                var visible = true;
-                var s = $gameSwitches._data;
-                var v = $gameVariables._data;
-                var p = $gameParty;
-                try {
-                    eval(item.customBuyShowEval);
-                } catch (e) {
-                    throw e;
-                }
-                return visible;
+        var meetsCustomBuyShowEval = function meetsCustomBuyShowEval(item) {
+            if (!item || item.customBuyShowEval === '') {
+                return true;
             }
-
-            return meetsCustomBuyShowEval;
-        }();
-
-        var getContainer = function () {
-            function getContainer(num) {
-                switch (num) {
-                    case 0:
-                        return $dataItems;
-                    case 1:
-                        return $dataWeapons;
-                    case 2:
-                        return $dataArmors;
-                    default:
-                        return [];
-                }
+            var visible = true;
+            var s = $gameSwitches._data;
+            var v = $gameVariables._data;
+            var p = $gameParty;
+            try {
+                eval(item.customBuyShowEval);
+            } catch (e) {
+                throw e;
             }
+            return visible;
+        };
 
-            return getContainer;
-        }();
+        var getContainer = function getContainer(num) {
+            switch (num) {
+                case 0:
+                    return $dataItems;
+                case 1:
+                    return $dataWeapons;
+                case 2:
+                    return $dataArmors;
+                default:
+                    return [];
+            }
+        };
 
         alias.Window_ShopBuy_makeItemList = Window_ShopBuy.makeItemList;
         extend(Window_ShopBuy, 'initialize', function () {

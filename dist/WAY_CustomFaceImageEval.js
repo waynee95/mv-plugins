@@ -71,25 +71,21 @@ if (WAY === undefined) {
         actor.customFaceImageEval = getMultiLineNotetag(actor.note, 'Custom Face Image Eval', null, trim);
     });
 
-    var evalCode = function () {
-        function evalCode(user, code) {
-            var a = user;
-            var s = $gameSwitches._data;
-            var v = $gameVariables._data;
-            var p = $gameParty;
-            var faceName = user._defaultFaceName;
-            var faceIndex = user._defaultFaceIndex;
-            try {
-                eval(code);
-            } catch (e) {
-                throw e;
-            }
-
-            return { faceName: faceName, faceIndex: faceIndex };
+    var evalCode = function evalCode(user, code) {
+        var a = user;
+        var s = $gameSwitches._data;
+        var v = $gameVariables._data;
+        var p = $gameParty;
+        var faceName = user._defaultFaceName;
+        var faceIndex = user._defaultFaceIndex;
+        try {
+            eval(code);
+        } catch (e) {
+            throw e;
         }
 
-        return evalCode;
-    }();
+        return { faceName: faceName, faceIndex: faceIndex };
+    };
 
     (function (Game_Actor, alias) {
         alias.Game_Actor_initImages = Game_Actor.initImages;

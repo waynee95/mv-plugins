@@ -58,21 +58,17 @@ if (WAY === undefined) {
 (function ($) {
     var $dataMacros = $.parameters.macros;
 
-    var replaceMacros = function () {
-        function replaceMacros(obj) {
-            $dataMacros.forEach(function (_ref) {
-                var name = _ref.name,
-                    formula = _ref.formula;
+    var replaceMacros = function replaceMacros(obj) {
+        $dataMacros.forEach(function (_ref) {
+            var name = _ref.name,
+                formula = _ref.formula;
 
-                if (obj.damage.formula.indexOf(name) > -1) {
-                    var regex = new RegExp(name, 'g');
-                    obj.damage.formula = obj.damage.formula.replace(regex, formula);
-                }
-            });
-        }
-
-        return replaceMacros;
-    }();
+            if (obj.damage.formula.indexOf(name) > -1) {
+                var regex = new RegExp(name, 'g');
+                obj.damage.formula = obj.damage.formula.replace(regex, formula);
+            }
+        });
+    };
 
     WAY.EventEmitter.on('load-item-notetags', replaceMacros);
     WAY.EventEmitter.on('load-skill-notetags', replaceMacros);

@@ -62,13 +62,9 @@ if (WAY === undefined) {
     var defaultFormula = $.parameters.defaultFormula;
 
 
-    var parseNotetags = function () {
-        function parseNotetags(obj) {
-            obj.tpFormula = getMultiLineNotetag(obj.note, 'Max TP Formula', null, trim);
-        }
-
-        return parseNotetags;
-    }();
+    var parseNotetags = function parseNotetags(obj) {
+        obj.tpFormula = getMultiLineNotetag(obj.note, 'Max TP Formula', null, trim);
+    };
 
     WAY.EventEmitter.on('load-actor-notetags', parseNotetags);
     WAY.EventEmitter.on('load-class-notetags', parseNotetags);
@@ -89,23 +85,19 @@ if (WAY === undefined) {
         }
     });
 
-    var evalFormula = function () {
-        function evalFormula(user, formula) {
-            var maxTp = 0;
-            var a = user;
-            var s = $gameSwitches._data;
-            var v = $gameVariables._data;
-            var p = $gameParty;
-            try {
-                eval(formula); // eslint-disable-line
-            } catch (e) {
-                throw e;
-            }
-            return maxTp;
+    var evalFormula = function evalFormula(user, formula) {
+        var maxTp = 0;
+        var a = user;
+        var s = $gameSwitches._data;
+        var v = $gameVariables._data;
+        var p = $gameParty;
+        try {
+            eval(formula); // eslint-disable-line
+        } catch (e) {
+            throw e;
         }
-
-        return evalFormula;
-    }();
+        return maxTp;
+    };
 
     /* Override */
     Game_Actor.prototype.maxTp = function () {

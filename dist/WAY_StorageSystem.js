@@ -68,52 +68,40 @@ var $gameStorageSystems = {};
 
     var $dataStorage = $.parameters.storages;
 
-    var parseNotetags = function () {
-        function parseNotetags(obj) {
-            obj.cannotStore = getNotetag(obj.note, 'Cannot Store', null, toBool);
-            obj.storeOnlyIn = getNotetag(obj.note, 'Store Only In', [], toArray);
-        }
-
-        return parseNotetags;
-    }();
+    var parseNotetags = function parseNotetags(obj) {
+        obj.cannotStore = getNotetag(obj.note, 'Cannot Store', null, toBool);
+        obj.storeOnlyIn = getNotetag(obj.note, 'Store Only In', [], toArray);
+    };
 
     WAY.EventEmitter.on('load-item-notetags', parseNotetags);
     WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
     WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
 
-    var getContainer = function () {
-        function getContainer(num) {
-            switch (num) {
-                case 0:
-                    return $dataItems;
-                case 1:
-                    return $dataWeapons;
-                case 2:
-                    return $dataArmors;
-                default:
-                    return [];
-            }
+    var getContainer = function getContainer(num) {
+        switch (num) {
+            case 0:
+                return $dataItems;
+            case 1:
+                return $dataWeapons;
+            case 2:
+                return $dataArmors;
+            default:
+                return [];
         }
+    };
 
-        return getContainer;
-    }();
-
-    var getItemCategory = function () {
-        function getItemCategory(item) {
-            if (DataManager.isItem(item) && item.itypeId === 1) {
-                return 'Items';
-            } else if (DataManager.isItem(item) && item.itypeId === 2) {
-                return 'KeyItems';
-            } else if (DataManager.isWeapon(item)) {
-                return 'Weapons';
-            } else if (DataManager.isArmor(item)) {
-                return 'Armors';
-            }
-            return false;
+    var getItemCategory = function getItemCategory(item) {
+        if (DataManager.isItem(item) && item.itypeId === 1) {
+            return 'Items';
+        } else if (DataManager.isItem(item) && item.itypeId === 2) {
+            return 'KeyItems';
+        } else if (DataManager.isWeapon(item)) {
+            return 'Weapons';
+        } else if (DataManager.isArmor(item)) {
+            return 'Armors';
         }
-
-        return getItemCategory;
-    }();
+        return false;
+    };
 
     PluginManager.addCommand('StorageSystem', {
         open: function () {

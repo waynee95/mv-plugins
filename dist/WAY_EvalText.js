@@ -47,30 +47,26 @@ if (WAY === undefined) {
 
 
     (function (Window_Base, alias) {
-        var evalText = function () {
-            function evalText(text) {
-                var a = $gameParty.leader();
-                var item = isScene(Scene_ItemBase) ? SceneManager._scene.item() : a;
-                var skill = item;
-                if (isScene(Scene_MenuBase)) {
-                    a = $gameParty.menuActor();
-                } else if (isScene(Scene_Battle)) {
-                    a = BattleManager.actor();
-                }
-                var s = $gameSwitches._data;
-                var v = $gameVariables._data;
-                var p = $gameParty;
-                return text.replace(/\${[^{}\\]+(?=\})}/g, function (code) {
-                    try {
-                        return eval(code.substring(2, code.length - 1));
-                    } catch (e) {
-                        return '';
-                    }
-                });
+        var evalText = function evalText(text) {
+            var a = $gameParty.leader();
+            var item = isScene(Scene_ItemBase) ? SceneManager._scene.item() : a;
+            var skill = item;
+            if (isScene(Scene_MenuBase)) {
+                a = $gameParty.menuActor();
+            } else if (isScene(Scene_Battle)) {
+                a = BattleManager.actor();
             }
-
-            return evalText;
-        }();
+            var s = $gameSwitches._data;
+            var v = $gameVariables._data;
+            var p = $gameParty;
+            return text.replace(/\${[^{}\\]+(?=\})}/g, function (code) {
+                try {
+                    return eval(code.substring(2, code.length - 1));
+                } catch (e) {
+                    return '';
+                }
+            });
+        };
 
         alias.WindowBase_convertEscapeCharacters = Window_Base.convertEscapeCharacters;
 
