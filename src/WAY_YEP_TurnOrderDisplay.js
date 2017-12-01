@@ -3,7 +3,7 @@
 // WAY_YEP_TurnOrderDisplay.js
 // ============================================================================
 /*:
-@plugindesc v1.0.3 Addon to Yanfly's Turn Order Display Plugin. <WAY_YEP_TurnOrderDisplay>
+@plugindesc v1.1.0 Addon to Yanfly's Turn Order Display Plugin. <WAY_YEP_TurnOrderDisplay>
 @author waynee95
 
 @help
@@ -33,11 +33,11 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_TurnOrderDisplay', '1.0.3', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_TurnOrderDisplay', '1.1.0', 'waynee95');
 }
 
 ($ => {
-    const { getNotetag } = WAY.Util;
+    const { getNotetag, extend } = WAY.Util;
 
     WAY.EventEmitter.on('load-enemy-notetags', enemy => {
         getNotetag(enemy.note, 'Turn Order Image', null, str => {
@@ -85,4 +85,9 @@ if (WAY === undefined) {
             });
         };
     })(Window_TurnOrderIcon.prototype, $.alias);
+
+    /* Fix */
+    extend(Window_TurnOrderIcon.prototype, 'updateDestinationX', function() {
+        if (this._destinationX === undefined) this._destinationX = this.x;
+    });
 })(WAYModuleLoader.getModule('WAY_YEP_TurnOrderDisplay'));
