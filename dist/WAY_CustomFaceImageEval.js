@@ -76,8 +76,8 @@ if (WAY === undefined) {
         var s = $gameSwitches._data;
         var v = $gameVariables._data;
         var p = $gameParty;
-        var faceName = user._defaultFaceName;
-        var faceIndex = user._defaultFaceIndex;
+        var faceName = user._defaultFaceName; // eslint-disable-line
+        var faceIndex = user._defaultFaceIndex; // eslint-disable-line
         try {
             eval(code);
         } catch (e) {

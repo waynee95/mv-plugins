@@ -77,8 +77,8 @@ if (WAY === undefined) {
         const s = $gameSwitches._data;
         const v = $gameVariables._data;
         const p = $gameParty;
-        const faceName = user._defaultFaceName;
-        const faceIndex = user._defaultFaceIndex;
+        let faceName = user._defaultFaceName; // eslint-disable-line
+        let faceIndex = user._defaultFaceIndex; // eslint-disable-line
         try {
             eval(code);
         } catch (e) {
