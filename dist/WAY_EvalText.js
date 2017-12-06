@@ -49,7 +49,7 @@ if (WAY === undefined) {
     (function (Window_Base, alias) {
         var evalText = function evalText(text) {
             var a = $gameParty.leader();
-            var item = isScene(Scene_ItemBase) ? SceneManager._scene.item() : a;
+            var item = isScene(Scene_ItemBase) && SceneManager._scene._itemWindow ? SceneManager._scene.item() : a;
             var skill = item;
             if (isScene(Scene_MenuBase)) {
                 a = $gameParty.menuActor();
