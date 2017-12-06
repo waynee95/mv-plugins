@@ -3,7 +3,7 @@
 // WAY_YEP_RegionRestrictions.js
 // ============================================================================
 /*:
-@plugindesc v1.0.0 Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
+@plugindesc v1.1.0 Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
 @author waynee95
 
 @help
@@ -16,6 +16,13 @@
 
 Use this notetag in the event's notebox and the event can bypass the specified
 region.
+
+<Force Restriction: x>
+<Force Restriction: x, x...>
+
+When you use this notetag and the event has the through flag, it will check
+the setting for the specified region ids first instead of going "through" 
+no matter what.
 
 ==============================================================================
  ■ Terms of Use
@@ -36,64 +43,98 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_RegionRestrictions', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_RegionRestrictions', '1.1.0', 'waynee95');
 }
 
 ($ => {
-    const { extend } = WAY.Util;
+    const { extend, getNotetag, toArray } = WAY.Util;
 
     $.alias.DataManager_extractMetadata = DataManager.extractMetadata;
     extend(DataManager, 'extractMetadata', object => {
         if (object === $dataMap) {
             const { events } = $dataMap;
-            const re = /<BYPASS RESTRICTION:[ ](\d+(?:\s*,\s*\d+)*)>/i;
 
             events.forEach(event => {
                 if (event) {
-                    const { note } = event;
-                    event._bypassRestriction = [];
-                    if (note.match(re)) {
-                        const array = JSON.parse(`[${RegExp.$1.match(/\d+/g)}]`);
-                        event._bypassRestriction.push(...array);
-                    }
+                    event._bypassRestriction = getNotetag(
+                        event.note,
+                        'Bypass Restriction',
+                        [],
+                        toArray
+                    );
+                    event._forceRestriction = getNotetag(
+                        event.note,
+                        'Force Restriction',
+                        [],
+                        toArray
+                    );
                 }
             });
         }
     });
 
-    $.alias.Game_CharacterBase_isEventRegionForbid =
-        Game_CharacterBase.prototype.isEventRegionForbid;
-    Game_CharacterBase.prototype.isEventRegionForbid = function(x, y, d) {
-        const regionId = this.getRegionId(x, y, d);
-        const event = this.isEvent() ? this.event() : null;
-        if (event && event._bypassRestriction && event._bypassRestriction.contains(regionId)) {
-            return false;
-        }
-        return $.alias.Game_CharacterBase_isEventRegionForbid.apply(this, arguments);
-    };
+    ((Game_CharacterBase, alias) => {
+        alias.Game_CharacterBase_isEventRegionForbid = Game_CharacterBase.isEventRegionForbid;
+        alias.Game_CharacterBase_isEventRegionAllow = Game_CharacterBase.isEventRegionAllow;
+        alias.Game_CharacterBase_canPass = Game_CharacterBase.canPass;
 
-    $.alias.Game_CharacterBase_isEventRegionAllow = Game_CharacterBase.prototype.isEventRegionAllow;
-    Game_CharacterBase.prototype.isEventRegionAllow = function(x, y, d) {
-        const regionId = this.getRegionId(x, y, d);
-        const event = this.isEvent() ? this.event() : null;
-        if (event && event._bypassRestriction && event._bypassRestriction.contains(regionId)) {
+        /* Override */
+        Game_CharacterBase.isEventRegionForbid = function(x, y, d) {
+            const regionId = this.getRegionId(x, y, d);
+            const event = this.isEvent() ? this.event() : null;
+            if (event && event._bypassRestriction.contains(regionId)) {
+                return false;
+            }
+            if (this.isPlayer()) return false;
+            if (this.isThrough()) {
+                if (event && event._forceRestriction.contains(regionId)) {
+                    return $gameMap.restrictEventRegions().contains(regionId);
+                }
+                return false;
+            }
+            if (regionId === 0) return false;
+            if ($gameMap.restrictEventRegions().contains(regionId)) return true;
+            return false;
+        };
+
+        /* Override */
+        Game_CharacterBase.isEventRegionAllow = function(x, y, d) {
+            const regionId = this.getRegionId(x, y, d);
+            const event = this.isEvent() ? this.event() : null;
+            if (event && event._bypassRestriction.contains(regionId)) {
+                return true;
+            }
+            if (this.isPlayer()) return false;
+            if (regionId === 0) return false;
+            if ($gameMap.allowEventRegions().contains(regionId)) return true;
+            return false;
+        };
+
+        /* Override */
+        Game_CharacterBase.canPass = function(x, y, d) {
+            const x2 = $gameMap.roundXWithDirection(x, d);
+            const y2 = $gameMap.roundYWithDirection(y, d);
+            if (!$gameMap.isValid(x2, y2)) {
+                return false;
+            }
+            const isThrough = this.isThrough() || this.isDebugThrough();
+            if (isThrough && this.getRegionId(x, y, d) === 0) {
+                return true;
+            }
+            if (!this.isMapPassable(x, y, d) || this.isCollidedWithCharacters(x2, y2)) {
+                return false;
+            }
             return true;
-        }
-        return $.alias.Game_CharacterBase_isEventRegionAllow.apply(this, arguments);
-    };
+        };
+    })(Game_CharacterBase.prototype, $.alias);
 
     /* Compatability with Galv_EventSpawner */
     if (Imported.Galv_EventSpawner) {
         $.alias.Game_SpawnEvent_init = Game_SpawnEvent.prototype.initialize;
         extend(Game_SpawnEvent.prototype, 'initialize', () => {
-            const re = /<BYPASS RESTRICTION:[ ](\d+(?:\s*,\s*\d+)*)>/i;
             const event = this.event();
-            const { note } = event;
-            event._bypassRestriction = [];
-            if (note.match(re)) {
-                const array = JSON.parse(`[${RegExp.$1.match(/\d+/g)}]`);
-                event._bypassRestriction.push(...array);
-            }
+            event._bypassRestriction = getNotetag(event.note, 'Bypass Restriction', [], toArray);
+            event._forceRestriction = getNotetag(event.note, 'Force Restriction', [], toArray);
         });
     }
 })(WAYModuleLoader.getModule('WAY_YEP_RegionRestrictions'));

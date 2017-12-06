@@ -3,7 +3,7 @@
 // WAY_YEP_RegionRestrictions.js
 // ============================================================================
 /*:
-@plugindesc v1.0.0 Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
+@plugindesc v1.1.0 Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
 @author waynee95
 
 @help
@@ -17,6 +17,13 @@
 Use this notetag in the event's notebox and the event can bypass the specified
 region.
 
+<Force Restriction: x>
+<Force Restriction: x, x...>
+
+When you use this notetag and the event has the through flag, it will check
+the setting for the specified region ids first instead of going "through" 
+no matter what.
+
 ==============================================================================
  ■ Terms of Use
 ==============================================================================
@@ -28,8 +35,6 @@ My plugins may be used in commercial and non-commercial products.
 
 'use strict';
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 if (WAY === undefined) {
     console.error('You need to install WAY_Core!'); //eslint-disable-line no-console
     if (Utils.isNwjs() && Utils.isOptionValid('test')) {
@@ -38,11 +43,14 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_RegionRestrictions', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_RegionRestrictions', '1.1.0', 'waynee95');
 }
 
 (function ($) {
-    var extend = WAY.Util.extend;
+    var _WAY$Util = WAY.Util,
+        extend = _WAY$Util.extend,
+        getNotetag = _WAY$Util.getNotetag,
+        toArray = _WAY$Util.toArray;
 
 
     $.alias.DataManager_extractMetadata = DataManager.extractMetadata;
@@ -51,59 +59,78 @@ if (WAY === undefined) {
             var _$dataMap = $dataMap,
                 events = _$dataMap.events;
 
-            var re = /<BYPASS RESTRICTION:[ ](\d+(?:\s*,\s*\d+)*)>/i;
 
             events.forEach(function (event) {
                 if (event) {
-                    var note = event.note;
-
-                    event._bypassRestriction = [];
-                    if (note.match(re)) {
-                        var _event$_bypassRestric;
-
-                        var array = JSON.parse('[' + String(RegExp.$1.match(/\d+/g)) + ']');
-                        (_event$_bypassRestric = event._bypassRestriction).push.apply(_event$_bypassRestric, _toConsumableArray(array));
-                    }
+                    event._bypassRestriction = getNotetag(event.note, 'Bypass Restriction', [], toArray);
+                    event._forceRestriction = getNotetag(event.note, 'Force Restriction', [], toArray);
                 }
             });
         }
     });
 
-    $.alias.Game_CharacterBase_isEventRegionForbid = Game_CharacterBase.prototype.isEventRegionForbid;
-    Game_CharacterBase.prototype.isEventRegionForbid = function (x, y, d) {
-        var regionId = this.getRegionId(x, y, d);
-        var event = this.isEvent() ? this.event() : null;
-        if (event && event._bypassRestriction && event._bypassRestriction.contains(regionId)) {
-            return false;
-        }
-        return $.alias.Game_CharacterBase_isEventRegionForbid.apply(this, arguments);
-    };
+    (function (Game_CharacterBase, alias) {
+        alias.Game_CharacterBase_isEventRegionForbid = Game_CharacterBase.isEventRegionForbid;
+        alias.Game_CharacterBase_isEventRegionAllow = Game_CharacterBase.isEventRegionAllow;
+        alias.Game_CharacterBase_canPass = Game_CharacterBase.canPass;
 
-    $.alias.Game_CharacterBase_isEventRegionAllow = Game_CharacterBase.prototype.isEventRegionAllow;
-    Game_CharacterBase.prototype.isEventRegionAllow = function (x, y, d) {
-        var regionId = this.getRegionId(x, y, d);
-        var event = this.isEvent() ? this.event() : null;
-        if (event && event._bypassRestriction && event._bypassRestriction.contains(regionId)) {
+        /* Override */
+        Game_CharacterBase.isEventRegionForbid = function (x, y, d) {
+            var regionId = this.getRegionId(x, y, d);
+            var event = this.isEvent() ? this.event() : null;
+            if (event && event._bypassRestriction.contains(regionId)) {
+                return false;
+            }
+            if (this.isPlayer()) return false;
+            if (this.isThrough()) {
+                if (event && event._forceRestriction.contains(regionId)) {
+                    return $gameMap.restrictEventRegions().contains(regionId);
+                }
+                return false;
+            }
+            if (regionId === 0) return false;
+            if ($gameMap.restrictEventRegions().contains(regionId)) return true;
+            return false;
+        };
+
+        /* Override */
+        Game_CharacterBase.isEventRegionAllow = function (x, y, d) {
+            var regionId = this.getRegionId(x, y, d);
+            var event = this.isEvent() ? this.event() : null;
+            if (event && event._bypassRestriction.contains(regionId)) {
+                return true;
+            }
+            if (this.isPlayer()) return false;
+            if (regionId === 0) return false;
+            if ($gameMap.allowEventRegions().contains(regionId)) return true;
+            return false;
+        };
+
+        /* Override */
+        Game_CharacterBase.canPass = function (x, y, d) {
+            var x2 = $gameMap.roundXWithDirection(x, d);
+            var y2 = $gameMap.roundYWithDirection(y, d);
+            if (!$gameMap.isValid(x2, y2)) {
+                return false;
+            }
+            var isThrough = this.isThrough() || this.isDebugThrough();
+            if (isThrough && this.getRegionId(x, y, d) === 0) {
+                return true;
+            }
+            if (!this.isMapPassable(x, y, d) || this.isCollidedWithCharacters(x2, y2)) {
+                return false;
+            }
             return true;
-        }
-        return $.alias.Game_CharacterBase_isEventRegionAllow.apply(this, arguments);
-    };
+        };
+    })(Game_CharacterBase.prototype, $.alias);
 
     /* Compatability with Galv_EventSpawner */
     if (Imported.Galv_EventSpawner) {
         $.alias.Game_SpawnEvent_init = Game_SpawnEvent.prototype.initialize;
         extend(Game_SpawnEvent.prototype, 'initialize', function () {
-            var re = /<BYPASS RESTRICTION:[ ](\d+(?:\s*,\s*\d+)*)>/i;
             var event = undefined.event();
-            var note = event.note;
-
-            event._bypassRestriction = [];
-            if (note.match(re)) {
-                var _event$_bypassRestric2;
-
-                var array = JSON.parse('[' + String(RegExp.$1.match(/\d+/g)) + ']');
-                (_event$_bypassRestric2 = event._bypassRestriction).push.apply(_event$_bypassRestric2, _toConsumableArray(array));
-            }
+            event._bypassRestriction = getNotetag(event.note, 'Bypass Restriction', [], toArray);
+            event._forceRestriction = getNotetag(event.note, 'Force Restriction', [], toArray);
         });
     }
 })(WAYModuleLoader.getModule('WAY_YEP_RegionRestrictions'));
