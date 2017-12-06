@@ -15,8 +15,9 @@ ${}. It will replace that later with the result of your entered JavaScript code.
 
 a - references the current selected actor (or the leader if there is no) 
 p - game party 
-s - switch 
-v - variable 
+s - game switches
+v - game variables
+p - game party
 item , skill - refers to the actual item or skill you are in. (If you are inside
 the description box of skill or item)
 
@@ -56,8 +57,8 @@ if (WAY === undefined) {
             } else if (isScene(Scene_Battle)) {
                 a = BattleManager.actor();
             }
-            var s = $gameSwitches._data;
-            var v = $gameVariables._data;
+            var s = $gameSwitches;
+            var v = $gameVariables;
             var p = $gameParty;
             return text.replace(/\${[^{}\\]+(?=\})}/g, function (code) {
                 try {
