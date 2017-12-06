@@ -3,7 +3,7 @@
 // WAY_YEP_RegionRestrictions.js
 // ============================================================================
 /*:
-@plugindesc v1.1.0 Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
+@plugindesc v1.1.1 Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
 @author waynee95
 
 @help
@@ -43,7 +43,7 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_RegionRestrictions', '1.1.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_RegionRestrictions', '1.1.1', 'waynee95');
 }
 
 ($ => {
@@ -131,10 +131,12 @@ if (WAY === undefined) {
     /* Compatability with Galv_EventSpawner */
     if (Imported.Galv_EventSpawner) {
         $.alias.Game_SpawnEvent_init = Game_SpawnEvent.prototype.initialize;
-        extend(Game_SpawnEvent.prototype, 'initialize', () => {
+
+        Game_SpawnEvent.prototype.initialize = function() {
+            $.alias.Game_SpawnEvent_init.apply(this, arguments);
             const event = this.event();
             event._bypassRestriction = getNotetag(event.note, 'Bypass Restriction', [], toArray);
             event._forceRestriction = getNotetag(event.note, 'Force Restriction', [], toArray);
-        });
+        };
     }
 })(WAYModuleLoader.getModule('WAY_YEP_RegionRestrictions'));
