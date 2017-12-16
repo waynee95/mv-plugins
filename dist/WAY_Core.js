@@ -287,6 +287,16 @@ var WAY = WAYCore;
 
                 return concatAll;
             }(),
+            countWords: function () {
+                function countWords(str, word) {
+                    var wholeWord = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+                    var re = wholeWord ? new RegExp('^' + String(word) + '$', 'g') : new RegExp(word, 'g');
+                    return (str.match(re) || []).length;
+                }
+
+                return countWords;
+            }(),
             difference: function () {
                 function difference(a, b) {
                     return a.filter(function (element) {
