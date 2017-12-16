@@ -168,7 +168,7 @@ const WAY = WAYCore;
                 return args.reduce((acc, val) => [...acc, ...val]);
             },
             countWords(str, word, subStr = false) {
-                const re = subStr ? new RegExp(word, 'g') : new RegExp(`^${word}$`, 'g');
+                const re = subStr ? new RegExp(`^${word}$`, 'g') : new RegExp(word, 'g');
                 return (str.match(re) || []).length;
             },
             difference(a, b) {
