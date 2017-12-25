@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.9.0 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.9.1 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -213,7 +213,7 @@ var WAYModuleLoader = function () {
     };
 }();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.9.0', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.9.1', 'waynee95');
 
 var WAYCore = window.WAYCore || {};
 var WAY = WAYCore;
@@ -258,14 +258,14 @@ var WAY = WAYCore;
 
                 return average;
             }(),
-            clean: function () {
-                function clean(arr) {
+            cleanArray: function () {
+                function cleanArray(arr) {
                     return arr.filter(function (element) {
                         return WAY.Util.exists(element);
                     });
                 }
 
-                return clean;
+                return cleanArray;
             }(),
             clip: function () {
                 function clip(num, lower, upper) {
@@ -343,6 +343,16 @@ var WAY = WAYCore;
                 }
 
                 return filter;
+            }(),
+            fillArray: function () {
+                function fillArray(item, length) {
+                    return Array.apply(null, { length: length }) // eslint-disable-line
+                    .map(function () {
+                        return item;
+                    });
+                }
+
+                return fillArray;
             }(),
             filterText: function () {
                 function filterText(text, re, action) {
@@ -430,7 +440,7 @@ var WAY = WAYCore;
                         return match[1].toLowerCase() === tag.toLowerCase();
                     });
                     matches.forEach(function (group) {
-                        return result.push(func.call(_this3, group[3]));
+                        return result.push(func.call(_this3, group[1]));
                     });
                     return result.length > 0 ? result[0] : defaultValue;
                 }
@@ -764,6 +774,15 @@ var WAY = WAYCore;
                 }
 
                 return shuffle;
+            }(),
+            sumArray: function () {
+                function sumArray(arr) {
+                    return arr.reduce(function (acc, val) {
+                        return acc + val;
+                    }, 0);
+                }
+
+                return sumArray;
             }(),
             textWidthEx: function () {
                 function textWidthEx(text) {

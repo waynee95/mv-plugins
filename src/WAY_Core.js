@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.9.0 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.9.1 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -26,7 +26,7 @@ My plugins may be used in commercial and non-commercial products.
 
 const Imported = window.Imported || {};
 
-const WAYModuleLoader = (function() {
+const WAYModuleLoader = (function () {
     const plugins = {};
     function parseParameters(params) {
         if (WAY === undefined) {
@@ -38,19 +38,19 @@ const WAYModuleLoader = (function() {
     function compareVersions(currentVersion, operator = '>=', requiredVersion) {
         let compare = 0;
         const operation = {
-            '<': function() {
+            '<': function () {
                 return compare < 0;
             },
-            '<=': function() {
+            '<=': function () {
                 return compare <= 0;
             },
-            '==': function() {
+            '==': function () {
                 return compare === 0;
             },
-            '>': function() {
+            '>': function () {
                 return compare > 0;
             },
-            '>=': function() {
+            '>=': function () {
                 return compare >= 0;
             }
         };
@@ -137,13 +137,13 @@ const WAYModuleLoader = (function() {
     };
 })();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.9.0', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.9.1', 'waynee95');
 
 const WAYCore = window.WAYCore || {};
 const WAY = WAYCore;
 
 ($ => {
-    const Utilities = function() {
+    const Utilities = function () {
         return {
             arrayFromRange(start, end) {
                 return Array.apply(null, { length: end - start + 1 }) // eslint-disable-line
@@ -158,7 +158,7 @@ const WAY = WAYCore;
             average(arr) {
                 return arr.reduce((acc, val) => acc + val) / arr.length;
             },
-            clean(arr) {
+            cleanArray(arr) {
                 return arr.filter(element => WAY.Util.exists(element));
             },
             clip(num, lower, upper) {
@@ -176,7 +176,7 @@ const WAY = WAYCore;
             },
             extend(obj, name, func) {
                 const orig = obj[name];
-                obj[name] = function(...args) {
+                obj[name] = function (...args) {
                     orig.apply(this, args);
                     func.apply(this, args);
                 };
@@ -197,6 +197,10 @@ const WAY = WAYCore;
                             }),
                         {}
                     );
+            },
+            fillArray(item, length) {
+                return Array.apply(null, { length }) // eslint-disable-line
+                    .map(() => item);
             },
             filterText(text, re, action) {
                 const result = [];
@@ -249,7 +253,7 @@ const WAY = WAYCore;
                     re,
                     match => match[1].toLowerCase() === tag.toLowerCase()
                 );
-                matches.forEach(group => result.push(func.call(this, group[3])));
+                matches.forEach(group => result.push(func.call(this, group[1])));
                 return result.length > 0 ? result[0] : defaultValue;
             },
             getNotetagList(text, tag, func) {
@@ -327,19 +331,19 @@ const WAY = WAYCore;
                 const currentVersion = Utils.RPGMAKER_VERSION;
                 let compare = 0;
                 const operation = {
-                    '<': function() {
+                    '<': function () {
                         return compare < 0;
                     },
-                    '<=': function() {
+                    '<=': function () {
                         return compare <= 0;
                     },
-                    '==': function() {
+                    '==': function () {
                         return compare === 0;
                     },
-                    '>': function() {
+                    '>': function () {
                         return compare > 0;
                     },
-                    '>=': function() {
+                    '>=': function () {
                         return compare >= 0;
                     }
                 };
@@ -389,7 +393,7 @@ const WAY = WAYCore;
                 return arr[index];
             },
             piper(...steps) {
-                return function(...args) {
+                return function (...args) {
                     let value = steps[0].apply(this, args);
                     steps.slice(1).forEach(step => (value = step.call(this, value)));
                     return value;
@@ -433,6 +437,9 @@ const WAY = WAYCore;
                     }
                 }
                 return arr;
+            },
+            sumArray(arr) {
+                return arr.reduce((acc, val) => acc + val, 0);
             },
             textWidthEx(text) {
                 const x = 0;
@@ -504,12 +511,12 @@ const WAY = WAYCore;
     };
     WAY.Util = Utilities();
 
-    const EventEmitter = function() {
+    const EventEmitter = function () {
         return new PIXI.utils.EventEmitter();
     };
     WAY.EventEmitter = WAY.EventEmitter || EventEmitter();
 
-    const Windows = function() {
+    const Windows = function () {
         class TitleWindow extends Window_Base {
             constructor(x = 0, y = 0, width = Graphics.boxWidth, height = 72) {
                 super(x, y, width, height);
@@ -533,7 +540,7 @@ const WAY = WAYCore;
     WAY.Window = Windows();
 
     ((DataManager, alias) => {
-        const loadNotetags = function(objects, index) {
+        const loadNotetags = function (objects, index) {
             const strings = [
                 'actor',
                 'class',
@@ -551,7 +558,7 @@ const WAY = WAYCore;
             });
         };
         alias.DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
-        DataManager.isDatabaseLoaded = function() {
+        DataManager.isDatabaseLoaded = function () {
             if (!alias.DataManager_isDatabaseLoaded.call(this)) {
                 return false;
             }
@@ -579,13 +586,13 @@ const WAY = WAYCore;
 
     (PluginManager => {
         const commands = {};
-        PluginManager.addCommand = function(command, actions) {
+        PluginManager.addCommand = function (command, actions) {
             commands[command] = actions;
         };
-        PluginManager.isCommand = function(command) {
+        PluginManager.isCommand = function (command) {
             return typeof commands[command] !== 'undefined';
         };
-        PluginManager.getCommand = function(command) {
+        PluginManager.getCommand = function (command) {
             if (this.isCommand(command)) {
                 return commands[command];
             }
@@ -595,7 +602,7 @@ const WAY = WAYCore;
 
     ((GameInterpreter, alias) => {
         alias.Game_Interpreter_pluginCommand = GameInterpreter.pluginCommand;
-        WAY.Util.extend(Game_Interpreter, 'pluginCommand', function(command, args) {
+        WAY.Util.extend(Game_Interpreter, 'pluginCommand', function (command, args) {
             const actions = PluginManager.getCommand(command);
             if (actions) {
                 const action = actions[args[0]];
@@ -607,7 +614,7 @@ const WAY = WAYCore;
     })(Game_Interpreter.prototype, $.alias);
 
     (Window_Base => {
-        Window_Base.textWidthEx = function(text) {
+        Window_Base.textWidthEx = function (text) {
             return this.drawTextEx(text, 0, this.contents.height);
         };
     })(Window_Base.prototype);
