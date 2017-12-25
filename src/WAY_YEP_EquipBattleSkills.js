@@ -3,7 +3,7 @@
 // WAY_YEP_EquipBattleSkills.js
 // ============================================================================
 /*:
-@plugindesc v1.1.0 Addon to Yanfly's Equip Battle Skills Plugin. <WAY_YEP_EquipBattleSkills>
+@plugindesc v1.1.1 Addon to Yanfly's Equip Battle Skills Plugin. <WAY_YEP_EquipBattleSkills>
 @author waynee95
 
 @help
@@ -39,7 +39,7 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_EquipBattleSkills', '1.1.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_EquipBattleSkills', '1.1.1', 'waynee95');
 }
 
 (($) => {
@@ -58,26 +58,26 @@ if (WAY === undefined) {
     });
 
     Window_SkillList.prototype.isBattleSkillEnabled = function (item) {
-        if (!item) return true;
         const actor = this._actor;
 
-        if (Imported.YEP_X_Subclass) {
-            const subclassId = actor._subclassId;
-            const subclass = subclassId > 0 ? $dataClasses[subclassId] : null;
-            if (subclass && subclass.lockedSkills.contains(item.id)) return false;
+        if (item) {
+            if (Imported.YEP_X_Subclass) {
+                const subclassId = actor._subclassId;
+                const subclass = subclassId > 0 ? $dataClasses[subclassId] : null;
+                if (subclass && subclass.lockedSkills.contains(item.id)) return false;
+            }
+            if (actor.currentClass().lockedSkills.contains(item.id)) return false;
+            if (item.lockSkill) return false;
         }
-        if (actor.currentClass().lockedSkills.contains(item.id)) return false;
-        if (item.lockSkill) return false;
 
         return true;
     };
 
     $.alias.Window_SkillEquip_isEnabled = Window_SkillEquip.prototype.isEnabled;
     Window_SkillEquip.prototype.isEnabled = function (item) {
-        if (!item) $.alias.Window_SkillEquip_isEnabled.call(this, item);
         const actor = this._actor;
 
-        if (actor.battleSkills().contains(item)) {
+        if (item && actor.battleSkills().contains(item)) {
             if (Imported.YEP_X_Subclass) {
                 const subclassId = actor._subclassId;
                 const subclass = subclassId > 0 ? $dataClasses[subclassId] : null;
