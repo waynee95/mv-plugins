@@ -57,7 +57,7 @@ if (WAY === undefined) {
 
     WAY.EventEmitter.on('load-class-notetags', function (obj) {
         obj.lockedSkills = [];
-        getNotetagList(obj.note, 'Locked Skills', function (data) {
+        getNotetagList(obj.note, 'Lock Skills', function (data) {
             var _obj$lockedSkills;
 
             var arr = toArray(data);
