@@ -97,7 +97,7 @@ if (WAY === undefined) {
         alias.Game_Actor_changeEquip = Game_Actor.changeEquip;
 
         /* Override */
-        Game_Actor.changeEquip = function(...args) {
+        Game_Actor.changeEquip = function (...args) {
             const equips = this.equips();
             alias.Game_Actor_changeEquip.apply(this, args);
             this.equips().forEach((item, slotId) => {
@@ -110,14 +110,14 @@ if (WAY === undefined) {
 
         if (!window.Imported.YEP_EquipCore) {
             alias.Game_Actor_initEquips = Game_Actor.initEquips;
-            extend(Game_Actor, 'initEquips', function() {
+            extend(Game_Actor, 'initEquips', function () {
                 this.equips().forEach(item => {
                     evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
                 });
             });
         } else {
             alias.Game_Actor_equipInitEquips = Game_Actor.equipInitEquips;
-            extend(Game_Actor, 'equipInitEquips', function() {
+            extend(Game_Actor, 'equipInitEquips', function () {
                 this.equips().forEach(item => {
                     evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
                 });

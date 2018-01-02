@@ -253,7 +253,7 @@ const WAY = WAYCore;
                     re,
                     match => match[1].toLowerCase() === tag.toLowerCase()
                 );
-                matches.forEach(group => result.push(func.call(this, group[1])));
+                matches.forEach(group => result.push(func.call(this, group[3])));
                 return result.length > 0 ? result[0] : defaultValue;
             },
             getNotetagList(text, tag, func) {

@@ -440,7 +440,7 @@ var WAY = WAYCore;
                         return match[1].toLowerCase() === tag.toLowerCase();
                     });
                     matches.forEach(function (group) {
-                        return result.push(func.call(_this3, group[1]));
+                        return result.push(func.call(_this3, group[3]));
                     });
                     return result.length > 0 ? result[0] : defaultValue;
                 }
