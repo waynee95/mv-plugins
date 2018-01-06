@@ -33,7 +33,7 @@ if (WAY === undefined) {
     Scene_Title.prototype.isNewGameEnabled = function () {
         var globalInfo = DataManager.loadGlobalInfo();
         var numSavefiles = Math.max(0, globalInfo.length - 1);
-        return numSavefiles < this.maxSavefiles();
+        return numSavefiles < DataManager.maxSavefiles();
     };
 
     Scene_Title.prototype.createCommandWindow = function () {
