@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.9.1 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.9.2 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -137,7 +137,7 @@ const WAYModuleLoader = (function () {
     };
 })();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.9.1', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.9.2', 'waynee95');
 
 const WAYCore = window.WAYCore || {};
 const WAY = WAYCore;
@@ -602,7 +602,7 @@ const WAY = WAYCore;
 
     ((GameInterpreter, alias) => {
         alias.Game_Interpreter_pluginCommand = GameInterpreter.pluginCommand;
-        WAY.Util.extend(Game_Interpreter, 'pluginCommand', function (command, args) {
+        GameInterpreter.pluginCommand = function (command, args) {
             const actions = PluginManager.getCommand(command);
             if (actions) {
                 const action = actions[args[0]];
@@ -610,7 +610,7 @@ const WAY = WAYCore;
                     action.apply(this, args.slice(1));
                 }
             }
-        });
+        };
     })(Game_Interpreter.prototype, $.alias);
 
     (Window_Base => {
