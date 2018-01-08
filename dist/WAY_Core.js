@@ -52,9 +52,10 @@ var WAYModuleLoader = function () {
     }
 
     function compareVersions(currentVersion) {
-        var operator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '>=';
+        var operator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '==';
         var requiredVersion = arguments[2];
 
+        var length = Math.max(currentVersion.length, requiredVersion.length);
         var compare = 0;
         var operation = {
             '<': function () {
@@ -93,17 +94,15 @@ var WAYModuleLoader = function () {
                 return _;
             }()
         };
-        var array = currentVersion.length > requiredVersion.length ? currentVersion : requiredVersion;
-        array.split('.').every(function (num, i) {
+        for (var i = 0; i < length; i += 1) {
             if (currentVersion[i] < requiredVersion[i]) {
                 compare = -1;
-                return false;
+                break;
             } else if (currentVersion[i] > requiredVersion[i]) {
                 compare = 1;
-                return false;
+                break;
             }
-            return true;
-        });
+        }
         return operation[operator]();
     }
 

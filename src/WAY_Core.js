@@ -35,7 +35,8 @@ const WAYModuleLoader = (function () {
         return WAY.Util.parseParameters(params);
     }
 
-    function compareVersions(currentVersion, operator = '>=', requiredVersion) {
+    function compareVersions(currentVersion, operator = '==', requiredVersion) {
+        const length = Math.max(currentVersion.length, requiredVersion.length);
         let compare = 0;
         const operation = {
             '<': function () {
@@ -54,18 +55,15 @@ const WAYModuleLoader = (function () {
                 return compare >= 0;
             }
         };
-        const array =
-            currentVersion.length > requiredVersion.length ? currentVersion : requiredVersion;
-        array.split('.').every((num, i) => {
+        for (let i = 0; i < length; i += 1) {
             if (currentVersion[i] < requiredVersion[i]) {
                 compare = -1;
-                return false;
+                break;
             } else if (currentVersion[i] > requiredVersion[i]) {
                 compare = 1;
-                return false;
+                break;
             }
-            return true;
-        });
+        }
         return operation[operator]();
     }
 
