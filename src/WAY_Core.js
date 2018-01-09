@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.9.3 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.9.4 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -135,7 +135,7 @@ const WAYModuleLoader = (function () {
     };
 })();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.9.3', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.9.4', 'waynee95');
 
 const WAYCore = window.WAYCore || {};
 const WAY = WAYCore;
@@ -575,11 +575,11 @@ const WAY = WAYCore;
         };
 
         alias.DataManager_onLoad = DataManager.onLoad;
-        WAY.Util.extend(DataManager, 'onLoad', object => {
+        DataManager.onLoad = object => {
             if (object === $dataMap) {
                 WAY.EventEmitter.emit('load-map-notetags', $dataMap);
             }
-        });
+        };
     })(DataManager, $.alias);
 
     (PluginManager => {
@@ -607,6 +607,8 @@ const WAY = WAYCore;
                 if (typeof action === 'function') {
                     action.apply(this, args.slice(1));
                 }
+            } else {
+                alias.Game_Interpreter_pluginCommand.call(command, args);
             }
         };
     })(Game_Interpreter.prototype, $.alias);

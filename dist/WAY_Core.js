@@ -967,11 +967,11 @@ var WAY = WAYCore;
         };
 
         alias.DataManager_onLoad = DataManager.onLoad;
-        WAY.Util.extend(DataManager, 'onLoad', function (object) {
+        DataManager.onLoad = function (object) {
             if (object === $dataMap) {
                 WAY.EventEmitter.emit('load-map-notetags', $dataMap);
             }
-        });
+        };
     })(DataManager, $.alias);
 
     (function (PluginManager) {
@@ -999,6 +999,8 @@ var WAY = WAYCore;
                 if (typeof action === 'function') {
                     action.apply(this, args.slice(1));
                 }
+            } else {
+                alias.Game_Interpreter_pluginCommand.call(command, args);
             }
         };
     })(Game_Interpreter.prototype, $.alias);
