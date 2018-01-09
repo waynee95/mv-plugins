@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.9.2 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.9.3 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -106,17 +106,6 @@ var WAYModuleLoader = function () {
         return operation[operator]();
     }
 
-    function printError(msg, key) {
-        var strA = 'Error loading ' + String(key) + '\n\n';
-        var strB = 'The following plugins are required:\n' + String(msg) + '\n';
-        var strC = 'Place the required plugins above ' + String(key) + '!';
-        console.error(strA + strB + strC); //eslint-disable-line no-console
-        if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-            var gui = require('nw.gui'); //eslint-disable-line
-            gui.Window.get().showDevTools();
-        }
-        SceneManager.stop();
-    }
     return {
         checkRequirements: function () {
             function checkRequirements(key) {
@@ -141,11 +130,26 @@ var WAYModuleLoader = function () {
                     }
                 });
                 if (list) {
-                    printError(list, key);
+                    WAYModuleLoader.printError(list, key);
                 }
             }
 
             return checkRequirements;
+        }(),
+        printError: function () {
+            function printError(msg, key) {
+                var strA = 'Error loading ' + String(key) + '\n\n';
+                var strB = 'The following plugins are required:\n' + String(msg) + '\n';
+                var strC = 'Place the required plugins above ' + String(key) + '!';
+                console.error(strA + strB + strC); //eslint-disable-line no-console
+                if (Utils.isNwjs() && Utils.isOptionValid('test')) {
+                    var gui = require('nw.gui'); //eslint-disable-line
+                    gui.Window.get().showDevTools();
+                }
+                SceneManager.stop();
+            }
+
+            return printError;
         }(),
         checkVersion: function () {
             function checkVersion(key, operator, requiredVersion) {
@@ -212,7 +216,7 @@ var WAYModuleLoader = function () {
     };
 }();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.9.2', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.9.3', 'waynee95');
 
 var WAYCore = window.WAYCore || {};
 var WAY = WAYCore;

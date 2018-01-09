@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v1.9.2 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v1.9.3 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -67,17 +67,6 @@ const WAYModuleLoader = (function () {
         return operation[operator]();
     }
 
-    function printError(msg, key) {
-        const strA = `Error loading ${key}\n\n`;
-        const strB = `The following plugins are required:\n${msg}\n`;
-        const strC = `Place the required plugins above ${key}!`;
-        console.error(strA + strB + strC); //eslint-disable-line no-console
-        if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-            const gui = require('nw.gui'); //eslint-disable-line
-            gui.Window.get().showDevTools();
-        }
-        SceneManager.stop();
-    }
     return {
         checkRequirements(key) {
             let list = '';
@@ -92,8 +81,19 @@ const WAYModuleLoader = (function () {
                 }
             });
             if (list) {
-                printError(list, key);
+                WAYModuleLoader.printError(list, key);
             }
+        },
+        printError(msg, key) {
+            const strA = `Error loading ${key}\n\n`;
+            const strB = `The following plugins are required:\n${msg}\n`;
+            const strC = `Place the required plugins above ${key}!`;
+            console.error(strA + strB + strC); //eslint-disable-line no-console
+            if (Utils.isNwjs() && Utils.isOptionValid('test')) {
+                const gui = require('nw.gui'); //eslint-disable-line
+                gui.Window.get().showDevTools();
+            }
+            SceneManager.stop();
         },
         checkVersion(key, operator, requiredVersion) {
             if (this.isImported(key)) {
@@ -135,7 +135,7 @@ const WAYModuleLoader = (function () {
     };
 })();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '1.9.2', 'waynee95');
+WAYModuleLoader.registerPlugin('WAY_Core', '1.9.3', 'waynee95');
 
 const WAYCore = window.WAYCore || {};
 const WAY = WAYCore;
