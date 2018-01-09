@@ -3,7 +3,7 @@
 // WAY_YEP_RegionRestrictions.js
 // ============================================================================
 /*:
-@plugindesc v1.1.1 Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
+@plugindesc v1.1.2 Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
 @author waynee95
 
 @help
@@ -43,14 +43,15 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_RegionRestrictions', '1.1.1', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_RegionRestrictions', '1.1.2', 'waynee95');
 }
 
 ($ => {
-    const { extend, getNotetag, toArray } = WAY.Util;
+    const { getNotetag, toArray } = WAY.Util;
 
     $.alias.DataManager_extractMetadata = DataManager.extractMetadata;
-    extend(DataManager, 'extractMetadata', object => {
+    DataManager.extractMetadata = function (object) {
+        $.alias.DataManager_extractMetadata.call(this, object);
         if (object === $dataMap) {
             const { events } = $dataMap;
 
@@ -71,7 +72,7 @@ if (WAY === undefined) {
                 }
             });
         }
-    });
+    };
 
     ((Game_CharacterBase, alias) => {
         alias.Game_CharacterBase_isEventRegionForbid = Game_CharacterBase.isEventRegionForbid;
@@ -79,7 +80,7 @@ if (WAY === undefined) {
         alias.Game_CharacterBase_canPass = Game_CharacterBase.canPass;
 
         /* Override */
-        Game_CharacterBase.isEventRegionForbid = function(x, y, d) {
+        Game_CharacterBase.isEventRegionForbid = function (x, y, d) {
             const regionId = this.getRegionId(x, y, d);
             const event = this.isEvent() ? this.event() : null;
             if (event && event._bypassRestriction.contains(regionId)) {
@@ -98,7 +99,7 @@ if (WAY === undefined) {
         };
 
         /* Override */
-        Game_CharacterBase.isEventRegionAllow = function(x, y, d) {
+        Game_CharacterBase.isEventRegionAllow = function (x, y, d) {
             const regionId = this.getRegionId(x, y, d);
             const event = this.isEvent() ? this.event() : null;
             if (event && event._bypassRestriction.contains(regionId)) {
@@ -111,7 +112,7 @@ if (WAY === undefined) {
         };
 
         /* Override */
-        Game_CharacterBase.canPass = function(x, y, d) {
+        Game_CharacterBase.canPass = function (x, y, d) {
             const x2 = $gameMap.roundXWithDirection(x, d);
             const y2 = $gameMap.roundYWithDirection(y, d);
             if (!$gameMap.isValid(x2, y2)) {
@@ -132,7 +133,7 @@ if (WAY === undefined) {
     if (Imported.Galv_EventSpawner) {
         $.alias.Game_SpawnEvent_init = Game_SpawnEvent.prototype.initialize;
 
-        Game_SpawnEvent.prototype.initialize = function() {
+        Game_SpawnEvent.prototype.initialize = function () {
             $.alias.Game_SpawnEvent_init.apply(this, arguments);
             const event = this.event();
             event._bypassRestriction = getNotetag(event.note, 'Bypass Restriction', [], toArray);

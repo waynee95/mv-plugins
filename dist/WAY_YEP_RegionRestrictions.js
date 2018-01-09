@@ -3,7 +3,7 @@
 // WAY_YEP_RegionRestrictions.js
 // ============================================================================
 /*:
-@plugindesc v1.1.1 Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
+@plugindesc v1.1.2 Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
 @author waynee95
 
 @help
@@ -43,18 +43,18 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_RegionRestrictions', '1.1.1', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_RegionRestrictions', '1.1.2', 'waynee95');
 }
 
 (function ($) {
     var _WAY$Util = WAY.Util,
-        extend = _WAY$Util.extend,
         getNotetag = _WAY$Util.getNotetag,
         toArray = _WAY$Util.toArray;
 
 
     $.alias.DataManager_extractMetadata = DataManager.extractMetadata;
-    extend(DataManager, 'extractMetadata', function (object) {
+    DataManager.extractMetadata = function (object) {
+        $.alias.DataManager_extractMetadata.call(this, object);
         if (object === $dataMap) {
             var _$dataMap = $dataMap,
                 events = _$dataMap.events;
@@ -67,7 +67,7 @@ if (WAY === undefined) {
                 }
             });
         }
-    });
+    };
 
     (function (Game_CharacterBase, alias) {
         alias.Game_CharacterBase_isEventRegionForbid = Game_CharacterBase.isEventRegionForbid;
