@@ -7,89 +7,89 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var WAYCore = {};
 
 (function () {
-  var EventEmitter = function () {
-    function EventEmitter() {
-      _classCallCheck(this, EventEmitter);
+    var EventEmitter = function () {
+        function EventEmitter() {
+            _classCallCheck(this, EventEmitter);
 
-      this._events = {};
-    }
-
-    _createClass(EventEmitter, [{
-      key: 'once',
-      value: function () {
-        function once(eventName, handler) {
-          this.setupEventNameSpace(eventName);
-          this.registerEventHandler(eventName, 'once', handler);
-          return this;
+            this._events = {};
         }
 
-        return once;
-      }()
-    }, {
-      key: 'on',
-      value: function () {
-        function on(eventName, handler) {
-          this.setupEventNameSpace(eventName);
-          this.registerEventHandler(eventName, 'on', handler);
-          return this;
-        }
+        _createClass(EventEmitter, [{
+            key: 'once',
+            value: function () {
+                function once(eventName, handler) {
+                    this.setupEventNameSpace(eventName);
+                    this.registerEventHandler(eventName, 'once', handler);
+                    return this;
+                }
 
-        return on;
-      }()
-    }, {
-      key: 'emit',
-      value: function () {
-        function emit(eventName) {
-          var _this = this;
+                return once;
+            }()
+        }, {
+            key: 'on',
+            value: function () {
+                function on(eventName, handler) {
+                    this.setupEventNameSpace(eventName);
+                    this.registerEventHandler(eventName, 'on', handler);
+                    return this;
+                }
 
-          var args = Array.prototype.slice.call(arguments);
-          if (this._events[eventName] !== undefined) {
-            this._events[eventName].forEach(function (listener, index) {
-              if (/once/.test(listener.type)) {
-                _this._events[eventName].splice(index, 1);
-              }
-              _this.callHandler(listener.handler, args.slice(1));
-            });
-          }
-        }
+                return on;
+            }()
+        }, {
+            key: 'emit',
+            value: function () {
+                function emit(eventName) {
+                    var _this = this;
 
-        return emit;
-      }()
-    }, {
-      key: 'setupEventNameSpace',
-      value: function () {
-        function setupEventNameSpace(eventName) {
-          if (this._events[eventName] === undefined) {
-            this._events[eventName] = [];
-          }
-        }
+                    var args = Array.prototype.slice.call(arguments);
+                    if (this._events[eventName] !== undefined) {
+                        this._events[eventName].forEach(function (listener, index) {
+                            if (/once/.test(listener.type)) {
+                                _this._events[eventName].splice(index, 1);
+                            }
+                            _this.callHandler(listener.handler, args.slice(1));
+                        });
+                    }
+                }
 
-        return setupEventNameSpace;
-      }()
-    }, {
-      key: 'registerEventHandler',
-      value: function () {
-        function registerEventHandler(eventName, type, handler) {
-          this._events[eventName].push({ type: type, handler: handler });
-        }
+                return emit;
+            }()
+        }, {
+            key: 'setupEventNameSpace',
+            value: function () {
+                function setupEventNameSpace(eventName) {
+                    if (this._events[eventName] === undefined) {
+                        this._events[eventName] = [];
+                    }
+                }
 
-        return registerEventHandler;
-      }()
-    }, {
-      key: 'callHandler',
-      value: function () {
-        function callHandler(handler, args) {
-          if (typeof handler === 'function') {
-            handler.apply(this, args);
-          }
-        }
+                return setupEventNameSpace;
+            }()
+        }, {
+            key: 'registerEventHandler',
+            value: function () {
+                function registerEventHandler(eventName, type, handler) {
+                    this._events[eventName].push({ type: type, handler: handler });
+                }
 
-        return callHandler;
-      }()
-    }]);
+                return registerEventHandler;
+            }()
+        }, {
+            key: 'callHandler',
+            value: function () {
+                function callHandler(handler, args) {
+                    if (typeof handler === 'function') {
+                        handler.apply(this, args);
+                    }
+                }
 
-    return EventEmitter;
-  }();
+                return callHandler;
+            }()
+        }]);
 
-  WAYCore.EventEmitter = new EventEmitter();
+        return EventEmitter;
+    }();
+
+    WAYCore.EventEmitter = new EventEmitter();
 })();

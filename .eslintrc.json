@@ -4,24 +4,62 @@
         "node": true,
         "rpgmaker/mv": true
     },
-    "extends": ["airbnb-base", "prettier"],
+    "extends": [
+        "airbnb-base",
+        "prettier"
+    ],
     "parserOptions": {
         "ecmaVersion": 6,
         "sourceType": "script"
     },
-    "plugins": ["import", "rpgmaker"],
+    "plugins": [
+        "import",
+        "rpgmaker"
+    ],
     "rules": {
         "camelcase": 0,
-        "comma-dangle": ["error", "never"],
-        "func-names": ["error", "never"],
-        "indent": ["error", 4],
-        "linebreak-style": ["error", "windows"],
-        "max-len": ["error", 100],
-        "max-statements": ["error", 10, { "ignoreTopLevelFunctions": true }],
-        "no-cond-assign": ["error", "except-parens"],
-        "no-param-reassign": ["error", { "props": false }],
+        "comma-dangle": [
+            "error",
+            "never"
+        ],
+        "func-names": [
+            "error",
+            "never"
+        ],
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "windows"
+        ],
+        "max-len": [
+            "error",
+            100
+        ],
+        "max-statements": [
+            "error",
+            20,
+            {
+                "ignoreTopLevelFunctions": true
+            }
+        ],
+        "no-cond-assign": [
+            "error",
+            "except-parens"
+        ],
+        "no-param-reassign": [
+            "error",
+            {
+                "props": false
+            }
+        ],
         "no-plusplus": 0,
-        "no-return-assign": ["error", "except-parens"],
+        "no-return-assign": [
+            "error",
+            "except-parens"
+        ],
         "no-underscore-dangle": 0,
         "prefer-destructuring": [
             "error",
@@ -31,6 +69,9 @@
             }
         ],
         "spaced-comment": 0,
-        "quotes": ["error", "single"]
+        "quotes": [
+            "error",
+            "single"
+        ]
     }
 }
