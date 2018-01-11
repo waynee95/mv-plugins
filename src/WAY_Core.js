@@ -159,10 +159,11 @@ const WAY = WAYCore;
             return a.filter(element => b.indexOf(element) === -1);
         },
         fillArray(item, length) {
-            return Array(...{
-                length
-            }) // eslint-disable-line
-                .map(() => item);
+            const arr = [];
+            for (let i = 0; i < length; i++) {
+                arr[i] = item;
+            }
+            return arr;
         },
         filterText(text, re, action) {
             const result = [];
