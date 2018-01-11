@@ -3,7 +3,7 @@
 // WAY_YEP_TurnOrderDisplay.js
 // ============================================================================
 /*:
-@plugindesc v1.1.0 Addon to Yanfly's Turn Order Display Plugin. <WAY_YEP_TurnOrderDisplay>
+@plugindesc v1.2.0 Addon to Yanfly's Turn Order Display Plugin. <WAY_YEP_TurnOrderDisplay>
 @author waynee95
 
 @help
@@ -21,6 +21,13 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
+
+==============================================================================
+ ■ Contact Information
+==============================================================================
+Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
+Website: http://waynee95.me/
+Discord Name: waynee95#4261
 */
 
 'use strict';
@@ -33,11 +40,14 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_TurnOrderDisplay', '1.1.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_TurnOrderDisplay', '1.2.0', 'waynee95', {
+        name: 'WAY_Core',
+        version: '>= 2.0.0'
+    });
 }
 
 ($ => {
-    const { getNotetag, extend } = WAY.Util;
+    const { getNotetag } = WAY.Util;
 
     WAY.EventEmitter.on('load-enemy-notetags', enemy => {
         getNotetag(enemy.note, 'Turn Order Image', null, str => {
@@ -48,46 +58,50 @@ if (WAY === undefined) {
         });
     });
 
-    ((Game_Enemy, alias) => {
-        alias.Game_Enemy_turnOrderDisplayBitmap = Game_Enemy.turnOrderDisplayBitmap;
-        Game_Enemy.turnOrderDisplayBitmap = function() {
-            if (this.enemy().turnOrderImage) {
-                return ImageManager.loadFace(this.enemy().turnOrderImage.fileName);
-            }
-            return alias.Game_Enemy_turnOrderDisplayBitmap.call(this);
-        };
-    })(Game_Enemy.prototype, $.alias);
+    //=============================================================================
+    // Game_Enemy
+    //=============================================================================
+    $.alias.Game_Enemy_turnOrderDisplayBitmap = Game_Enemy.prototype.turnOrderDisplayBitmap;
+    Game_Enemy.prototype.turnOrderDisplayBitmap = function () {
+        if (this.enemy().turnOrderImage) {
+            return ImageManager.loadFace(this.enemy().turnOrderImage.fileName);
+        }
+        return $.alias.Game_Enemy_turnOrderDisplayBitmap.call(this);
+    };
 
-    ((Window_TurnOrderIcon, alias) => {
-        alias.Window_TurnOrderIcon_drawBattler = Window_TurnOrderIcon.drawBattler;
-        Window_TurnOrderIcon.drawBattler = function() {
-            if (this.battler().isEnemy() && this.battler().enemy().turnOrderImage) {
-                this.drawEnemyFace();
-            } else {
-                alias.Window_TurnOrderIcon_drawBattler.call(this);
-            }
-        };
+    //=============================================================================
+    // Window_TurnOrderIcon
+    //=============================================================================
+    $.alias.Window_TurnOrderIcon_drawBattler = Window_TurnOrderIcon.prototype.drawBattler;
+    Window_TurnOrderIcon.prototype.drawBattler = function () {
+        if (this.battler().isEnemy() && this.battler().enemy().turnOrderImage) {
+            this.drawEnemyFace();
+        } else {
+            $.alias.Window_TurnOrderIcon_drawBattler.call(this);
+        }
+    };
 
-        Window_TurnOrderIcon.drawEnemyFace = function() {
-            const { filename, faceIndex } = this.battler().enemy().turnOrderImage;
-            const bitmap = ImageManager.loadFace(filename);
-            bitmap.addLoadListener(() => {
-                const sw = Window_Base._faceWidth;
-                const sh = Window_Base._faceHeight;
-                const dx = 0;
-                const dy = 0;
-                const sx = (faceIndex % 4) * sw;
-                const sy = Math.floor(faceIndex / 4) * sh;
-                const dw = this.contents.width - 8;
-                const dh = this.contents.height - 8;
-                this.contents.blt(bitmap, sx, sy, sw, sh, dx + 4, dy + 4, dw, dh);
-                this.drawLetter();
-            });
-        };
-    })(Window_TurnOrderIcon.prototype, $.alias);
-
-    /* Fix */
-    extend(Window_TurnOrderIcon.prototype, 'updateDestinationX', function() {
+    $.alias.Window_TurnOrderIcon_updateDestinationX =
+        Window_TurnOrderIcon.prototype.updateDestinationX;
+    Window_TurnOrderIcon.prototype.updateDestinationX = function () {
+        $.alias.Window_TurnOrderIcon_updateDestinationX.call(this);
         if (this._destinationX === undefined) this._destinationX = this.x;
-    });
+    };
+
+    Window_TurnOrderIcon.prototype.drawEnemyFace = function () {
+        const { filename, faceIndex } = this.battler().enemy().turnOrderImage;
+        const bitmap = ImageManager.loadFace(filename);
+        bitmap.addLoadListener(() => {
+            const sw = Window_Base._faceWidth;
+            const sh = Window_Base._faceHeight;
+            const dx = 0;
+            const dy = 0;
+            const sx = (faceIndex % 4) * sw;
+            const sy = Math.floor(faceIndex / 4) * sh;
+            const dw = this.contents.width - 8;
+            const dh = this.contents.height - 8;
+            this.contents.blt(bitmap, sx, sy, sw, sh, dx + 4, dy + 4, dw, dh);
+            this.drawLetter();
+        });
+    };
 })(WAYModuleLoader.getModule('WAY_YEP_TurnOrderDisplay'));

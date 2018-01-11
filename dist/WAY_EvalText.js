@@ -3,7 +3,8 @@
 // WAY_EvalText.js
 // ============================================================================
 /*:
-@plugindesc v1.0.3 Use JavaScript Code in textboxes. <WAY_EvalText>
+@plugindesc v1.1.0 Use JavaScript Code in textboxes. <WAY_EvalText>
+
 @author waynee95
 
 @help
@@ -28,6 +29,13 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
+
+==============================================================================
+ ■ Contact Information
+==============================================================================
+Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
+Website: http://waynee95.me/
+Discord Name: waynee95#4261
 */
 
 'use strict';
@@ -40,40 +48,44 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_EvalText', '1.0.3', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_EvalText', '1.1.0', 'waynee95', {
+        name: 'WAY_Core',
+        version: '>= 2.0.0'
+    });
 }
 
 (function ($) {
-    var isScene = WAY.Util.isScene;
-
-
-    (function (Window_Base, alias) {
-        var evalText = function evalText(text) {
-            var a = $gameParty.leader();
-            var item = isScene(Scene_ItemBase) && SceneManager._scene._itemWindow ? SceneManager._scene.item() : a;
-            var skill = item;
-            if (isScene(Scene_MenuBase)) {
-                a = $gameParty.menuActor();
-            } else if (isScene(Scene_Battle)) {
-                a = BattleManager.actor();
+    var evalText = function evalText(text) {
+        var scene = SceneManager._scene;
+        var a = $gameParty.leader();
+        var item = scene instanceof Scene_ItemBase && scene._itemWindow ? scene._itemWindow.item() : a;
+        /* eslint-disable */
+        var skill = item;
+        var s = $gameSwitches;
+        var v = $gameVariables;
+        var p = $gameParty;
+        if (scene instanceof Scene_MenuBase) {
+            a = $gameParty.menuActor();
+        } else if (scene instanceof Scene_Battle) {
+            a = BattleManager.actor();
+            item = scene && scene._itemWindow ? scene._itemWindow.item() : a;
+            skill = scene && scene._skillWindow ? scene._skillWindow.item() : a;
+        }
+        return text.replace(/\${[^{}\\]+(?=\})}/g, function (code) {
+            try {
+                return eval(code.substring(2, code.length - 1));
+                /* eslint-enable */
+            } catch (e) {
+                return '';
             }
-            var s = $gameSwitches;
-            var v = $gameVariables;
-            var p = $gameParty;
-            return text.replace(/\${[^{}\\]+(?=\})}/g, function (code) {
-                try {
-                    return eval(code.substring(2, code.length - 1));
-                } catch (e) {
-                    return '';
-                }
-            });
-        };
+        });
+    };
 
-        alias.WindowBase_convertEscapeCharacters = Window_Base.convertEscapeCharacters;
-
-        /* Override */
-        Window_Base.convertEscapeCharacters = function (text) {
-            return alias.WindowBase_convertEscapeCharacters.call(this, evalText(text));
-        };
-    })(Window_Base.prototype, $.alias);
+    //=============================================================================
+    // Window_Base
+    //=============================================================================
+    $.alias.WindowBase_convertEscapeCharacters = Window_Base.prototype.convertEscapeCharacters;
+    Window_Base.prototype.convertEscapeCharacters = function (text) {
+        return $.alias.WindowBase_convertEscapeCharacters.call(this, evalText(text));
+    };
 })(WAYModuleLoader.getModule('WAY_EvalText'));

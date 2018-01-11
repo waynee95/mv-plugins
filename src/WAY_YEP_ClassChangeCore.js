@@ -3,7 +3,7 @@
 // WAY_YEP_ClassChangeCore.js
 // ===========================================================================
 /*:
-@plugindesc v1.0.0 Addon to Yanfly's Class Change Core Plugin. <WAY_YEP_ClassChangeCore>
+@plugindesc v1.1.0 Addon to Yanfly's Class Change Core Plugin. <WAY_YEP_ClassChangeCore>
 @author waynee95
 
 @param classChangeCooldown
@@ -29,6 +29,13 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
+
+==============================================================================
+ ■ Contact Information
+==============================================================================
+Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
+Website: http://waynee95.me/
+Discord Name: waynee95#4261
 */
 
 'use strict';
@@ -41,7 +48,10 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_ClassChangeCore', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_ClassChangeCore', '1.1.0', 'waynee95', {
+        name: 'WAY_Core',
+        version: '>= 2.0.0'
+    });
 }
 
 ($ => {
@@ -57,71 +67,81 @@ if (WAY === undefined) {
         savedBattleBgs = null;
     };
 
-    ((BattleManager, alias) => {
-        alias.BattleManager_startBattle = BattleManager.startBattle;
-        BattleManager.startBattle = function() {
-            if (!bypassBattleStart) {
-                $.alias.BattleManager_startBattle.call(this);
-            } else {
-                this.refreshAllMembers();
-            }
-            bypassBattleStart = false;
-            this._bypassMoveToStartLocation = false;
-        };
+    //=============================================================================
+    // BattleManager
+    //=============================================================================
+    $.alias.BattleManager_startBattle = BattleManager.startBattle;
+    BattleManager.startBattle = function () {
+        if (!bypassBattleStart) {
+            $.alias.BattleManager_startBattle.call(this);
+        } else {
+            this.refreshAllMembers();
+        }
+        bypassBattleStart = false;
+        this._bypassMoveToStartLocation = false;
+    };
 
-        alias.BattleManager_playBattleBgm = BattleManager.playBattleBgm;
-        BattleManager.playBattleBgm = function() {
-            let restartBgm = true;
-            if (savedBattleBgm) {
-                AudioManager.playBgm(savedBattleBgm);
-                restartBgm = false;
-            }
-            if (savedBattleBgs) {
-                AudioManager.playBgs(savedBattleBgs);
-                restartBgm = false;
-            }
-            if (restartBgm) {
-                $.alias.BattleManager_playBattleBgm.call(this);
-            }
-            clearBGM();
-        };
-    })(BattleManager, $.alias);
+    $.alias.BattleManager_playBattleBgm = BattleManager.playBattleBgm;
+    BattleManager.playBattleBgm = function () {
+        let restartBgm = true;
+        if (savedBattleBgm) {
+            AudioManager.playBgm(savedBattleBgm);
+            restartBgm = false;
+        }
+        if (savedBattleBgs) {
+            AudioManager.playBgs(savedBattleBgs);
+            restartBgm = false;
+        }
+        if (restartBgm) {
+            $.alias.BattleManager_playBattleBgm.call(this);
+        }
+        clearBGM();
+    };
 
+    //=============================================================================
+    // Game_Unit
+    //=============================================================================
     $.alias.Game_Unit_onBattleStart = Game_Unit.prototype.onBattleStart;
-    Game_Unit.prototype.onBattleStart = function() {
+    Game_Unit.prototype.onBattleStart = function () {
         if (!bypassBattleStart) {
             $.alias.Game_Unit_onBattleStart.call(this);
         }
     };
 
     $.alias.Game_Unit_onBattleEnd = Game_Unit.prototype.onBattleEnd;
-    Game_Unit.prototype.onBattleEnd = function() {
+    Game_Unit.prototype.onBattleEnd = function () {
         if (!bypassBattleStart) {
             $.alias.Game_Unit_onBattleEnd.call(this);
         }
     };
 
+    //=============================================================================
+    // Window_ActorCommand
+    //=============================================================================
     $.alias.Window_ActorCommand_makeCommandList = Window_ActorCommand.prototype.makeCommandList;
-    Window_ActorCommand.prototype.makeCommandList = function() {
+    Window_ActorCommand.prototype.makeCommandList = function () {
         $.alias.Window_ActorCommand_makeCommandList.call(this);
         if (this._actor && this._actor.isActor()) {
             this.addClassChangeCommand();
         }
     };
 
-    Window_ActorCommand.prototype.addClassChangeCommand = function() {
+    Window_ActorCommand.prototype.addClassChangeCommand = function () {
         const enabled = this._actor.canChangeClass();
         this.addCommand(classChangeCommand, 'class', enabled);
     };
 
+    //=============================================================================
+    // Scene_Battle
+    //=============================================================================
     $.alias.Scene_Battle_createActorCommandWindow = Scene_Battle.prototype.createActorCommandWindow;
-    Scene_Battle.prototype.createActorCommandWindow = function() {
+    Scene_Battle.prototype.createActorCommandWindow = function () {
         $.alias.Scene_Battle_createActorCommandWindow.call(this);
         const commandWindow = this._actorCommandWindow;
         commandWindow.setHandler('class', this.commandChangeClass.bind(this));
     };
 
-    Scene_Battle.prototype.commandChangeClass = function() {
+    Scene_Battle.prototype.commandChangeClass = function () {
         BattleManager._bypassMoveToStartLocation = true;
         $gameParty.setMenuActor(BattleManager.actor());
         BattleManager._savedActor = BattleManager.actor();
@@ -134,30 +154,36 @@ if (WAY === undefined) {
         bypassBattleStart = true;
     };
 
+    //=============================================================================
+    // Game_Battler
+    //=============================================================================
     $.alias.Game_Battler_onBattleStart = Game_Battler.prototype.onBattleStart;
-    Game_Battler.prototype.onBattleStart = function() {
+    Game_Battler.prototype.onBattleStart = function () {
         $.alias.Game_Battler_onBattleStart.call(this);
         this._classChangeCooldown = 0;
     };
 
     $.alias.Game_Battler_onBattleEnd = Game_Battler.prototype.onBattleEnd;
-    Game_Battler.prototype.onBattleEnd = function() {
+    Game_Battler.prototype.onBattleEnd = function () {
         $.alias.Game_Battler_onBattleEnd.call(this);
         this._classChangeCooldown = 0;
     };
 
     $.alias.Game_Battler_regenerateAll = Game_Battler.prototype.regenerateAll;
-    Game_Battler.prototype.regenerateAll = function() {
+    Game_Battler.prototype.regenerateAll = function () {
         $.alias.Game_Battler_regenerateAll.call(this);
         if (this.isActor()) this.updateClassChangeCooldown();
     };
 
-    Game_Actor.prototype.setClassChangeCooldown = function(value) {
+    //=============================================================================
+    // Game_Actor
+    //=============================================================================
+    Game_Actor.prototype.setClassChangeCooldown = function (value) {
         this._classChangeCooldown += value;
         this._classChangeCooldown.clamp(0, classChangeCooldown);
     };
 
-    Game_Actor.prototype.updateClassChangeCooldown = function() {
+    Game_Actor.prototype.updateClassChangeCooldown = function () {
         this._classChangeCooldown = this._classChangeCooldown || 0;
         this._classChangeCooldown -= 1;
     };

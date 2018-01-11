@@ -3,7 +3,8 @@
 // WAY_VerticalScreenShake.js
 // ============================================================================
 /*:
-@plugindesc v1.0.0 Adds Vertical Screen Shake. <WAY_VerticalScreenShake>
+@plugindesc v1.1.0 Adds Vertical Screen Shake. <WAY_VerticalScreenShake>
+
 @author waynee95
 
 @help
@@ -36,6 +37,13 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
+
+==============================================================================
+ ■ Contact Information
+==============================================================================
+Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
+Website: http://waynee95.me/
+Discord Name: waynee95#4261
 */
 
 'use strict';
@@ -48,19 +56,25 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_VerticalScreenShake', '1.0.0', 'waynee95', {
+    WAYModuleLoader.registerPlugin('WAY_VerticalScreenShake', '1.1.0', 'waynee95', {
         name: 'WAY_Core',
-        version: '>= 1.9.2'
+        version: '>= 2.0.0'
     });
 }
 
 (function ($) {
+    //=============================================================================
+    // Spriteset_Base
+    //=============================================================================
     $.alias.Spriteset_Base_updatePosition = Spriteset_Base.prototype.updatePosition;
     Spriteset_Base.prototype.updatePosition = function () {
         $.alias.Spriteset_Base_updatePosition.call(this);
         this.y += Math.round($gameScreen.shakeY());
     };
 
+    //=============================================================================
+    // Game_Screen
+    //=============================================================================
     $.alias.Game_Screen_clear = Game_Screen.prototype.clear;
     Game_Screen.prototype.clear = function () {
         $.alias.Game_Screen_clear.call(this);
@@ -71,6 +85,12 @@ if (WAY === undefined) {
     Game_Screen.prototype.onBattleStart = function () {
         $.alias.Game_Screen_onBattleStart.call(this);
         this.clearShakeY();
+    };
+
+    $.alias.Game_Screen_update = Game_Screen.prototype.update;
+    Game_Screen.prototype.update = function () {
+        $.alias.Game_Screen_update.call(this);
+        this.updateShakeY();
     };
 
     Game_Screen.prototype.shakeY = function () {
@@ -109,12 +129,9 @@ if (WAY === undefined) {
         this._shakeDurationY = duration;
     };
 
-    $.alias.Game_Screen_update = Game_Screen.prototype.update;
-    Game_Screen.prototype.update = function () {
-        $.alias.Game_Screen_update.call(this);
-        this.updateShakeY();
-    };
-
+    //=============================================================================
+    // PluginManager
+    //=============================================================================
     PluginManager.addCommand('VerticalScreenShake', {
         start: function () {
             function start() {

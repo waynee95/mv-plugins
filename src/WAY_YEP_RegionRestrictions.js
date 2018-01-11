@@ -3,7 +3,8 @@
 // WAY_YEP_RegionRestrictions.js
 // ============================================================================
 /*:
-@plugindesc v1.1.2 Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
+@plugindesc v1.2.0 Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
+
 @author waynee95
 
 @help
@@ -31,6 +32,13 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
+
+==============================================================================
+ ■ Contact Information
+==============================================================================
+Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
+Website: http://waynee95.me/
+Discord Name: waynee95#4261
 */
 
 'use strict';
@@ -49,6 +57,9 @@ if (WAY === undefined) {
 ($ => {
     const { getNotetag, toArray } = WAY.Util;
 
+    //=============================================================================
+    // DataManager
+    //=============================================================================
     $.alias.DataManager_extractMetadata = DataManager.extractMetadata;
     DataManager.extractMetadata = function (object) {
         $.alias.DataManager_extractMetadata.call(this, object);
@@ -74,67 +85,67 @@ if (WAY === undefined) {
         }
     };
 
-    ((Game_CharacterBase, alias) => {
-        alias.Game_CharacterBase_isEventRegionForbid = Game_CharacterBase.isEventRegionForbid;
-        alias.Game_CharacterBase_isEventRegionAllow = Game_CharacterBase.isEventRegionAllow;
-        alias.Game_CharacterBase_canPass = Game_CharacterBase.canPass;
+    //=============================================================================
+    // Game_CharacterBase
+    //=============================================================================
+    $.alias.Game_CharacterBase_isEventRegionForbid =
+        Game_CharacterBase.prototype.isEventRegionForbid;
+    $.alias.Game_CharacterBase_isEventRegionAllow =
+        Game_CharacterBase.prototype.isEventRegionAllow;
+    $.alias.Game_CharacterBase_canPass = Game_CharacterBase.prototype.canPass;
 
-        /* Override */
-        Game_CharacterBase.isEventRegionForbid = function (x, y, d) {
-            const regionId = this.getRegionId(x, y, d);
-            const event = this.isEvent() ? this.event() : null;
-            if (event && event._bypassRestriction.contains(regionId)) {
-                return false;
-            }
-            if (this.isPlayer()) return false;
-            if (this.isThrough()) {
-                if (event && event._forceRestriction.contains(regionId)) {
-                    return $gameMap.restrictEventRegions().contains(regionId);
-                }
-                return false;
-            }
-            if (regionId === 0) return false;
-            if ($gameMap.restrictEventRegions().contains(regionId)) return true;
+    Game_CharacterBase.prototype.isEventRegionForbid = function (x, y, d) {
+        const regionId = this.getRegionId(x, y, d);
+        const event = this.isEvent() ? this.event() : null;
+        if (event && event._bypassRestriction.contains(regionId)) {
             return false;
-        };
-
-        /* Override */
-        Game_CharacterBase.isEventRegionAllow = function (x, y, d) {
-            const regionId = this.getRegionId(x, y, d);
-            const event = this.isEvent() ? this.event() : null;
-            if (event && event._bypassRestriction.contains(regionId)) {
-                return true;
+        }
+        if (this.isPlayer()) return false;
+        if (this.isThrough()) {
+            if (event && event._forceRestriction.contains(regionId)) {
+                return $gameMap.restrictEventRegions().contains(regionId);
             }
-            if (this.isPlayer()) return false;
-            if (regionId === 0) return false;
-            if ($gameMap.allowEventRegions().contains(regionId)) return true;
             return false;
-        };
+        }
+        if (regionId === 0) return false;
+        if ($gameMap.restrictEventRegions().contains(regionId)) return true;
+        return false;
+    };
 
-        /* Override */
-        Game_CharacterBase.canPass = function (x, y, d) {
-            const x2 = $gameMap.roundXWithDirection(x, d);
-            const y2 = $gameMap.roundYWithDirection(y, d);
-            if (!$gameMap.isValid(x2, y2)) {
-                return false;
-            }
-            const isThrough = this.isThrough() || this.isDebugThrough();
-            if (isThrough && this.getRegionId(x, y, d) === 0) {
-                return true;
-            }
-            if (!this.isMapPassable(x, y, d) || this.isCollidedWithCharacters(x2, y2)) {
-                return false;
-            }
+    Game_CharacterBase.prototype.isEventRegionAllow = function (x, y, d) {
+        const regionId = this.getRegionId(x, y, d);
+        const event = this.isEvent() ? this.event() : null;
+        if (event && event._bypassRestriction.contains(regionId)) {
             return true;
-        };
-    })(Game_CharacterBase.prototype, $.alias);
+        }
+        if (this.isPlayer()) return false;
+        if (regionId === 0) return false;
+        if ($gameMap.allowEventRegions().contains(regionId)) return true;
+        return false;
+    };
+
+    Game_CharacterBase.prototype.canPass = function (x, y, d) {
+        const x2 = $gameMap.roundXWithDirection(x, d);
+        const y2 = $gameMap.roundYWithDirection(y, d);
+        if (!$gameMap.isValid(x2, y2)) {
+            return false;
+        }
+        const isThrough = this.isThrough() || this.isDebugThrough();
+        if (isThrough && this.getRegionId(x, y, d) === 0) {
+            return true;
+        }
+        if (!this.isMapPassable(x, y, d) || this.isCollidedWithCharacters(x2, y2)) {
+            return false;
+        }
+        return true;
+    };
 
     /* Compatability with Galv_EventSpawner */
     if (Imported.Galv_EventSpawner) {
         $.alias.Game_SpawnEvent_init = Game_SpawnEvent.prototype.initialize;
 
-        Game_SpawnEvent.prototype.initialize = function () {
-            $.alias.Game_SpawnEvent_init.apply(this, arguments);
+        Game_SpawnEvent.prototype.initialize = function (...args) {
+            $.alias.Game_SpawnEvent_init.apply(this, args);
             const event = this.event();
             event._bypassRestriction = getNotetag(event.note, 'Bypass Restriction', [], toArray);
             event._forceRestriction = getNotetag(event.note, 'Force Restriction', [], toArray);

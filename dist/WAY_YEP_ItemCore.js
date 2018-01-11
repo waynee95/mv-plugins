@@ -3,7 +3,8 @@
 // WAY_YEP_ItemCore.js
 // ===========================================================================
 /*:
-@plugindesc v1.0.1 Addon to Yanfly's Item Core Plugin. <WAY_YEP_ItemCore>
+@plugindesc v1.2.0 Addon to Yanfly's Item Core Plugin. <WAY_YEP_ItemCore>
+
 @author waynee95
 
 @help
@@ -23,7 +24,7 @@ certain conditions:
 
 Item, Weapon, Armor and Skill Notetag:
 <Custom Name Eval>
-name = "Holy Sword +" + v[42]
+name = "Holy Sword " + $gameVariables.value(1);
 </Custom Name Eval>
 
 ==============================================================================
@@ -51,6 +52,13 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
+
+==============================================================================
+ ■ Contact Information
+==============================================================================
+Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
+Website: http://waynee95.me/
+Discord Name: waynee95#4261
 */
 
 'use strict';
@@ -63,14 +71,16 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_ItemCore', '1.0.1', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_ItemCore', '1.2.0', 'waynee95', {
+        name: 'WAY_Core',
+        version: '>= 2.0.0'
+    });
 }
 
 (function () {
     var _WAY$Util = WAY.Util,
         getNotetag = _WAY$Util.getNotetag,
         getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
-        showError = _WAY$Util.showError,
         trim = _WAY$Util.trim,
         toInt = _WAY$Util.toInt;
 
@@ -86,63 +96,66 @@ if (WAY === undefined) {
     WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
     WAY.EventEmitter.on('load-skill-notetags', parseNotetags);
 
-    (function (Window_Base) {
-        var evalCustomName = function evalCustomName(item) {
-            var customNameEval = item.customNameEval;
+    var evalCustomName = function evalCustomName(item) {
+        var customNameEval = item.customNameEval;
 
-            if (!customNameEval || customNameEval === '') return item.name;
-            var name = ''; // eslint-disable-line prefer-const
-            var s = $gameSwitches._data;
-            var v = $gameVariables._data;
-            var p = $gameParty;
-            try {
-                eval(customNameEval);
-            } catch (e) {
-                showError(e.message);
+        if (!customNameEval || customNameEval === '') return item.name;
+        /* eslint-disable */
+        var name = '';
+        var s = $gameSwitches;
+        var v = $gameVariables;
+        var p = $gameParty;
+        try {
+            eval(customNameEval);
+            /* eslint-enable */
+        } catch (e) {
+            throw e;
+        }
+        return name;
+    };
+
+    var evalCustomTextColor = function evalCustomTextColor(item) {
+        var customTextColorEval = item.customTextColorEval;
+
+        if (!customTextColorEval || customTextColorEval === '') return 0;
+        /* eslint-disable */
+        var textColor = 0;
+        var s = $gameSwitches;
+        var v = $gameVariables;
+        var p = $gameParty;
+        try {
+            eval(customTextColorEval);
+            /* eslint-enable */
+        } catch (e) {
+            throw e;
+        }
+        return textColor;
+    };
+
+    //=============================================================================
+    // Window_Base
+    //=============================================================================
+    Window_Base.prototype.setItemTextColorEval = function (item) {
+        if (!item) return;
+        this._resetTextColor = evalCustomTextColor(item) || item.textColor;
+    };
+
+    Window_Base.prototype.drawItemName = function (item, x, y) {
+        var width = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 312;
+
+        if (item) {
+            this.setItemTextColor(item);
+            this.setItemTextColorEval(item);
+            var iconBoxWidth = Window_Base._iconWidth + 4;
+            if (item.iconBackground) {
+                this.drawIcon(item.iconBackground, x + 2, y + 2);
             }
-            return name;
-        };
-
-        var evalCustomTextColor = function evalCustomTextColor(item) {
-            var customTextColorEval = item.customTextColorEval;
-
-            if (!customTextColorEval || customTextColorEval === '') return 0;
-            var textColor = 0; // eslint-disable-line prefer-const
-            var s = $gameSwitches._data;
-            var v = $gameVariables._data;
-            var p = $gameParty;
-            try {
-                eval(customTextColorEval);
-            } catch (e) {
-                showError(e.message);
-            }
-            return textColor;
-        };
-
-        /* Override */
-        Window_Base.prototype.setItemTextColorEval = function (item) {
-            if (!item) return;
-            this._resetTextColor = evalCustomTextColor(item) || item.textColor;
-        };
-
-        /* Override */
-        Window_Base.prototype.drawItemName = function (item, x, y) {
-            var width = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 312;
-
-            if (item) {
-                this.setItemTextColor(item);
-                this.setItemTextColorEval(item);
-                var iconBoxWidth = Window_Base._iconWidth + 4;
-                if (item.iconBackground) {
-                    this.drawIcon(item.iconBackground, x + 2, y + 2);
-                }
-                this.drawIcon(item.iconIndex, x + 2, y + 2);
-                var itemName = evalCustomName(item);
-                this.resetTextColor();
-                this.drawText(itemName, x + iconBoxWidth, y, width - iconBoxWidth);
-                this._resetTextColor = undefined;
-                this.resetTextColor();
-            }
-        };
-    })(Window_Base);
+            this.drawIcon(item.iconIndex, x + 2, y + 2);
+            var itemName = evalCustomName(item);
+            this.resetTextColor();
+            this.drawText(itemName, x + iconBoxWidth, y, width - iconBoxWidth);
+            this._resetTextColor = undefined;
+            this.resetTextColor();
+        }
+    };
 })(WAYModuleLoader.getModule('WAY_YEP_ItemCore'));

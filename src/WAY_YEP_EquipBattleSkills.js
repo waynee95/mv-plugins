@@ -3,7 +3,8 @@
 // WAY_YEP_EquipBattleSkills.js
 // ============================================================================
 /*:
-@plugindesc v1.1.1 Addon to Yanfly's Equip Battle Skills Plugin. <WAY_YEP_EquipBattleSkills>
+@plugindesc v1.2.0 Addon to Yanfly's Equip Battle Skills Plugin. <WAY_YEP_EquipBattleSkills>
+
 @author waynee95
 
 @help
@@ -27,6 +28,13 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
+
+==============================================================================
+ ■ Contact Information
+==============================================================================
+Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
+Website: http://waynee95.me/
+Discord Name: waynee95#4261
 */
 
 'use strict';
@@ -39,7 +47,10 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_EquipBattleSkills', '1.1.1', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_EquipBattleSkills', '1.2.0', 'waynee95', {
+        name: 'WAY_Core',
+        version: '>= 2.0.0'
+    });
 }
 
 (($) => {
@@ -57,22 +68,9 @@ if (WAY === undefined) {
         });
     });
 
-    Window_SkillList.prototype.isBattleSkillEnabled = function (item) {
-        const actor = this._actor;
-
-        if (item) {
-            if (Imported.YEP_X_Subclass) {
-                const subclassId = actor._subclassId;
-                const subclass = subclassId > 0 ? $dataClasses[subclassId] : null;
-                if (subclass && subclass.lockedSkills.contains(item.id)) return false;
-            }
-            if (actor.currentClass().lockedSkills.contains(item.id)) return false;
-            if (item.lockSkill) return false;
-        }
-
-        return true;
-    };
-
+    //=============================================================================
+    // Window_SkillList
+    //=============================================================================
     $.alias.Window_SkillEquip_isEnabled = Window_SkillEquip.prototype.isEnabled;
     Window_SkillEquip.prototype.isEnabled = function (item) {
         const actor = this._actor;
@@ -88,5 +86,21 @@ if (WAY === undefined) {
         }
 
         return $.alias.Window_SkillEquip_isEnabled.call(this, item);
+    };
+
+    Window_SkillList.prototype.isBattleSkillEnabled = function (item) {
+        const actor = this._actor;
+
+        if (item) {
+            if (Imported.YEP_X_Subclass) {
+                const subclassId = actor._subclassId;
+                const subclass = subclassId > 0 ? $dataClasses[subclassId] : null;
+                if (subclass && subclass.lockedSkills.contains(item.id)) return false;
+            }
+            if (actor.currentClass().lockedSkills.contains(item.id)) return false;
+            if (item.lockSkill) return false;
+        }
+
+        return true;
     };
 })(WAYModuleLoader.getModule('WAY_YEP_EquipBattleSkills'));

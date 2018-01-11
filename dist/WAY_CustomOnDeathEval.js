@@ -3,7 +3,8 @@
 // WAY_CustomOnDeathEval.js
 // ============================================================================
 /*:
-@plugindesc v1.0.1 Run code when a battler dies. <WAY_CustomOnDeathEval>
+@plugindesc v1.1.0 Run code when a battler dies. <WAY_CustomOnDeathEval>
+
 @author waynee95
 
 @help
@@ -29,6 +30,13 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
+
+==============================================================================
+ ■ Contact Information
+==============================================================================
+Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
+Website: http://waynee95.me/
+Discord Name: waynee95#4261
 */
 
 'use strict';
@@ -41,12 +49,14 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_CustomOnDeathEval', '1.0.1', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_CustomOnDeathEval', '1.1.0', 'waynee95', {
+        name: 'WAY_Core',
+        version: '>= 2.0.0'
+    });
 }
 
 (function ($) {
     var _WAY$Util = WAY.Util,
-        extend = _WAY$Util.extend,
         getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
         trim = _WAY$Util.trim;
 
@@ -62,71 +72,63 @@ if (WAY === undefined) {
     WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
     WAY.EventEmitter.on('load-state-notetags', parseNotetags);
 
-    (function (Game_Battler) {
-        Game_Battler.customOnDeathEval = function () {
-            var code = '';
-            this.states().forEach(function (obj) {
-                if (obj && obj.customOnDeathEval && obj.customOnDeathEval !== '') {
-                    code += '\n' + String(obj.customOnDeathEval);
-                }
-            });
-            return code;
-        };
+    var byCustomDeathEval = function byCustomDeathEval(obj) {
+        return obj ? obj.customOnDeathEval : '';
+    };
+    var toCustomDeathEvalCode = function toCustomDeathEvalCode(acc, obj) {
+        return String(acc) + '\n' + String(obj.customOnDeathEval || '');
+    };
 
-        Game_Battler.evalCustomOnDeathEval = function (subject, target) {
-            var code = this.customOnDeathEval();
-            var user = subject;
-            var killer = target;
-            var a = subject;
-            var b = target;
-            var s = $gameSwitches._data;
-            var v = $gameVariables._data;
-            var p = $gameParty;
-            try {
-                eval(code);
-            } catch (e) {
-                throw e;
-            }
-        };
-    })(Game_Battler.prototype);
+    var evalCustomOnDeathEval = function evalCustomOnDeathEval(code, user, killer) {
+        /* eslint-disable */
+        var a = user;
+        var b = killer;
+        var s = $gameSwitches;
+        var v = $gameVariables;
+        var p = $gameParty;
+        try {
+            eval(code);
+            /* eslint-enable */
+        } catch (e) {
+            throw e;
+        }
+    };
 
-    (function (Game_Actor) {
-        Game_Actor.customOnDeathEval = function () {
-            var code = Game_Battler.prototype.customOnDeathEval.call(this);
-            this.equips().forEach(function (obj) {
-                if (obj && obj.customOnDeathEval && obj.customOnDeathEval !== '') {
-                    code += '\n' + String(obj.customOnDeathEval);
-                }
-            });
-            var currentClass = this.currentClass();
-            if (currentClass.customOnDeathEval && currentClass.customOnDeathEval !== '') {
-                code += '\n' + String(currentClass.customOnDeathEval);
-            }
-            var actor = this.actor();
-            if (actor.customOnDeathEval && actor.customOnDeathEval !== '') {
-                code += '\n' + String(actor.customOnDeathEval);
-            }
-            return code;
-        };
-    })(Game_Actor.prototype);
+    //=============================================================================
+    // Game_Battler
+    //=============================================================================
+    Game_Battler.prototype.customOnDeathEval = function () {
+        return this.states().filter(byCustomDeathEval).reduce(toCustomDeathEvalCode, '');
+    };
 
-    (function (Game_Enemy) {
-        Game_Enemy.customOnDeathEval = function () {
-            var code = Game_Battler.prototype.customOnDeathEval.call(this);
-            var enemy = this.enemy();
-            if (enemy.customOnDeathEval && enemy.customOnDeathEval !== '') {
-                code += '\n' + String(enemy.customOnDeathEval);
-            }
-            return code;
-        };
-    })(Game_Enemy.prototype);
+    //=============================================================================
+    // Game_Actor
+    //=============================================================================
+    Game_Actor.prototype.customOnDeathEval = function () {
+        var code = Game_Battler.prototype.customOnDeathEval.call(this);
+        code += this.equips().filter(byCustomDeathEval).reduce(toCustomDeathEvalCode, '');
+        code += '\n' + String(this.currentClass().customOnDeathEval) || '';
+        code += '\n' + String(this.actor().customOnDeathEval) || '';
+        return code;
+    };
 
-    (function (Game_Action, alias) {
-        alias.Game_Action_executeHpDamage = Game_Action.executeHpDamage;
-        extend(Game_Action, 'executeHpDamage', function (target) {
-            if (target.hp < 1 || target.isDead()) {
-                target.evalCustomOnDeathEval(target, this.subject());
-            }
-        });
-    })(Game_Action.prototype, $.alias);
+    //=============================================================================
+    // Game_Enemy
+    //=============================================================================
+    Game_Enemy.prototype.customOnDeathEval = function () {
+        var code = Game_Battler.prototype.customOnDeathEval.call(this);
+        code += '\n' + String(this.enemy().customOnDeathEval) || '';
+        return code;
+    };
+
+    //=============================================================================
+    // Game_Action
+    //=============================================================================
+    $.alias.Game_Action_executeHpDamage = Game_Action.prototype.executeHpDamage;
+    Game_Action.prototype.executeHpDamage = function (target, value) {
+        $.alias.Game_Action_executeHpDamage.call(this, target, value);
+        if (target.hp < 1 || target.isDead()) {
+            evalCustomOnDeathEval(target.customOnDeathEval(), target, this.subject());
+        }
+    };
 })(WAYModuleLoader.getModule('WAY_CustomOnDeathEval'));

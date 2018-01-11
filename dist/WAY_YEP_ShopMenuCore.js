@@ -28,6 +28,13 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
+
+==============================================================================
+ ■ Contact Information
+==============================================================================
+Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
+Website: http://waynee95.me/
+Discord Name: waynee95#4261
 */
 
 'use strict';
@@ -47,7 +54,6 @@ if (WAY === undefined) {
 
 (function ($) {
     var _WAY$Util = WAY.Util,
-        extend = _WAY$Util.extend,
         getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
         trim = _WAY$Util.trim;
 
@@ -90,8 +96,9 @@ if (WAY === undefined) {
             }
         };
 
-        alias.Window_ShopBuy_makeItemList = Window_ShopBuy.makeItemList;
-        extend(Window_ShopBuy, 'initialize', function () {
+        alias.Window_ShopBuy_initialize = Window_ShopBuy.initialize;
+        Window_ShopBuy.initialize = function () {
+            alias.Window_ShopBuy_initialize.call(this, arguments);
             this._shopGoods = this._shopGoods.filter(function (_ref) {
                 var _ref2 = _slicedToArray(_ref, 2),
                     itemType = _ref2[0],
@@ -99,6 +106,6 @@ if (WAY === undefined) {
 
                 return meetsCustomBuyShowEval(getContainer(itemType)[itemId]);
             });
-        });
+        };
     })(Window_ShopBuy.prototype, $.alias);
 })(WAYModuleLoader.getModule('WAY_YEP_ShopMenuCore'));

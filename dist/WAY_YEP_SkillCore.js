@@ -3,7 +3,8 @@
 // WAY_YEP_SkillCore.js
 // ============================================================================
 /*:
-@plugindesc v1.0.1 Addon to Yanfly's Skill Core Plugin. <WAY_YEP_SkillCore>
+@plugindesc v1.2.0 Addon to Yanfly's Skill Core Plugin. <WAY_YEP_SkillCore>
+
 @author waynee95
 
 @help
@@ -58,6 +59,13 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
+
+==============================================================================
+ ■ Contact Information
+==============================================================================
+Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
+Website: http://waynee95.me/
+Discord Name: waynee95#4261
 */
 
 'use strict';
@@ -70,7 +78,10 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_SkillCore', '1.0.1', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_SkillCore', '1.2.0', 'waynee95', {
+        name: 'WAY_Core',
+        version: '>= 2.0.0'
+    });
 }
 
 (function ($) {
@@ -92,85 +103,89 @@ if (WAY === undefined) {
         skill.customTpCostTextEval = getMultiLineNotetag(skill.note, 'Custom TP Cost Text Eval', '', trim);
     });
 
-    (function (Window_ActorCommand, alias) {
-        alias.Window_ActorCommand_addSkillCommands = Window_ActorCommand.addSkillCommands;
-        Window_ActorCommand.addSkillCommands = function () {
-            var _this = this;
+    //=============================================================================
+    // Window_ActorCommand
+    //=============================================================================
+    $.alias.Window_ActorCommand_addSkillCommands = Window_ActorCommand.prototype.addSkillCommands;
+    Window_ActorCommand.prototype.addSkillCommands = function () {
+        var _this = this;
 
-            var _actor$actor = this._actor.actor(),
-                hiddenSTypes = _actor$actor.hiddenSTypes;
+        var _actor$actor = this._actor.actor(),
+            hiddenSTypes = _actor$actor.hiddenSTypes;
 
-            var skillTypes = this._actor.addedSkillTypes();
-            skillTypes = difference(skillTypes, hiddenSTypes);
+        var skillTypes = this._actor.addedSkillTypes();
+        skillTypes = difference(skillTypes, hiddenSTypes);
 
-            skillTypes.sort(function (a, b) {
-                return a - b;
-            });
-            skillTypes.forEach(function (stypeId) {
-                var name = $dataSystem.skillTypes[stypeId];
-                _this.addCommand(name, 'skill', true, stypeId);
-            });
-        };
-    })(Window_ActorCommand.prototype, $.alias);
+        skillTypes.sort(function (a, b) {
+            return a - b;
+        });
+        skillTypes.forEach(function (stypeId) {
+            var name = $dataSystem.skillTypes[stypeId];
+            _this.addCommand(name, 'skill', true, stypeId);
+        });
+    };
 
-    (function (Window_SkillList, alias) {
-        Window_SkillList.drawCustomCostText = function (text, wx, wy, dw) {
-            var width = this.textWidthEx(text);
-            this.drawTextEx(text, wx - width + dw, wy);
-            var returnWidth = dw - width - Yanfly.Param.SCCCostPadding;
-            this.resetFontSettings();
-            return returnWidth;
-        };
+    function customCostTextEval(skill, cost, code, a) {
+        var text = '';
+        /* eslint-disable */
+        var user = a;
+        var subject = a;
+        var s = $gameSwitches._data;
+        var v = $gameVariables._data;
+        var p = $gameParty;
+        try {
+            eval(code);
+            /* eslint-enable */
+        } catch (e) {
+            throw e;
+        }
+        return text;
+    }
 
-        var customCostTextEval = function customCostTextEval(skill, cost, code, a) {
-            var text = '';
-            var user = a;
-            var subject = a;
-            var s = $gameSwitches._data;
-            var v = $gameVariables._data;
-            var p = $gameParty;
-            try {
-                eval(code);
-            } catch (e) {
-                throw e;
-            }
-            return text;
-        };
+    //=============================================================================
+    // Window_SkillList
+    //=============================================================================
+    $.alias.Window_SkillList_drawHpCost = Window_SkillList.prototype.drawHpCost;
+    Window_SkillList.prototype.drawHpCost = function (skill, wx, wy, dw) {
+        var cost = this._actor.skillHpCost(skill);
+        var code = skill.customHpCostTextEval;
+        if (cost > 0 && code !== '') {
+            var text = customCostTextEval(skill, cost, code, this._actor);
+            return this.drawCustomCostText(text, wx, wy, dw);
+        }
 
-        alias.Window_SkillList_drawHpCost = Window_SkillList.drawHpCost;
-        Window_SkillList.drawHpCost = function (skill, wx, wy, dw) {
-            var cost = this._actor.skillHpCost(skill);
-            var code = skill.customHpCostTextEval;
-            if (cost > 0 && code !== '') {
-                var text = customCostTextEval(skill, cost, code, this._actor);
-                return this.drawCustomCostText(text, wx, wy, dw);
-            }
+        return $.alias.Window_SkillList_drawHpCost.call(this, skill, wx, wy, dw);
+    };
 
-            return alias.Window_SkillList_drawHpCost.call(this, skill, wx, wy, dw);
-        };
+    $.alias.Window_SkillList_drawMpCost = Window_SkillList.prototype.drawMpCost;
+    Window_SkillList.prototype.drawMpCost = function (skill, wx, wy, dw) {
+        var cost = this._actor.skillMpCost(skill);
+        var code = skill.customMpCostTextEval;
+        if (cost > 0 && code !== '') {
+            var text = customCostTextEval(skill, cost, code, this._actor);
+            return this.drawCustomCostText(text, wx, wy, dw);
+        }
 
-        alias.Window_SkillList_drawMpCost = Window_SkillList.drawMpCost;
-        Window_SkillList.drawMpCost = function (skill, wx, wy, dw) {
-            var cost = this._actor.skillMpCost(skill);
-            var code = skill.customMpCostTextEval;
-            if (cost > 0 && code !== '') {
-                var text = customCostTextEval(skill, cost, code, this._actor);
-                return this.drawCustomCostText(text, wx, wy, dw);
-            }
+        return $.alias.Window_SkillList_drawMpCost.call(this, skill, wx, wy, dw);
+    };
 
-            return alias.Window_SkillList_drawMpCost.call(this, skill, wx, wy, dw);
-        };
+    $.alias.Window_SkillList_drawTpCost = Window_SkillList.prototype.drawTpCost;
+    Window_SkillList.prototype.drawTpCost = function (skill, wx, wy, dw) {
+        var cost = this._actor.skillTpCost(skill);
+        var code = skill.customTpCostTextEval;
+        if (cost > 0 && code !== '') {
+            var text = customCostTextEval(skill, cost, code, this._actor);
+            return this.drawCustomCostText(text, wx, wy, dw);
+        }
 
-        alias.Window_SkillList_drawTpCost = Window_SkillList.drawTpCost;
-        Window_SkillList.drawTpCost = function (skill, wx, wy, dw) {
-            var cost = this._actor.skillTpCost(skill);
-            var code = skill.customTpCostTextEval;
-            if (cost > 0 && code !== '') {
-                var text = customCostTextEval(skill, cost, code, this._actor);
-                return this.drawCustomCostText(text, wx, wy, dw);
-            }
+        return $.alias.Window_SkillList_drawTpCost.call(this, skill, wx, wy, dw);
+    };
 
-            return alias.Window_SkillList_drawTpCost.call(this, skill, wx, wy, dw);
-        };
-    })(Window_SkillList.prototype, $.alias);
+    Window_SkillList.prototype.drawCustomCostText = function (text, wx, wy, dw) {
+        var width = this.textWidthEx(text);
+        this.drawTextEx(text, wx - width + dw, wy);
+        var returnWidth = dw - width - Yanfly.Param.SCCCostPadding;
+        this.resetFontSettings();
+        return returnWidth;
+    };
 })(WAYModuleLoader.getModule('WAY_YEP_SkillCore'));

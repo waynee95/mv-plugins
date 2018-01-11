@@ -3,7 +3,8 @@
 // WAY_CustomOnEquipEval.js
 // ============================================================================
 /*:
-@plugindesc v1.0.0 Run code when an actor equips or unequips an item. <WAY_CustomOnEquipEval>
+@plugindesc v1.1.0 Run code when an actor equips or unequips an item. <WAY_CustomOnEquipEval>
+
 @author waynee95
 
 @help
@@ -43,6 +44,13 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
+
+==============================================================================
+ ■ Contact Information
+==============================================================================
+Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
+Website: http://waynee95.me/
+Discord Name: waynee95#4261
 */
 
 'use strict';
@@ -55,11 +63,14 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_CustomOnEquipEval', '1.0.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_CustomOnEquipEval', '1.1.0', 'waynee95', {
+        name: 'WAY_Core',
+        version: '>= 2.0.0'
+    });
 }
 
 ($ => {
-    const { extend, getMultiLineNotetag, trim } = WAY.Util;
+    const { getMultiLineNotetag, trim } = WAY.Util;
     const CUSTOM_ON_EQUIP_EVAL = 'customOnEquipEval';
     const CUSTOM_ON_REMOVE_EQUIP_EVAL = 'customOnRemoveEquipEval';
 
@@ -78,6 +89,7 @@ if (WAY === undefined) {
 
     const evalCode = (user, item, type) => {
         if (item && item[type]) {
+            /* eslint-disable */
             const a = user;
             const s = $gameSwitches._data;
             const v = $gameVariables._data;
@@ -85,6 +97,7 @@ if (WAY === undefined) {
             const code = item[type];
             try {
                 return eval(code);
+                /* eslint-enable */
             } catch (e) {
                 throw e;
             }
@@ -93,35 +106,36 @@ if (WAY === undefined) {
         return false;
     };
 
-    ((Game_Actor, alias) => {
-        alias.Game_Actor_changeEquip = Game_Actor.changeEquip;
+    //=============================================================================
+    // Game_Actor
+    //=============================================================================
+    $.alias.Game_Actor_changeEquip = Game_Actor.prototype.changeEquip;
+    Game_Actor.prototype.changeEquip = function (...args) {
+        const equips = this.equips();
+        $.alias.Game_Actor_changeEquip.apply(this, args);
+        this.equips().forEach((item, slotId) => {
+            if (item !== equips[slotId]) {
+                evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
+                evalCode(this, equips[slotId], CUSTOM_ON_REMOVE_EQUIP_EVAL);
+            }
+        });
+    };
 
-        /* Override */
-        Game_Actor.changeEquip = function (...args) {
-            const equips = this.equips();
-            alias.Game_Actor_changeEquip.apply(this, args);
-            this.equips().forEach((item, slotId) => {
-                if (item !== equips[slotId]) {
-                    evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
-                    evalCode(this, equips[slotId], CUSTOM_ON_REMOVE_EQUIP_EVAL);
-                }
+    if (!Imported.YEP_EquipCore) {
+        $.alias.Game_Actor_initEquips = Game_Actor.prototype.initEquips;
+        Game_Actor.prototype.initEquips = function (...args) {
+            $.alias.Game_Actor_initEquips.call(this, args);
+            this.equips().forEach(item => {
+                evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
             });
         };
-
-        if (!window.Imported.YEP_EquipCore) {
-            alias.Game_Actor_initEquips = Game_Actor.initEquips;
-            extend(Game_Actor, 'initEquips', function () {
-                this.equips().forEach(item => {
-                    evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
-                });
+    } else {
+        $.alias.Game_Actor_equipInitEquips = Game_Actor.prototype.equipInitEquips;
+        Game_Actor.prototype.equipInitEquips = function (...args) {
+            $.alias.Game_Actor_equipInitEquips.call(this, args);
+            this.equips().forEach(item => {
+                evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
             });
-        } else {
-            alias.Game_Actor_equipInitEquips = Game_Actor.equipInitEquips;
-            extend(Game_Actor, 'equipInitEquips', function () {
-                this.equips().forEach(item => {
-                    evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
-                });
-            });
-        }
-    })(Game_Actor.prototype, $.alias);
+        };
+    }
 })(WAYModuleLoader.getModule('WAY_CustomOnEquipEval'));

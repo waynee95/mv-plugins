@@ -3,7 +3,8 @@
 // WAY_MapControlSwitch.js
 // ============================================================================
 /*:
-@plugindesc v1.0.0 Control switches for each map through notetags. <WAY_MapControlSwitch>
+@plugindesc v1.1.0 Control switches for each map through notetags. <WAY_MapControlSwitch>
+
 @author waynee95
 
 @help
@@ -26,6 +27,13 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
+
+==============================================================================
+ ■ Contact Information
+==============================================================================
+Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
+Website: http://waynee95.me/
+Discord Name: waynee95#4261
 */
 
 'use strict';
@@ -40,18 +48,22 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_MapControlSwitch', '1.0.0', 'waynee95', {
+    WAYModuleLoader.registerPlugin('WAY_MapControlSwitch', '1.1.0', 'waynee95', {
         name: 'WAY_Core',
-        version: '>= 1.8.0'
+        version: '>= 2.0.0'
     });
 }
 
 (function () {
-    var _WAY$Util = WAY.Util,
-        getNotetagList = _WAY$Util.getNotetagList,
-        toInt = _WAY$Util.toInt,
-        trim = _WAY$Util.trim;
+    var getNotetagList = WAY.Util.getNotetagList;
 
+
+    var toInt = function toInt(number) {
+        return number - number % 1;
+    };
+    var trim = function trim(str) {
+        return str.trim();
+    };
 
     WAY.EventEmitter.on('load-map-notetags', function (map) {
         map.switches = getNotetagList(map.note, 'Control Switch', function (data) {

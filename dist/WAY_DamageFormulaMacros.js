@@ -3,7 +3,8 @@
 // WAY_DamageFormulaMacros.js
 // ============================================================================
 /*:
-@plugindesc v1.0.1 Define macros for damage formulas. <WAY_DamageFormulaMacros>
+@plugindesc v1.1.0 Define macros for damage formulas. <WAY_DamageFormulaMacros>
+
 @author waynee95
 
 @param macros
@@ -40,6 +41,13 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
+
+==============================================================================
+ ■ Contact Information
+==============================================================================
+Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
+Website: http://waynee95.me/
+Discord Name: waynee95#4261
 */
 
 'use strict';
@@ -52,7 +60,10 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_DamageFormulaMacros', '1.0.1', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_DamageFormulaMacros', '1.1.0', 'waynee95', {
+        name: 'WAY_Core',
+        version: '>= 2.0.0'
+    });
 }
 
 (function ($) {
