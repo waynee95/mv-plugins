@@ -3,7 +3,7 @@
 // WAY_TransferOnRegion.js
 // ============================================================================
 /*:
-@plugindesc v1.0.1 Transfer per player when he touches a certain region id.
+@plugindesc v1.0.1 Transfer the player when he touches a certain region id.
 <WAY_TransferOnRegion>
 
 @author waynee95
