@@ -3,7 +3,7 @@
 // WAY_TransferOnRegion.js
 // ============================================================================
 /*:
-@plugindesc v1.0.0 Transfer per player when he touches a certain region id.
+@plugindesc v1.0.1 Transfer per player when he touches a certain region id.
 <WAY_TransferOnRegion>
 
 @author waynee95
@@ -71,7 +71,7 @@ if (WAY === undefined) {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_TransferOnRegion', '1.0.0', 'waynee95', {
+    WAYModuleLoader.registerPlugin('WAY_TransferOnRegion', '1.0.1', 'waynee95', {
         name: 'WAY_Core',
         version: '>= 2.0.0'
     });
@@ -103,24 +103,13 @@ if (WAY === undefined) {
     });
 
     //=============================================================================
-    //  Game_Map
-    //=============================================================================
-    $.alias.Game_Map_setup = Game_Map.prototype.setup;
-    Game_Map.prototype.setup = function (mapId) {
-        if (!$dataMap) {
-            throw new Error('The map data is not available');
-        }
-        $.alias.Game_Map_setup.call(this, mapId);
-        this._transferData = $dataMap._transferData;
-    };
-
-    //=============================================================================
     //  Game_Player
     //=============================================================================
     $.alias.Game_Player_moveStraight = Game_Player.prototype.moveStraight;
     Game_Player.prototype.moveStraight = function (d) {
+        $.alias.Game_Player_moveStraight.call(this, d);
         if (this.canPass(this.x, this.y, d)) {
-            var transferDataObject = $gameMap._transferData[this.regionId()];
+            var transferDataObject = $dataMap ? $dataMap._transferData[this.regionId()] : null;
             if (transferDataObject) {
                 var mapId = transferDataObject.mapId,
                     targetX = transferDataObject.targetX,
@@ -131,6 +120,5 @@ if (WAY === undefined) {
                 $gamePlayer.reserveTransfer(mapId, targetX, targetY, direction, fadeType);
             }
         }
-        $.alias.Game_Player_moveStraight.call(this, d);
     };
 })(WAYModuleLoader.getModule('WAY_TransferOnRegion'));
