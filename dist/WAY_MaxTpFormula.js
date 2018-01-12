@@ -52,7 +52,7 @@ Discord Name: waynee95#4261
 
 'use strict';
 
-if (WAY === undefined) {
+if (typeof WAY === 'undefined') {
     console.error('You need to install WAY_Core!'); //eslint-disable-line no-console
     if (Utils.isNwjs() && Utils.isOptionValid('test')) {
         var gui = require('nw.gui'); //eslint-disable-line
