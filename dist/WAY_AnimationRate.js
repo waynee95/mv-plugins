@@ -20,9 +20,9 @@ Default: 4
 
 Just add <rate: x> to the name of the Animation. The higher, the slower.
 
-===============================================================================
+==============================================================================
  ■ Terms of Use
-===============================================================================
+==============================================================================
 Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
