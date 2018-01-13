@@ -3,7 +3,7 @@
 // WAY_YEP_ShopMenuCore.js
 // ============================================================================
 /*:
-@plugindesc v1.0.1 Addon to Yanfly's Shop Menu Core Plugin. <WAY_YEP_ShopMenuCore>
+@plugindesc v1.0.2 Addon to Yanfly's Shop Menu Core Plugin. <WAY_YEP_ShopMenuCore>
 @author waynee95
 
 @help
@@ -49,7 +49,7 @@ if (typeof WAY === 'undefined') {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_ShopMenuCore', '1.0.1', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_ShopMenuCore', '1.0.2', 'waynee95');
 }
 
 (function ($) {
@@ -66,46 +66,44 @@ if (typeof WAY === 'undefined') {
     WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
     WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
 
-    (function (Window_ShopBuy, alias) {
-        var meetsCustomBuyShowEval = function meetsCustomBuyShowEval(item) {
-            if (!item || item.customBuyShowEval === '') {
-                return true;
-            }
-            var visible = true;
-            var s = $gameSwitches._data;
-            var v = $gameVariables._data;
-            var p = $gameParty;
-            try {
-                eval(item.customBuyShowEval);
-            } catch (e) {
-                throw e;
-            }
-            return visible;
-        };
+    var meetsCustomBuyShowEval = function meetsCustomBuyShowEval(item) {
+        if (!item || item.customBuyShowEval === '') {
+            return true;
+        }
+        var visible = true;
+        var s = $gameSwitches._data;
+        var v = $gameVariables._data;
+        var p = $gameParty;
+        try {
+            eval(item.customBuyShowEval);
+        } catch (e) {
+            throw e;
+        }
+        return visible;
+    };
 
-        var getContainer = function getContainer(num) {
-            switch (num) {
-                case 0:
-                    return $dataItems;
-                case 1:
-                    return $dataWeapons;
-                case 2:
-                    return $dataArmors;
-                default:
-                    return [];
-            }
-        };
+    var getContainer = function getContainer(num) {
+        switch (num) {
+            case 0:
+                return $dataItems;
+            case 1:
+                return $dataWeapons;
+            case 2:
+                return $dataArmors;
+            default:
+                return [];
+        }
+    };
 
-        alias.Window_ShopBuy_initialize = Window_ShopBuy.initialize;
-        Window_ShopBuy.initialize = function () {
-            alias.Window_ShopBuy_initialize.call(this, arguments);
-            this._shopGoods = this._shopGoods.filter(function (_ref) {
-                var _ref2 = _slicedToArray(_ref, 2),
-                    itemType = _ref2[0],
-                    itemId = _ref2[1];
+    $.alias.Window_ShopBuy_initialize = Window_ShopBuy.prototype.initialize;
+    Window_ShopBuy.prototype.initialize = function (x, y, height, shopGoods) {
+        shopGoods = shopGoods.filter(function (_ref) {
+            var _ref2 = _slicedToArray(_ref, 2),
+                itemType = _ref2[0],
+                itemId = _ref2[1];
 
-                return meetsCustomBuyShowEval(getContainer(itemType)[itemId]);
-            });
-        };
-    })(Window_ShopBuy.prototype, $.alias);
+            return meetsCustomBuyShowEval(getContainer(itemType)[itemId]);
+        });
+        $.alias.Window_ShopBuy_initialize.call(this, x, y, height, shopGoods);
+    };
 })(WAYModuleLoader.getModule('WAY_YEP_ShopMenuCore'));
