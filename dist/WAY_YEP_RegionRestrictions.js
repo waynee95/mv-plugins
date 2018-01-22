@@ -3,7 +3,7 @@
 // WAY_YEP_RegionRestrictions.js
 // ============================================================================
 /*:
-@plugindesc v1.2.0 Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
+@plugindesc v1.2.1 Addon to Yanfly's RegionRestrictions Plugin. <WAY_YEP_RegionRestrictions>
 
 @author waynee95
 
@@ -51,7 +51,7 @@ if (typeof WAY === 'undefined') {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_RegionRestrictions', '1.1.2', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_RegionRestrictions', '1.2.1', 'waynee95');
 }
 
 (function ($) {
@@ -90,12 +90,12 @@ if (typeof WAY === 'undefined') {
     Game_CharacterBase.prototype.isEventRegionForbid = function (x, y, d) {
         var regionId = this.getRegionId(x, y, d);
         var event = this.isEvent() ? this.event() : null;
-        if (event && event._bypassRestriction.contains(regionId)) {
+        if (event && event._bypassRestriction && event._bypassRestriction.contains(regionId)) {
             return false;
         }
         if (this.isPlayer()) return false;
         if (this.isThrough()) {
-            if (event && event._forceRestriction.contains(regionId)) {
+            if (event && event._forceRestriction && event._forceRestriction.contains(regionId)) {
                 return $gameMap.restrictEventRegions().contains(regionId);
             }
             return false;
@@ -108,7 +108,7 @@ if (typeof WAY === 'undefined') {
     Game_CharacterBase.prototype.isEventRegionAllow = function (x, y, d) {
         var regionId = this.getRegionId(x, y, d);
         var event = this.isEvent() ? this.event() : null;
-        if (event && event._bypassRestriction.contains(regionId)) {
+        if (event && event._bypassRestriction && event._bypassRestriction.contains(regionId)) {
             return true;
         }
         if (this.isPlayer()) return false;
