@@ -3,7 +3,7 @@
 // WAY_TransferOnRegion.js
 // ============================================================================
 /*:
-@plugindesc v1.0.1 Transfer the player when he touches a certain region id.
+@plugindesc v1.0.2 Transfer the player when he touches a certain region id.
 <WAY_TransferOnRegion>
 
 @author waynee95
@@ -14,7 +14,9 @@
 ==============================================================================
 -- Map:
 
-<Region Transfer: mapId, targetX, targetY, direction, fadeType>
+<Region Transfer: regionId, mapId, targetX, targetY, direction, fadeType>
+
+regionId  - Id of the region, that will trigger the transfer
 
 mapId     - mapId of the map the player will be transferred to
 
@@ -71,7 +73,7 @@ if (typeof WAY === 'undefined') {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_TransferOnRegion', '1.0.1', 'waynee95', {
+    WAYModuleLoader.registerPlugin('WAY_TransferOnRegion', '1.0.2', 'waynee95', {
         name: 'WAY_Core',
         version: '>= 2.0.0'
     });
@@ -108,17 +110,15 @@ if (typeof WAY === 'undefined') {
     $.alias.Game_Player_moveStraight = Game_Player.prototype.moveStraight;
     Game_Player.prototype.moveStraight = function (d) {
         $.alias.Game_Player_moveStraight.call(this, d);
-        if (this.canPass(this.x, this.y, d)) {
-            var transferDataObject = $dataMap ? $dataMap._transferData[this.regionId()] : null;
-            if (transferDataObject) {
-                var mapId = transferDataObject.mapId,
-                    targetX = transferDataObject.targetX,
-                    targetY = transferDataObject.targetY,
-                    direction = transferDataObject.direction,
-                    fadeType = transferDataObject.fadeType;
+        var transferDataObject = $dataMap ? $dataMap._transferData[this.regionId()] : null;
+        if (transferDataObject) {
+            var mapId = transferDataObject.mapId,
+                targetX = transferDataObject.targetX,
+                targetY = transferDataObject.targetY,
+                direction = transferDataObject.direction,
+                fadeType = transferDataObject.fadeType;
 
-                $gamePlayer.reserveTransfer(mapId, targetX, targetY, direction, fadeType);
-            }
+            $gamePlayer.reserveTransfer(mapId, targetX, targetY, direction, fadeType);
         }
     };
 })(WAYModuleLoader.getModule('WAY_TransferOnRegion'));
