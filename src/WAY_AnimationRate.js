@@ -39,7 +39,7 @@ Discord Name: waynee95#4261
 'use strict';
 
 if (typeof WAY === 'undefined') {
-    console.error('You need to install WAY_Core!'); //eslint-disable-line no-console
+    console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
     if (Utils.isNwjs() && Utils.isOptionValid('test')) {
         var gui = require('nw.gui'); //eslint-disable-line
         gui.Window.get().showDevTools();
@@ -59,7 +59,7 @@ if (typeof WAY === 'undefined') {
     $.alias.Sprite_Animation_setRate = Sprite_Animation.prototype.setupRate;
 
     Sprite_Animation.prototype.setupRate = function () {
-        const re = /<(?:RATE): ([0-9]+)>/i;
+        const re = /<(?:RATE): (\d+)>/i;
         if (this._animation.name.match(re)) {
             this._rate = Number(RegExp.$1);
         } else {

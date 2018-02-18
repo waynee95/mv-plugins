@@ -14,11 +14,18 @@ Credit must be given to: waynee95
 Please don't share my plugins anywhere, except if you have my permissions.
 
 My plugins may be used in commercial and non-commercial products.
+
+==============================================================================
+ ■ Contact Information
+==============================================================================
+Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
+Website: http://waynee95.me/
+Discord Name: waynee95#4261
 */
 
 'use strict';
 
-if (WAY === undefined) {
+if (typeof WAY === 'undefined') {
     console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
     if (Utils.isNwjs() && Utils.isOptionValid('test')) {
         var gui = require('nw.gui'); //eslint-disable-line
