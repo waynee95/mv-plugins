@@ -8,13 +8,10 @@
         "clean:dist": "rimraf -rf ./dist/WAY_*",
         "clean:game": "rimraf -rf ./game/js/plugins/WAY_*",
         "clean": "npm run clean:game && npm run clean:dist",
-        "build:dist":
-            "babel ./src --presets env,airbnb --plugins transform-es2015-parameters -d ./dist",
-        "build:game":
-            "babel ./src --presets env,airbnb --plugins transform-es2015-parameters -d ./game/js/plugins/",
+        "build:dist": "babel ./src --presets env,airbnb --plugins transform-es2015-parameters -d ./dist",
+        "build:game": "babel ./src --presets env,airbnb --plugins transform-es2015-parameters -d ./game/js/plugins/",
         "build": "npm run build:game && npm run build:dist",
-        "watch":
-            "babel ./src --presets env,airbnb --plugins transform-es2015-parameters -d ./game/js/plugins/ --watch"
+        "watch": "babel ./src --presets env,airbnb --plugins transform-es2015-parameters -d ./game/js/plugins/ --watch"
     },
     "repository": {
         "type": "git",
