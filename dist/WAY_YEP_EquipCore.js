@@ -3,7 +3,7 @@
 // WAY_YEP_EquipCore.js
 // ============================================================================
 /*:
-@plugindesc v1.2.0 Addon to Yanfly's Equip Core Plugin. <WAY_YEP_EquipCore>
+@plugindesc v1.2.1 Addon to Yanfly's Equip Core Plugin. <WAY_YEP_EquipCore>
 
 @author waynee95
 
@@ -14,9 +14,23 @@
 -- Weapons and Armors Notetag:
 <Restrict Slot: x>
 <Restrict Slot: x, x, x>
-<Restrict Slot: x to y>
 
 Items with that notetag can only be equipped to the specified slots.
+
+Example:
+Let's say you have the following Equip Slots.
+
+<Equip Slot>
+Weapon
+Weapon
+Armor
+Accessory
+</Equip Slot>
+
+If you want to restrict Two-Handed-Weapons to only be equipable in the first 
+slot, then you can give the Axe the following notetag:
+
+*   <Restrict Slot: 0>
 
 ==============================================================================
  ■ Scriptcalls
@@ -57,7 +71,7 @@ if (typeof WAY === 'undefined') {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_EquipCore', '1.2.0', 'waynee95', {
+    WAYModuleLoader.registerPlugin('WAY_YEP_EquipCore', '1.2.1', 'waynee95', {
         name: 'WAY_Core',
         version: '>= 2.0.0'
     });
@@ -70,15 +84,11 @@ if (typeof WAY === 'undefined') {
 
 
     var parseNotetags = function parseNotetags(obj) {
-        obj.restrictSlots = getNotetag(obj.note, 'Restrict Slots', [], toArray);
+        obj.restrictSlots = getNotetag(obj.note, 'Restrict Slots', null, toArray);
     };
 
     WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
     WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
-
-    var isItemRestricted = function isItemRestricted(item, slotId) {
-        return item && item.restrictSlots.length > 0 && !item.restrictSlots.contains(slotId);
-    };
 
     //=============================================================================
     // Game_Actor
@@ -96,14 +106,6 @@ if (typeof WAY === 'undefined') {
         this.equipSlots().forEach(function (slot) {
             _this._sealedEquipSlots[slot] = false;
         });
-    };
-
-    $.alias.Game_Actor_changeEquip = Game_Actor.prototype.changeEquip;
-    Game_Actor.prototype.changeEquip = function (slotId, item) {
-        if (isItemRestricted(item, slotId)) {
-            return;
-        }
-        $.alias.Game_Actor_changeEquip.call(this, slotId, item);
     };
 
     $.alias.Game_Actor_isEquipChangeOk = Game_Actor.prototype.isEquipChangeOk;
@@ -135,5 +137,17 @@ if (typeof WAY === 'undefined') {
             return false;
         }
         return $.alias.Window_EquipSlot_isEnabled.call(this, index);
+    };
+
+    //=============================================================================
+    // Window_EquipItem
+    //=============================================================================
+    $.alias.Window_EquipItem_isEnabled = Window_EquipItem.prototype.isEnabled;
+    Window_EquipItem.prototype.isEnabled = function (item) {
+        if (item && item.restrictSlots) {
+            return item.restrictSlots.contains(this._slotId);
+        }
+
+        return $.alias.Window_EquipItem_isEnabled.call(this, item);
     };
 })(WAYModuleLoader.getModule('WAY_YEP_EquipCore'));
