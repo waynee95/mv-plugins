@@ -73,7 +73,6 @@ if (typeof WAY === 'undefined') {
 
     $.alias.Scene_Item_performDiscardItem = Scene_Item.prototype.performDiscardItem;
     Scene_Item.prototype.performDiscardItem = function (item, quantity) {
-        console.log(item.customOnDiscardEval);
         if ($gameParty.numItems(item) > 0 && item.customOnDiscardEval) {
             for (var i = 0; i < quantity; i++) {
                 eval(item.customOnDiscardEval);

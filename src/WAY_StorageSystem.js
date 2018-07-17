@@ -272,7 +272,6 @@ window.$gameStorageSystems = null;
             $gameStorageSystems.open(storageId);
         },
         add(storageId, item, amount) {
-            console.log(storageId, eval(item), amount)
             $gameStorageSystems.storage(storageId).addItem(eval(item), parseInt(amount));
         },
         remove(storageId, item, amount) {
