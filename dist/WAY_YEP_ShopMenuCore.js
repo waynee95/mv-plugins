@@ -3,7 +3,7 @@
 // WAY_YEP_ShopMenuCore.js
 // ============================================================================
 /*:
-@plugindesc v1.1.0 Addon to Yanfly's Shop Menu Core Plugin. <WAY_YEP_ShopMenuCore>
+@plugindesc v1.1.1 Addon to Yanfly's Shop Menu Core Plugin. <WAY_YEP_ShopMenuCore>
 @author waynee95
 
 @help
@@ -45,8 +45,6 @@ Discord Name: waynee95#4261
 
 'use strict';
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 if (typeof WAY === 'undefined') {
     console.error('You need to install WAY_Core!'); //eslint-disable-line no-console
     if (Utils.isNwjs() && Utils.isOptionValid('test')) {
@@ -55,7 +53,7 @@ if (typeof WAY === 'undefined') {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_ShopMenuCore', '1.1.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_ShopMenuCore', '1.1.1', 'waynee95');
 }
 
 (function ($) {
@@ -120,20 +118,41 @@ if (typeof WAY === 'undefined') {
 
     $.alias.Window_ShopBuy_initialize = Window_ShopBuy.prototype.initialize;
     Window_ShopBuy.prototype.initialize = function (x, y, height, shopGoods) {
-        shopGoods = shopGoods.filter(function (_ref) {
-            var _ref2 = _slicedToArray(_ref, 2),
-                itemType = _ref2[0],
-                itemId = _ref2[1];
-
-            return meetsCustomBuyShowEval(getContainer(itemType)[itemId]);
-        });
         $.alias.Window_ShopBuy_initialize.call(this, x, y, height, shopGoods);
+    };
+
+    Window_ShopBuy.prototype.makeItemList = function () {
+        this._data = [];
+        this._price = [];
+        this._shopGoods.forEach(function (goods) {
+            var item = null;
+            switch (goods[0]) {
+                case 0:
+                    item = $dataItems[goods[1]];
+                    break;
+                case 1:
+                    item = $dataWeapons[goods[1]];
+                    break;
+                case 2:
+                    item = $dataArmors[goods[1]];
+                    break;
+            }
+            if (item && meetsCustomBuyShowEval(item)) {
+                this._data.push(item);
+                this._price.push(goods[2] === 0 ? item.price : goods[3]);
+            }
+        }, this);
     };
 
     $.alias.Window_ShopBuy_isEnabled = Window_ShopBuy.prototype.isEnabled;
     Window_ShopBuy.prototype.isEnabled = function (item) {
         var condition = $.alias.Window_ShopBuy_isEnabled.call(this, item);
-        console.log(meetsCustomBuyEnableEval(item));
         return condition && meetsCustomBuyEnableEval(item);
+    };
+
+    $.alias.Scene_Shop_onBuyOk = Scene_Shop.prototype.onBuyOk;
+    Scene_Shop.prototype.onBuyOk = function () {
+        $.alias.Scene_Shop_onBuyOk.call(this);
+        this._buyWindow.refresh();
     };
 })(WAYModuleLoader.getModule('WAY_YEP_ShopMenuCore'));

@@ -3,7 +3,7 @@
 // WAY_YEP_ShopMenuCore.js
 // ============================================================================
 /*:
-@plugindesc v1.1.0 Addon to Yanfly's Shop Menu Core Plugin. <WAY_YEP_ShopMenuCore>
+@plugindesc v1.1.1 Addon to Yanfly's Shop Menu Core Plugin. <WAY_YEP_ShopMenuCore>
 @author waynee95
 
 @help
@@ -53,7 +53,7 @@ if (typeof WAY === 'undefined') {
     }
     SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_ShopMenuCore', '1.1.0', 'waynee95');
+    WAYModuleLoader.registerPlugin('WAY_YEP_ShopMenuCore', '1.1.1', 'waynee95');
 }
 
 ($ => {
@@ -105,29 +105,55 @@ if (typeof WAY === 'undefined') {
 
     const getContainer = num => {
         switch (num) {
-            case 0:
-                return $dataItems;
-            case 1:
-                return $dataWeapons;
-            case 2:
-                return $dataArmors;
-            default:
-                return [];
+        case 0:
+            return $dataItems;
+        case 1:
+            return $dataWeapons;
+        case 2:
+            return $dataArmors;
+        default:
+            return [];
         }
     };
 
     $.alias.Window_ShopBuy_initialize = Window_ShopBuy.prototype.initialize;
     Window_ShopBuy.prototype.initialize = function (x, y, height, shopGoods) {
-        shopGoods = shopGoods.filter(([itemType, itemId]) =>
-            meetsCustomBuyShowEval(getContainer(itemType)[itemId])
-        );
         $.alias.Window_ShopBuy_initialize.call(this, x, y, height, shopGoods);
+    };
+
+    Window_ShopBuy.prototype.makeItemList = function() {
+        this._data = [];
+        this._price = [];
+        this._shopGoods.forEach(function(goods) {
+            var item = null;
+            switch (goods[0]) {
+                case 0:
+                item = $dataItems[goods[1]];
+                break;
+            case 1:
+                item = $dataWeapons[goods[1]];
+                break;
+            case 2:
+                item = $dataArmors[goods[1]];
+                break;
+            }
+            if (item && meetsCustomBuyShowEval(item)) {
+                this._data.push(item);
+                this._price.push(goods[2] === 0 ? item.price : goods[3]);
+            }
+        }, this);
     };
 
     $.alias.Window_ShopBuy_isEnabled = Window_ShopBuy.prototype.isEnabled;
     Window_ShopBuy.prototype.isEnabled = function (item) {
         const condition = $.alias.Window_ShopBuy_isEnabled.call(this, item);
-        console.log(meetsCustomBuyEnableEval(item))
         return condition && meetsCustomBuyEnableEval(item);
     };
+
+    $.alias.Scene_Shop_onBuyOk = Scene_Shop.prototype.onBuyOk;
+    Scene_Shop.prototype.onBuyOk = function () {
+        $.alias.Scene_Shop_onBuyOk.call(this);
+        this._buyWindow.refresh();
+    };
+       
 })(WAYModuleLoader.getModule('WAY_YEP_ShopMenuCore'));
