@@ -121,27 +121,12 @@ if (typeof WAY === 'undefined') {
         $.alias.Window_ShopBuy_initialize.call(this, x, y, height, shopGoods);
     };
 
+    $.alias.Window_ShopBuy_makeItemList = Window_ShopBuy.prototype.makeItemList;
     Window_ShopBuy.prototype.makeItemList = function () {
-        this._data = [];
-        this._price = [];
-        this._shopGoods.forEach(function (goods) {
-            var item = null;
-            switch (goods[0]) {
-                case 0:
-                    item = $dataItems[goods[1]];
-                    break;
-                case 1:
-                    item = $dataWeapons[goods[1]];
-                    break;
-                case 2:
-                    item = $dataArmors[goods[1]];
-                    break;
-            }
-            if (item && meetsCustomBuyShowEval(item)) {
-                this._data.push(item);
-                this._price.push(goods[2] === 0 ? item.price : goods[3]);
-            }
-        }, this);
+        $.alias.Window_ShopBuy_makeItemList.call(this);
+        this._data = this._data.filter(function (item) {
+            return meetsCustomBuyShowEval(item);
+        });
     };
 
     $.alias.Window_ShopBuy_isEnabled = Window_ShopBuy.prototype.isEnabled;
