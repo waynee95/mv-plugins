@@ -103,24 +103,6 @@ if (typeof WAY === 'undefined') {
         return enable;
     };
 
-    const getContainer = num => {
-        switch (num) {
-        case 0:
-            return $dataItems;
-        case 1:
-            return $dataWeapons;
-        case 2:
-            return $dataArmors;
-        default:
-            return [];
-        }
-    };
-
-    $.alias.Window_ShopBuy_initialize = Window_ShopBuy.prototype.initialize;
-    Window_ShopBuy.prototype.initialize = function (x, y, height, shopGoods) {
-        $.alias.Window_ShopBuy_initialize.call(this, x, y, height, shopGoods);
-    };
-
     $.alias.Window_ShopBuy_makeItemList = Window_ShopBuy.prototype.makeItemList;
     Window_ShopBuy.prototype.makeItemList = function() {
         $.alias.Window_ShopBuy_makeItemList.call(this);
