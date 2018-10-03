@@ -3,7 +3,7 @@
 // WAY_CustomFaceImageEval.js
 // ============================================================================
 /*:
-@plugindesc v1.1.0 Set different face images using Lunatic Code. <WAY_CustomFaceImageEval>
+@plugindesc v1.1.1 Set different face images using Lunatic Code. <WAY_CustomFaceImageEval>
 
 @author waynee95
 
@@ -23,7 +23,7 @@ if (user.hp / user.mhp <= 0) {
 } else if (user.hp / user.mhp <= 1) {
 	faceName = 'Actor1';
 	faceIndex = 2;
-} 
+}
 if (user.isStateAffected(42)) {
 	faceName = 'Nature';
 	faceIndex = 2;
@@ -35,7 +35,7 @@ You can use 'user' to reference the actor. There are 2 variables you can change.
 'faceIndex' refers to the face index.
 If any of those variables is not set, the default vaules will be used instead.
 
-Also you can use shortcuts for referencing switches, variables and 
+Also you can use shortcuts for referencing switches, variables and
 the game party. Instead of using $gameSwitches, $gameVariables and $gameParty,
 you can just use s, v, and p.
 
@@ -116,5 +116,10 @@ if (typeof WAY === 'undefined') {
         $.alias.Game_Actor_refresh.call(this);
         const { faceName, faceIndex } = evalCode(this, this.actor().customFaceImageEval);
         this.setFaceImage(faceName, faceIndex);
+
+        // make the TurnOrderDisplay notice the image change
+        if (Imported.YEP_X_TurnOrderDisplay && $gameParty.inBattle()) {
+            BattleManager.refreshTurnOrderDisplay();
+        }
     };
 })(WAYModuleLoader.getModule('WAY_CustomFaceImageEval'));
