@@ -1,7 +1,7 @@
 /* globals WAY, WAYModuleLoader */
-// ============================================================================
+// ===========================================================================
 // WAY_DamageFormulaMacros.js
-// ============================================================================
+// ===========================================================================
 /*:
 @plugindesc v1.1.0 Define macros for damage formulas. <WAY_DamageFormulaMacros>
 
@@ -21,7 +21,7 @@
 2. Click on formula macros.
 3. Click on a free row.
 4. Put in a name and a formula.
-5. Now you can use that name in every formula you want. It will be replaced 
+5. Now you can use that name in every formula you want. It will be replaced
 with the formula.
 
 You can use different macros in one formula or the same macro as many times
@@ -50,39 +50,39 @@ Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
 
-'use strict';
+'use strict'
 
 if (typeof WAY === 'undefined') {
-    console.error('You need to install WAY_Core!'); //eslint-disable-line no-console
-    if (Utils.isNwjs() && Utils.isOptionValid('test')) {
+  console.error('You need to install WAY_Core!') // eslint-disable-line no-console
+  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
         var gui = require('nw.gui'); //eslint-disable-line
-        gui.Window.get().showDevTools();
-    }
-    SceneManager.stop();
+    gui.Window.get().showDevTools()
+  }
+  SceneManager.stop()
 } else {
-    WAYModuleLoader.registerPlugin('WAY_DamageFormulaMacros', '1.1.0', 'waynee95', {
-        name: 'WAY_Core',
-        version: '>= 2.0.0'
-    });
+  WAYModuleLoader.registerPlugin('WAY_DamageFormulaMacros', '1.1.0', 'waynee95', {
+    name: 'WAY_Core',
+    version: '>= 2.0.0'
+  })
 }
 
 ($ => {
-    const $dataMacros = $.parameters.macros;
+  const $dataMacros = $.parameters.macros
 
-    const replaceMacros = obj => {
-        $dataMacros.forEach(({ name, formula }) => {
-            if (obj.damage.formula.indexOf(name) > -1) {
-                const regex = new RegExp(name, 'g');
-                obj.damage.formula = obj.damage.formula.replace(regex, formula);
-            }
-        });
-    };
+  const replaceMacros = obj => {
+    $dataMacros.forEach(({ name, formula }) => {
+      if (obj.damage.formula.indexOf(name) > -1) {
+        const regex = new RegExp(name, 'g')
+        obj.damage.formula = obj.damage.formula.replace(regex, formula)
+      }
+    })
+  }
 
-    WAY.EventEmitter.on('load-item-notetags', replaceMacros);
-    WAY.EventEmitter.on('load-skill-notetags', replaceMacros);
-})(WAYModuleLoader.getModule('WAY_DamageFormulaMacros'));
+  WAY.EventEmitter.on('load-item-notetags', replaceMacros)
+  WAY.EventEmitter.on('load-skill-notetags', replaceMacros)
+})(WAYModuleLoader.getModule('WAY_DamageFormulaMacros'))
 
-/*~struct~macro:
+/* ~struct~macro:
 @param name
 @text Macro Name
 @desc Name of the macro. Put this name into the damage formula.
@@ -91,5 +91,5 @@ if (typeof WAY === 'undefined') {
 @param formula
 @text Formula
 @desc The formula the macro will be replaced with.
-@type text 
+@type text
 */

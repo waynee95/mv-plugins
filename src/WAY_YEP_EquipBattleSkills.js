@@ -1,7 +1,7 @@
 /* globals WAY, WAYModuleLoader, Window_SkillEquip */
-// ============================================================================
+// ===========================================================================
 // WAY_YEP_EquipBattleSkills.js
-// ============================================================================
+// ===========================================================================
 /*:
 @plugindesc v1.2.0 Addon to Yanfly's Equip Battle Skills Plugin. <WAY_YEP_EquipBattleSkills>
 
@@ -37,70 +37,70 @@ Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
 
-'use strict';
+'use strict'
 
 if (typeof WAY === 'undefined') {
-    console.error('You need to install WAY_Core!'); //eslint-disable-line no-console
-    if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-        var gui = require('nw.gui'); //eslint-disable-line
-        gui.Window.get().showDevTools();
-    }
-    SceneManager.stop();
+  console.error('You need to install WAY_Core!') // eslint-disable-line no-console
+  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
+    var gui = require('nw.gui'); //eslint-disable-line
+    gui.Window.get().showDevTools()
+  }
+  SceneManager.stop()
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_EquipBattleSkills', '1.2.0', 'waynee95', {
-        name: 'WAY_Core',
-        version: '>= 2.0.0'
-    });
+  WAYModuleLoader.registerPlugin('WAY_YEP_EquipBattleSkills', '1.2.0', 'waynee95', {
+    name: 'WAY_Core',
+    version: '>= 2.0.0'
+  })
 }
 
 (($) => {
-    const { getNotetag, getNotetagList, toArray } = WAY.Util;
+  const { getNotetag, getNotetagList, toArray } = WAY.Util
 
-    WAY.EventEmitter.on('load-skill-notetags', obj => {
-        obj.lockSkill = getNotetag(obj.note, 'Lock Skill', false);
-    });
+  WAY.EventEmitter.on('load-skill-notetags', obj => {
+    obj.lockSkill = getNotetag(obj.note, 'Lock Skill', false)
+  })
 
-    WAY.EventEmitter.on('load-class-notetags', obj => {
-        obj.lockedSkills = [];
-        getNotetagList(obj.note, 'Lock Skills', data => {
-            const arr = toArray(data);
-            obj.lockedSkills = obj.lockedSkills.concat(...arr);
-        });
-    });
+  WAY.EventEmitter.on('load-class-notetags', obj => {
+    obj.lockedSkills = []
+    getNotetagList(obj.note, 'Lock Skills', data => {
+      const arr = toArray(data)
+      obj.lockedSkills = obj.lockedSkills.concat(...arr)
+    })
+  })
 
-    //=============================================================================
-    // Window_SkillList
-    //=============================================================================
-    $.alias.Window_SkillEquip_isEnabled = Window_SkillEquip.prototype.isEnabled;
-    Window_SkillEquip.prototype.isEnabled = function (item) {
-        const actor = this._actor;
+  //==========================================================================
+  // Window_SkillList
+  //==========================================================================
+  $.alias.Window_SkillEquip_isEnabled = Window_SkillEquip.prototype.isEnabled
+  Window_SkillEquip.prototype.isEnabled = function (item) {
+    const actor = this._actor
 
-        if (item && actor.battleSkills().contains(item)) {
-            if (Imported.YEP_X_Subclass) {
-                const subclassId = actor._subclassId;
-                const subclass = subclassId > 0 ? $dataClasses[subclassId] : null;
-                if (subclass && subclass.lockedSkills.contains(item.id)) return false;
-            }
-            if (actor.currentClass().lockedSkills.contains(item.id)) return false;
-            if (item.lockSkill) return false;
-        }
+    if (item && actor.battleSkills().contains(item)) {
+      if (Imported.YEP_X_Subclass) {
+        const subclassId = actor._subclassId
+        const subclass = subclassId > 0 ? $dataClasses[subclassId] : null
+        if (subclass && subclass.lockedSkills.contains(item.id)) return false
+      }
+      if (actor.currentClass().lockedSkills.contains(item.id)) return false
+      if (item.lockSkill) return false
+    }
 
-        return $.alias.Window_SkillEquip_isEnabled.call(this, item);
-    };
+    return $.alias.Window_SkillEquip_isEnabled.call(this, item)
+  }
 
-    Window_SkillList.prototype.isBattleSkillEnabled = function (item) {
-        const actor = this._actor;
+  Window_SkillList.prototype.isBattleSkillEnabled = function (item) {
+    const actor = this._actor
 
-        if (item) {
-            if (Imported.YEP_X_Subclass) {
-                const subclassId = actor._subclassId;
-                const subclass = subclassId > 0 ? $dataClasses[subclassId] : null;
-                if (subclass && subclass.lockedSkills.contains(item.id)) return false;
-            }
-            if (actor.currentClass().lockedSkills.contains(item.id)) return false;
-            if (item.lockSkill) return false;
-        }
+    if (item) {
+      if (Imported.YEP_X_Subclass) {
+        const subclassId = actor._subclassId
+        const subclass = subclassId > 0 ? $dataClasses[subclassId] : null
+        if (subclass && subclass.lockedSkills.contains(item.id)) return false
+      }
+      if (actor.currentClass().lockedSkills.contains(item.id)) return false
+      if (item.lockSkill) return false
+    }
 
-        return true;
-    };
-})(WAYModuleLoader.getModule('WAY_YEP_EquipBattleSkills'));
+    return true
+  }
+})(WAYModuleLoader.getModule('WAY_YEP_EquipBattleSkills'))

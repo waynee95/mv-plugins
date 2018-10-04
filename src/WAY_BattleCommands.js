@@ -1,7 +1,7 @@
 /* globals WAY, WAYModuleLoader */
-// ============================================================================
+// ===========================================================================
 // WAY_BattleCommands.js
-// ============================================================================
+// ===========================================================================
 /*:
 @plugindesc v0.0.0 <WAY_BattleCommands>
 @author waynee95
@@ -23,17 +23,17 @@ Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
 
-'use strict';
+'use strict'
 
 if (typeof WAY === 'undefined') {
-    console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
-    if (Utils.isNwjs() && Utils.isOptionValid('test')) {
+  console.error('You need to install WAY_Core!') // eslint-disable-line no-console
+  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
         var gui = require('nw.gui'); //eslint-disable-line
-        gui.Window.get().showDevTools();
-    }
-    SceneManager.stop();
+    gui.Window.get().showDevTools()
+  }
+  SceneManager.stop()
 } else {
-    WAYModuleLoader.registerPlugin('WAY_BattleCommands', '0.0.0', 'waynee95');
+  WAYModuleLoader.registerPlugin('WAY_BattleCommands', '0.0.0', 'waynee95')
 }
 
-($ => { })(WAYModuleLoader.getModule('WAY_BattleCommands'));
+($ => { })(WAYModuleLoader.getModule('WAY_BattleCommands'))
