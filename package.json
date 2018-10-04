@@ -1,42 +1,41 @@
 {
-    "name": "mv-plugins",
-    "version": "0.0.0",
-    "description": "JavaScript Plugin Collection for RPG Maker MV",
-    "main": "/game/index.js",
-    "scripts": {
-        "serve": "cd ./game && live-server",
-        "clean:dist": "rimraf -rf ./dist/WAY_*",
-        "clean:game": "rimraf -rf ./game/js/plugins/WAY_*",
-        "clean": "npm run clean:game && npm run clean:dist",
-        "build:dist": "babel ./src --presets env,airbnb --plugins transform-es2015-parameters -d ./dist",
-        "build:game": "babel ./src --presets env,airbnb --plugins transform-es2015-parameters -d ./game/js/plugins/",
-        "build": "npm run build:game && npm run build:dist",
-        "watch": "babel ./src --presets env,airbnb --plugins transform-es2015-parameters -d ./game/js/plugins/ --watch"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/waynee95/mv-plugins.git"
-    },
-    "author": "waynee95",
-    "bugs": {
-        "url": "https://github.com/waynee95/mv-plugins/issues"
-    },
-    "homepage": "https://github.com/waynee95/mv-plugins#readme",
-    "devDependencies": {
-        "babel-cli": "^6.26.0",
-        "babel-plugin-transform-es2015-parameters": "^6.24.1",
-        "babel-preset-airbnb": "^2.4.0",
-        "babel-preset-env": "^1.6.0",
-        "browser-sync": "^2.18.13",
-        "eslint": "^4.9.0",
-        "eslint-config-airbnb-base": "^12.1.0",
-        "eslint-config-prettier": "^2.6.0",
-        "eslint-plugin-import": "^2.7.0",
-        "eslint-plugin-rpgmaker": "^1.0.2",
-        "live-server": "^1.2.0",
-        "rimraf": "^2.6.2"
-    },
-    "dependencies": {
-        "eslint-import-resolver-node": "^0.3.1"
-    }
+  "name": "mv-plugins",
+  "version": "1.0.0",
+  "description": "waynee95's Plugin Collection for RPG Maker MV",
+  "main": "./game/index.js",
+  "scripts": {
+    "lint": "eslint src/**/*.js; exit 0",
+    "build:dist": "babel src -d dist",
+    "build:game": "babel src -d game/js/plugins",
+    "build": "npm run build:game && npm run build:dist",
+    "watch": "babel src -d game/js/plugins --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/waynee95/mv-plugins.git"
+  },
+  "keywords": [
+    "rpg",
+    "maker",
+    "mv",
+    "javascript"
+  ],
+  "author": "waynee95 <larsericmarquardt@mail.de> (https://waynee95.me)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/waynee95/mv-plugins/issues"
+  },
+  "homepage": "https://github.com/waynee95/mv-plugins#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "eslint": "^5.6.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-rpgmaker": "^1.0.2",
+    "eslint-plugin-standard": "^3.1.0",
+    "standard": "^12.0.1"
+  }
 }

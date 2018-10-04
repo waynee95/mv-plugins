@@ -1,0 +1,19 @@
+{
+  "extends": "standard",
+    "parserOptions": {
+        "ecmaVersion": 2017,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "rpgmaker"
+    ],
+    "env": {
+        "browser": true,
+        "node": true,
+        "rpgmaker/mv": true
+    },
+    "rules": {
+        "camelcase": 0,
+        "spaced-comment": 0
+    }
+}

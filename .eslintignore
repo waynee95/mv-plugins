@@ -1,2 +1,4 @@
-game/*
-dist/*
+./node_modules
+./git
+./game
+./dist
