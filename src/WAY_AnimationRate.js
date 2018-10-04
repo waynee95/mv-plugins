@@ -23,10 +23,9 @@ Just add <rate: x> to the name of the Animation. The higher, the slower.
 ==============================================================================
  ■ Terms of Use
 ==============================================================================
-Credit must be given to: waynee95
-Please don't share my plugins anywhere, except if you have my permissions.
+This work is licensed under the MIT license.
 
-My plugins may be used in commercial and non-commercial products.
+More info here: https://github.com/waynee95/mv-plugins/blob/master/LICENSE
 
 ==============================================================================
  ■ Contact Information
