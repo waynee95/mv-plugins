@@ -1,7 +1,8 @@
 /* globals WAY, WAYModuleLoader */
-// ============================================================================
+// ===========================================================================
 // WAY_RandomEncounterFormula.js
-// ============================================================================
+// ===========================================================================
+
 /*:
 @plugindesc v1.1.0 Use a custom random encounter formula. <WAY_RandomEncounterFormula>
 
@@ -29,26 +30,30 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-
 'use strict';
 
 if (typeof WAY === 'undefined') {
-    console.error('You need to install WAY_Core!'); //eslint-disable-line no-console
-    if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-        var gui = require('nw.gui'); //eslint-disable-line
-        gui.Window.get().showDevTools();
-    }
-    SceneManager.stop();
+  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+
+  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
+    var gui = require('nw.gui'); //eslint-disable-line
+
+
+    gui.Window.get().showDevTools();
+  }
+
+  SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_RandomEncounterFormula', '1.1.0', 'waynee95', {
-        name: 'WAY_Core',
-        version: '>= 2.0.0'
-    });
+  WAYModuleLoader.registerPlugin('WAY_RandomEncounterFormula', '1.1.0', 'waynee95', {
+    name: 'WAY_Core',
+    version: '>= 2.0.0'
+  });
 }
 
-(function ($) {
-    Game_Player.prototype.makeEncounterCount = function () {
-        var n = $gameMap.encounterStep();
-        this._encounterCount = eval($.parameters.encounterFormula);
-    };
+($ => {
+  Game_Player.prototype.makeEncounterCount = function () {
+    const n = $gameMap.encounterStep(); // eslint-disable-line no-unused-vars
+
+    this._encounterCount = eval($.parameters.encounterFormula); // eslint-disable-line no-eval
+  };
 })(WAYModuleLoader.getModule('WAY_RandomEncounterFormula'));

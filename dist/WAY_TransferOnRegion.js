@@ -1,7 +1,8 @@
 /* globals WAY, WAYModuleLoader */
-// ============================================================================
+// ===========================================================================
 // WAY_TransferOnRegion.js
-// ============================================================================
+// ===========================================================================
+
 /*:
 @plugindesc v1.0.2 Transfer the player when he touches a certain region id.
 <WAY_TransferOnRegion>
@@ -27,7 +28,7 @@ targetY   - player y position on new map
 direction - facing direction of the player after moving (optional)
 
 For the direction, use one of the following numbers:
-    0 = retain 
+    0 = retain
     2 = down
     4 = left
     6 = right
@@ -60,65 +61,64 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-
 'use strict';
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 if (typeof WAY === 'undefined') {
-    console.error('You need to install WAY_Core!'); //eslint-disable-line no-console
-    if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-        var gui = require('nw.gui'); //eslint-disable-line
-        gui.Window.get().showDevTools();
-    }
-    SceneManager.stop();
+  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+
+  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
+    var gui = require('nw.gui'); //eslint-disable-line
+
+
+    gui.Window.get().showDevTools();
+  }
+
+  SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_TransferOnRegion', '1.0.2', 'waynee95', {
-        name: 'WAY_Core',
-        version: '>= 2.0.0'
-    });
+  WAYModuleLoader.registerPlugin('WAY_TransferOnRegion', '1.0.2', 'waynee95', {
+    name: 'WAY_Core',
+    version: '>= 2.0.0'
+  });
 }
 
-(function ($) {
-    var _WAY$Util = WAY.Util,
-        getNotetagList = _WAY$Util.getNotetagList,
-        toInt = _WAY$Util.toInt;
-
-
-    WAY.EventEmitter.on('load-map-notetags', function (map) {
-        map._transferData = {};
-        getNotetagList(map.note, 'Region Transfer', function (data) {
-            var _data$split$map = data.split(',').map(toInt),
-                _data$split$map2 = _slicedToArray(_data$split$map, 6),
-                regionId = _data$split$map2[0],
-                mapId = _data$split$map2[1],
-                targetX = _data$split$map2[2],
-                targetY = _data$split$map2[3],
-                _data$split$map2$ = _data$split$map2[4],
-                direction = _data$split$map2$ === undefined ? 0 : _data$split$map2$,
-                _data$split$map2$2 = _data$split$map2[5],
-                fadeType = _data$split$map2$2 === undefined ? 0 : _data$split$map2$2;
-
-            var transferDataObject = { regionId: regionId, mapId: mapId, targetX: targetX, targetY: targetY, direction: direction, fadeType: fadeType };
-            map._transferData[regionId] = transferDataObject;
-        });
+($ => {
+  const {
+    getNotetagList,
+    toInt
+  } = WAY.Util;
+  WAY.EventEmitter.on('load-map-notetags', map => {
+    map._transferData = {};
+    getNotetagList(map.note, 'Region Transfer', data => {
+      const [regionId, mapId, targetX, targetY, direction = 0, fadeType = 0] = data.split(',').map(toInt);
+      const transferDataObject = {
+        regionId,
+        mapId,
+        targetX,
+        targetY,
+        direction,
+        fadeType
+      };
+      map._transferData[regionId] = transferDataObject;
     });
+  }); //==========================================================================
+  //  Game_Player
+  //==========================================================================
 
-    //=============================================================================
-    //  Game_Player
-    //=============================================================================
-    $.alias.Game_Player_moveStraight = Game_Player.prototype.moveStraight;
-    Game_Player.prototype.moveStraight = function (d) {
-        $.alias.Game_Player_moveStraight.call(this, d);
-        var transferDataObject = $dataMap ? $dataMap._transferData[this.regionId()] : null;
-        if (transferDataObject) {
-            var mapId = transferDataObject.mapId,
-                targetX = transferDataObject.targetX,
-                targetY = transferDataObject.targetY,
-                direction = transferDataObject.direction,
-                fadeType = transferDataObject.fadeType;
+  $.alias.Game_Player_moveStraight = Game_Player.prototype.moveStraight;
 
-            $gamePlayer.reserveTransfer(mapId, targetX, targetY, direction, fadeType);
-        }
-    };
+  Game_Player.prototype.moveStraight = function (d) {
+    $.alias.Game_Player_moveStraight.call(this, d);
+    const transferDataObject = $dataMap ? $dataMap._transferData[this.regionId()] : null;
+
+    if (transferDataObject) {
+      const {
+        mapId,
+        targetX,
+        targetY,
+        direction,
+        fadeType
+      } = transferDataObject;
+      $gamePlayer.reserveTransfer(mapId, targetX, targetY, direction, fadeType);
+    }
+  };
 })(WAYModuleLoader.getModule('WAY_TransferOnRegion'));

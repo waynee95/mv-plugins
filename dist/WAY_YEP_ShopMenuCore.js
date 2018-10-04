@@ -1,7 +1,8 @@
 /* globals WAY, WAYModuleLoader */
-// ============================================================================
+// ===========================================================================
 // WAY_YEP_ShopMenuCore.js
-// ============================================================================
+// ===========================================================================
+
 /*:
 @plugindesc v1.1.1 Addon to Yanfly's Shop Menu Core Plugin. <WAY_YEP_ShopMenuCore>
 @author waynee95
@@ -42,84 +43,101 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-
 'use strict';
 
 if (typeof WAY === 'undefined') {
-    console.error('You need to install WAY_Core!'); //eslint-disable-line no-console
-    if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-        var gui = require('nw.gui'); //eslint-disable-line
-        gui.Window.get().showDevTools();
-    }
-    SceneManager.stop();
+  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+
+  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
+    var gui = require('nw.gui'); //eslint-disable-line
+
+
+    gui.Window.get().showDevTools();
+  }
+
+  SceneManager.stop();
 } else {
-    WAYModuleLoader.registerPlugin('WAY_YEP_ShopMenuCore', '1.1.1', 'waynee95');
+  WAYModuleLoader.registerPlugin('WAY_YEP_ShopMenuCore', '1.1.1', 'waynee95');
 }
 
-(function ($) {
-    var _WAY$Util = WAY.Util,
-        getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
-        trim = _WAY$Util.trim;
+($ => {
+  const {
+    getMultiLineNotetag,
+    trim
+  } = WAY.Util;
+
+  const parseNotetags = obj => {
+    obj.customBuyShowEval = getMultiLineNotetag(obj.note, 'Custom Buy Show Eval', null, trim);
+    obj.customBuyEnableEval = getMultiLineNotetag(obj.note, 'Custom Buy Enable Eval', null, trim);
+  };
+
+  WAY.EventEmitter.on('load-item-notetags', parseNotetags);
+  WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
+  WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
+
+  const meetsCustomBuyShowEval = item => {
+    if (!item || item.customBuyShowEval === null) {
+      return true;
+    }
+
+    const visible = true;
+    /* eslint-disable */
+
+    const s = $gameSwitches._data;
+    const v = $gameVariables._data;
+    const p = $gameParty;
+
+    try {
+      eval(item.customBuyShowEval);
+      /* eslint-enable */
+    } catch (e) {
+      throw e;
+    }
+
+    return visible;
+  };
+
+  const meetsCustomBuyEnableEval = item => {
+    if (!item || item.customBuyEnableEval === null) {
+      return true;
+    }
+    /* eslint-disable */
 
 
-    var parseNotetags = function parseNotetags(obj) {
-        obj.customBuyShowEval = getMultiLineNotetag(obj.note, 'Custom Buy Show Eval', null, trim);
-        obj.customBuyEnableEval = getMultiLineNotetag(obj.note, 'Custom Buy Enable Eval', null, trim);
-    };
+    const enable = true;
+    const s = $gameSwitches._data;
+    const v = $gameVariables._data;
+    const p = $gameParty;
 
-    WAY.EventEmitter.on('load-item-notetags', parseNotetags);
-    WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
-    WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
+    try {
+      eval(item.customBuyEnableEval);
+      /* eslint-disable */
+    } catch (e) {
+      throw e;
+    }
 
-    var meetsCustomBuyShowEval = function meetsCustomBuyShowEval(item) {
-        if (!item || item.customBuyShowEval === null) {
-            return true;
-        }
-        var visible = true;
-        var s = $gameSwitches._data;
-        var v = $gameVariables._data;
-        var p = $gameParty;
-        try {
-            eval(item.customBuyShowEval);
-        } catch (e) {
-            throw e;
-        }
-        return visible;
-    };
+    return enable;
+  };
 
-    var meetsCustomBuyEnableEval = function meetsCustomBuyEnableEval(item) {
-        if (!item || item.customBuyEnableEval === null) {
-            return true;
-        }
-        var enable = true;
-        var s = $gameSwitches._data;
-        var v = $gameVariables._data;
-        var p = $gameParty;
-        try {
-            eval(item.customBuyEnableEval);
-        } catch (e) {
-            throw e;
-        }
-        return enable;
-    };
+  $.alias.Window_ShopBuy_makeItemList = Window_ShopBuy.prototype.makeItemList;
 
-    $.alias.Window_ShopBuy_makeItemList = Window_ShopBuy.prototype.makeItemList;
-    Window_ShopBuy.prototype.makeItemList = function () {
-        $.alias.Window_ShopBuy_makeItemList.call(this);
-        this._data = this._data.filter(function (item) {
-            return meetsCustomBuyShowEval(item);
-        });
-    };
+  Window_ShopBuy.prototype.makeItemList = function () {
+    $.alias.Window_ShopBuy_makeItemList.call(this);
+    this._data = this._data.filter(item => meetsCustomBuyShowEval(item));
+  };
 
-    $.alias.Window_ShopBuy_isEnabled = Window_ShopBuy.prototype.isEnabled;
-    Window_ShopBuy.prototype.isEnabled = function (item) {
-        var condition = $.alias.Window_ShopBuy_isEnabled.call(this, item);
-        return condition && meetsCustomBuyEnableEval(item);
-    };
+  $.alias.Window_ShopBuy_isEnabled = Window_ShopBuy.prototype.isEnabled;
 
-    $.alias.Scene_Shop_onBuyOk = Scene_Shop.prototype.onBuyOk;
-    Scene_Shop.prototype.onBuyOk = function () {
-        $.alias.Scene_Shop_onBuyOk.call(this);
-        this._buyWindow.refresh();
-    };
+  Window_ShopBuy.prototype.isEnabled = function (item) {
+    const condition = $.alias.Window_ShopBuy_isEnabled.call(this, item);
+    return condition && meetsCustomBuyEnableEval(item);
+  };
+
+  $.alias.Scene_Shop_onBuyOk = Scene_Shop.prototype.onBuyOk;
+
+  Scene_Shop.prototype.onBuyOk = function () {
+    $.alias.Scene_Shop_onBuyOk.call(this);
+
+    this._buyWindow.refresh();
+  };
 })(WAYModuleLoader.getModule('WAY_YEP_ShopMenuCore'));
