@@ -70,16 +70,16 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
-  const $dataMacros = $.parameters.macros;
+(function ($) {
+  var $dataMacros = $.parameters.macros;
 
-  const replaceMacros = obj => {
-    $dataMacros.forEach(({
-      name,
-      formula
-    }) => {
+  var replaceMacros = function replaceMacros(obj) {
+    $dataMacros.forEach(function (_ref) {
+      var name = _ref.name,
+          formula = _ref.formula;
+
       if (obj.damage.formula.indexOf(name) > -1) {
-        const regex = new RegExp(name, 'g');
+        var regex = new RegExp(name, 'g');
         obj.damage.formula = obj.damage.formula.replace(regex, formula);
       }
     });

@@ -56,14 +56,14 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
+(function ($) {
   //==========================================================================
   // Sprite_Animation
   //==========================================================================
   $.alias.Sprite_Animation_setRate = Sprite_Animation.prototype.setupRate;
 
   Sprite_Animation.prototype.setupRate = function () {
-    const re = /<(?:RATE): (\d+)>/i;
+    var re = /<(?:RATE): (\d+)>/i;
 
     if (this._animation.name.match(re)) {
       this._rate = Number(RegExp.$1);

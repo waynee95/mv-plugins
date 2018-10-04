@@ -81,15 +81,14 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-(() => {
-  const {
-    getNotetag,
-    getMultiLineNotetag,
-    trim,
-    toInt
-  } = WAY.Util;
+(function () {
+  var _WAY$Util = WAY.Util,
+      getNotetag = _WAY$Util.getNotetag,
+      getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
+      trim = _WAY$Util.trim,
+      toInt = _WAY$Util.toInt;
 
-  const parseNotetags = obj => {
+  var parseNotetags = function parseNotetags(obj) {
     obj.customNameEval = getMultiLineNotetag(obj.note, 'Custom Name Eval', null, trim);
     obj.customTextColorEval = getMultiLineNotetag(obj.note, 'custom textcolor eval', null, trim);
     obj.iconBackground = getNotetag(obj.note, 'Icon Background', null, toInt);
@@ -100,17 +99,15 @@ if (typeof WAY === 'undefined') {
   WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
   WAY.EventEmitter.on('load-skill-notetags', parseNotetags);
 
-  const evalCustomName = item => {
-    const {
-      customNameEval
-    } = item;
+  var evalCustomName = function evalCustomName(item) {
+    var customNameEval = item.customNameEval;
     if (!customNameEval || customNameEval === '') return item.name;
     /* eslint-disable */
 
-    let name = '';
-    const s = $gameSwitches;
-    const v = $gameVariables;
-    const p = $gameParty;
+    var name = '';
+    var s = $gameSwitches;
+    var v = $gameVariables;
+    var p = $gameParty;
 
     try {
       eval(customNameEval);
@@ -122,17 +119,15 @@ if (typeof WAY === 'undefined') {
     return name;
   };
 
-  const evalCustomTextColor = item => {
-    const {
-      customTextColorEval
-    } = item;
+  var evalCustomTextColor = function evalCustomTextColor(item) {
+    var customTextColorEval = item.customTextColorEval;
     if (!customTextColorEval || customTextColorEval === '') return 0;
     /* eslint-disable */
 
-    let textColor = 0;
-    const s = $gameSwitches;
-    const v = $gameVariables;
-    const p = $gameParty;
+    var textColor = 0;
+    var s = $gameSwitches;
+    var v = $gameVariables;
+    var p = $gameParty;
 
     try {
       eval(customTextColorEval);
@@ -152,18 +147,20 @@ if (typeof WAY === 'undefined') {
     this._resetTextColor = evalCustomTextColor(item) || item.textColor;
   };
 
-  Window_Base.prototype.drawItemName = function (item, x, y, width = 312) {
+  Window_Base.prototype.drawItemName = function (item, x, y) {
+    var width = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 312;
+
     if (item) {
       this.setItemTextColor(item);
       this.setItemTextColorEval(item);
-      const iconBoxWidth = Window_Base._iconWidth + 4;
+      var iconBoxWidth = Window_Base._iconWidth + 4;
 
       if (item.iconBackground) {
         this.drawIcon(item.iconBackground, x + 2, y + 2);
       }
 
       this.drawIcon(item.iconIndex, x + 2, y + 2);
-      const itemName = evalCustomName(item);
+      var itemName = evalCustomName(item);
       this.resetTextColor();
       this.drawText(itemName, x + iconBoxWidth, y, width - iconBoxWidth);
       this._resetTextColor = undefined;

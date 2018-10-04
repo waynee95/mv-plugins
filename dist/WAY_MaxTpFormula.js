@@ -70,16 +70,13 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
-  const {
-    getMultiLineNotetag,
-    trim
-  } = WAY.Util;
-  const {
-    defaultFormula
-  } = $.parameters;
+(function ($) {
+  var _WAY$Util = WAY.Util,
+      getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
+      trim = _WAY$Util.trim;
+  var defaultFormula = $.parameters.defaultFormula;
 
-  const parseNotetags = obj => {
+  var parseNotetags = function parseNotetags(obj) {
     obj.tpFormula = getMultiLineNotetag(obj.note, 'Max TP Formula', null, trim);
   };
 
@@ -89,22 +86,21 @@ if (typeof WAY === 'undefined') {
   Object.defineProperties(Game_BattlerBase.prototype, {
     // Max TP
     mtp: {
-      get() {
+      get: function get() {
         return this.maxTp();
       },
-
       configurable: true
     }
   });
 
-  const evalFormula = (user, formula) => {
-    const maxTp = 0;
+  var evalFormula = function evalFormula(user, formula) {
+    var maxTp = 0;
     /* eslint-disable */
 
-    const a = user;
-    const s = $gameSwitches;
-    const v = $gameVariables;
-    const p = $gameParty;
+    var a = user;
+    var s = $gameSwitches;
+    var v = $gameVariables;
+    var p = $gameParty;
 
     try {
       eval(formula);

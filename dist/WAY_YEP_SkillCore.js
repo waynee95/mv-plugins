@@ -88,18 +88,17 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
-  const {
-    getMultiLineNotetag,
-    getNotetag,
-    toArray,
-    trim,
-    difference
-  } = WAY.Util;
-  WAY.EventEmitter.on('load-actor-notetags', actor => {
+(function ($) {
+  var _WAY$Util = WAY.Util,
+      getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
+      getNotetag = _WAY$Util.getNotetag,
+      toArray = _WAY$Util.toArray,
+      trim = _WAY$Util.trim,
+      difference = _WAY$Util.difference;
+  WAY.EventEmitter.on('load-actor-notetags', function (actor) {
     actor.hiddenSTypes = getNotetag(actor.note, 'Hide SType', [], toArray);
   });
-  WAY.EventEmitter.on('load-skill-notetags', skill => {
+  WAY.EventEmitter.on('load-skill-notetags', function (skill) {
     skill.customHpCostTextEval = getMultiLineNotetag(skill.note, 'Custom HP Cost Text Eval', '', trim);
     skill.customMpCostTextEval = getMultiLineNotetag(skill.note, 'Custom MP Cost Text Eval', '', trim);
     skill.customTpCostTextEval = getMultiLineNotetag(skill.note, 'Custom TP Cost Text Eval', '', trim);
@@ -110,29 +109,33 @@ if (typeof WAY === 'undefined') {
   $.alias.Window_ActorCommand_addSkillCommands = Window_ActorCommand.prototype.addSkillCommands;
 
   Window_ActorCommand.prototype.addSkillCommands = function () {
-    const {
-      hiddenSTypes
-    } = this._actor.actor();
+    var _this = this;
 
-    let skillTypes = this._actor.addedSkillTypes();
+    var _this$_actor$actor = this._actor.actor(),
+        hiddenSTypes = _this$_actor$actor.hiddenSTypes;
+
+    var skillTypes = this._actor.addedSkillTypes();
 
     skillTypes = difference(skillTypes, hiddenSTypes);
-    skillTypes.sort((a, b) => a - b);
-    skillTypes.forEach(stypeId => {
-      const name = $dataSystem.skillTypes[stypeId];
-      this.addCommand(name, 'skill', true, stypeId);
+    skillTypes.sort(function (a, b) {
+      return a - b;
+    });
+    skillTypes.forEach(function (stypeId) {
+      var name = $dataSystem.skillTypes[stypeId];
+
+      _this.addCommand(name, 'skill', true, stypeId);
     });
   };
 
   function customCostTextEval(skill, cost, code, a) {
-    const text = '';
+    var text = '';
     /* eslint-disable */
 
-    const user = a;
-    const subject = a;
-    const s = $gameSwitches._data;
-    const v = $gameVariables._data;
-    const p = $gameParty;
+    var user = a;
+    var subject = a;
+    var s = $gameSwitches._data;
+    var v = $gameVariables._data;
+    var p = $gameParty;
 
     try {
       eval(code);
@@ -150,12 +153,12 @@ if (typeof WAY === 'undefined') {
   $.alias.Window_SkillList_drawHpCost = Window_SkillList.prototype.drawHpCost;
 
   Window_SkillList.prototype.drawHpCost = function (skill, wx, wy, dw) {
-    const cost = this._actor.skillHpCost(skill);
+    var cost = this._actor.skillHpCost(skill);
 
-    const code = skill.customHpCostTextEval;
+    var code = skill.customHpCostTextEval;
 
     if (cost > 0 && code !== '') {
-      const text = customCostTextEval(skill, cost, code, this._actor);
+      var text = customCostTextEval(skill, cost, code, this._actor);
       return this.drawCustomCostText(text, wx, wy, dw);
     }
 
@@ -165,12 +168,12 @@ if (typeof WAY === 'undefined') {
   $.alias.Window_SkillList_drawMpCost = Window_SkillList.prototype.drawMpCost;
 
   Window_SkillList.prototype.drawMpCost = function (skill, wx, wy, dw) {
-    const cost = this._actor.skillMpCost(skill);
+    var cost = this._actor.skillMpCost(skill);
 
-    const code = skill.customMpCostTextEval;
+    var code = skill.customMpCostTextEval;
 
     if (cost > 0 && code !== '') {
-      const text = customCostTextEval(skill, cost, code, this._actor);
+      var text = customCostTextEval(skill, cost, code, this._actor);
       return this.drawCustomCostText(text, wx, wy, dw);
     }
 
@@ -180,12 +183,12 @@ if (typeof WAY === 'undefined') {
   $.alias.Window_SkillList_drawTpCost = Window_SkillList.prototype.drawTpCost;
 
   Window_SkillList.prototype.drawTpCost = function (skill, wx, wy, dw) {
-    const cost = this._actor.skillTpCost(skill);
+    var cost = this._actor.skillTpCost(skill);
 
-    const code = skill.customTpCostTextEval;
+    var code = skill.customTpCostTextEval;
 
     if (cost > 0 && code !== '') {
-      const text = customCostTextEval(skill, cost, code, this._actor);
+      var text = customCostTextEval(skill, cost, code, this._actor);
       return this.drawCustomCostText(text, wx, wy, dw);
     }
 
@@ -193,9 +196,9 @@ if (typeof WAY === 'undefined') {
   };
 
   Window_SkillList.prototype.drawCustomCostText = function (text, wx, wy, dw) {
-    const width = this.textWidthEx(text);
+    var width = this.textWidthEx(text);
     this.drawTextEx(text, wx - width + dw, wy);
-    const returnWidth = dw - width - Yanfly.Param.SCCCostPadding;
+    var returnWidth = dw - width - Yanfly.Param.SCCCostPadding;
     this.resetFontSettings();
     return returnWidth;
   };

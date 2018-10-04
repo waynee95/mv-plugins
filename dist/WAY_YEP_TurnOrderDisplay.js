@@ -32,6 +32,14 @@ Discord Name: waynee95#4261
 */
 'use strict';
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 if (typeof WAY === 'undefined') {
   console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
 
@@ -50,18 +58,20 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
-  const {
-    getNotetag
-  } = WAY.Util;
-  WAY.EventEmitter.on('load-enemy-notetags', enemy => {
-    getNotetag(enemy.note, 'Turn Order Image', null, str => {
-      let [filename, faceIndex] = str.split(',');
+(function ($) {
+  var getNotetag = WAY.Util.getNotetag;
+  WAY.EventEmitter.on('load-enemy-notetags', function (enemy) {
+    getNotetag(enemy.note, 'Turn Order Image', null, function (str) {
+      var _str$split = str.split(','),
+          _str$split2 = _slicedToArray(_str$split, 2),
+          filename = _str$split2[0],
+          faceIndex = _str$split2[1];
+
       filename = filename.trim();
       faceIndex = parseInt(faceIndex, 10);
       enemy.turnOrderImage = {
-        filename,
-        faceIndex
+        filename: filename,
+        faceIndex: faceIndex
       };
     });
   }); //==========================================================================
@@ -99,22 +109,25 @@ if (typeof WAY === 'undefined') {
   };
 
   Window_TurnOrderIcon.prototype.drawEnemyFace = function () {
-    const {
-      filename,
-      faceIndex
-    } = this.battler().enemy().turnOrderImage;
-    const bitmap = ImageManager.loadFace(filename);
-    bitmap.addLoadListener(() => {
-      const sw = Window_Base._faceWidth;
-      const sh = Window_Base._faceHeight;
-      const dx = 0;
-      const dy = 0;
-      const sx = faceIndex % 4 * sw;
-      const sy = Math.floor(faceIndex / 4) * sh;
-      const dw = this.contents.width - 8;
-      const dh = this.contents.height - 8;
-      this.contents.blt(bitmap, sx, sy, sw, sh, dx + 4, dy + 4, dw, dh);
-      this.drawLetter();
+    var _this = this;
+
+    var _this$battler$enemy$t = this.battler().enemy().turnOrderImage,
+        filename = _this$battler$enemy$t.filename,
+        faceIndex = _this$battler$enemy$t.faceIndex;
+    var bitmap = ImageManager.loadFace(filename);
+    bitmap.addLoadListener(function () {
+      var sw = Window_Base._faceWidth;
+      var sh = Window_Base._faceHeight;
+      var dx = 0;
+      var dy = 0;
+      var sx = faceIndex % 4 * sw;
+      var sy = Math.floor(faceIndex / 4) * sh;
+      var dw = _this.contents.width - 8;
+      var dh = _this.contents.height - 8;
+
+      _this.contents.blt(bitmap, sx, sy, sw, sh, dx + 4, dy + 4, dw, dh);
+
+      _this.drawLetter();
     });
   };
 })(WAYModuleLoader.getModule('WAY_YEP_TurnOrderDisplay'));

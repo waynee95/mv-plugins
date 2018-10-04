@@ -58,16 +58,15 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
-  const {
-    classChangeCommand,
-    classChangeCooldown
-  } = $.parameters;
-  let bypassBattleStart = false;
-  let savedBattleBgm = null;
-  let savedBattleBgs = null;
+(function ($) {
+  var _$$parameters = $.parameters,
+      classChangeCommand = _$$parameters.classChangeCommand,
+      classChangeCooldown = _$$parameters.classChangeCooldown;
+  var bypassBattleStart = false;
+  var savedBattleBgm = null;
+  var savedBattleBgs = null;
 
-  const clearBGM = () => {
+  var clearBGM = function clearBGM() {
     savedBattleBgm = null;
     savedBattleBgs = null;
   }; //==========================================================================
@@ -91,7 +90,7 @@ if (typeof WAY === 'undefined') {
   $.alias.BattleManager_playBattleBgm = BattleManager.playBattleBgm;
 
   BattleManager.playBattleBgm = function () {
-    let restartBgm = true;
+    var restartBgm = true;
 
     if (savedBattleBgm) {
       AudioManager.playBgm(savedBattleBgm);
@@ -143,7 +142,7 @@ if (typeof WAY === 'undefined') {
   };
 
   Window_ActorCommand.prototype.addClassChangeCommand = function () {
-    const enabled = this._actor.canChangeClass();
+    var enabled = this._actor.canChangeClass();
 
     this.addCommand(classChangeCommand, 'class', enabled);
   }; //==========================================================================
@@ -155,7 +154,7 @@ if (typeof WAY === 'undefined') {
 
   Scene_Battle.prototype.createActorCommandWindow = function () {
     $.alias.Scene_Battle_createActorCommandWindow.call(this);
-    const commandWindow = this._actorCommandWindow;
+    var commandWindow = this._actorCommandWindow;
     commandWindow.setHandler('class', this.commandChangeClass.bind(this));
   };
 

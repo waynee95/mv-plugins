@@ -39,6 +39,14 @@ Discord Name: waynee95#4261
 */
 'use strict';
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 if (typeof WAY === 'undefined') {
   console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
 
@@ -57,20 +65,21 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
-  const {
-    getNotetag,
-    getNotetagList,
-    toArray
-  } = WAY.Util;
-  WAY.EventEmitter.on('load-skill-notetags', obj => {
+(function ($) {
+  var _WAY$Util = WAY.Util,
+      getNotetag = _WAY$Util.getNotetag,
+      getNotetagList = _WAY$Util.getNotetagList,
+      toArray = _WAY$Util.toArray;
+  WAY.EventEmitter.on('load-skill-notetags', function (obj) {
     obj.lockSkill = getNotetag(obj.note, 'Lock Skill', false);
   });
-  WAY.EventEmitter.on('load-class-notetags', obj => {
+  WAY.EventEmitter.on('load-class-notetags', function (obj) {
     obj.lockedSkills = [];
-    getNotetagList(obj.note, 'Lock Skills', data => {
-      const arr = toArray(data);
-      obj.lockedSkills = obj.lockedSkills.concat(...arr);
+    getNotetagList(obj.note, 'Lock Skills', function (data) {
+      var _obj$lockedSkills;
+
+      var arr = toArray(data);
+      obj.lockedSkills = (_obj$lockedSkills = obj.lockedSkills).concat.apply(_obj$lockedSkills, _toConsumableArray(arr));
     });
   }); //==========================================================================
   // Window_SkillList
@@ -79,12 +88,12 @@ if (typeof WAY === 'undefined') {
   $.alias.Window_SkillEquip_isEnabled = Window_SkillEquip.prototype.isEnabled;
 
   Window_SkillEquip.prototype.isEnabled = function (item) {
-    const actor = this._actor;
+    var actor = this._actor;
 
     if (item && actor.battleSkills().contains(item)) {
       if (Imported.YEP_X_Subclass) {
-        const subclassId = actor._subclassId;
-        const subclass = subclassId > 0 ? $dataClasses[subclassId] : null;
+        var subclassId = actor._subclassId;
+        var subclass = subclassId > 0 ? $dataClasses[subclassId] : null;
         if (subclass && subclass.lockedSkills.contains(item.id)) return false;
       }
 
@@ -96,12 +105,12 @@ if (typeof WAY === 'undefined') {
   };
 
   Window_SkillList.prototype.isBattleSkillEnabled = function (item) {
-    const actor = this._actor;
+    var actor = this._actor;
 
     if (item) {
       if (Imported.YEP_X_Subclass) {
-        const subclassId = actor._subclassId;
-        const subclass = subclassId > 0 ? $dataClasses[subclassId] : null;
+        var subclassId = actor._subclassId;
+        var subclass = subclassId > 0 ? $dataClasses[subclassId] : null;
         if (subclass && subclass.lockedSkills.contains(item.id)) return false;
       }
 

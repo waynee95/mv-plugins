@@ -81,23 +81,22 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
-  const {
-    getMultiLineNotetag,
-    trim
-  } = WAY.Util;
-  WAY.EventEmitter.on('load-actor-notetags', actor => {
+(function ($) {
+  var _WAY$Util = WAY.Util,
+      getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
+      trim = _WAY$Util.trim;
+  WAY.EventEmitter.on('load-actor-notetags', function (actor) {
     actor.customFaceImageEval = getMultiLineNotetag(actor.note, 'Custom Face Image Eval', null, trim);
   });
 
-  const evalCode = (user, code) => {
+  var evalCode = function evalCode(user, code) {
     /* eslint-disable */
-    const a = user;
-    const s = $gameSwitches._data;
-    const v = $gameVariables._data;
-    const p = $gameParty;
-    let faceName = user._defaultFaceName;
-    let faceIndex = user._defaultFaceIndex;
+    var a = user;
+    var s = $gameSwitches._data;
+    var v = $gameVariables._data;
+    var p = $gameParty;
+    var faceName = user._defaultFaceName;
+    var faceIndex = user._defaultFaceIndex;
 
     try {
       eval(code);
@@ -107,8 +106,8 @@ if (typeof WAY === 'undefined') {
     }
 
     return {
-      faceName,
-      faceIndex
+      faceName: faceName,
+      faceIndex: faceIndex
     };
   }; //==========================================================================
   // Game_Actor
@@ -127,10 +126,11 @@ if (typeof WAY === 'undefined') {
 
   Game_Actor.prototype.refresh = function () {
     $.alias.Game_Actor_refresh.call(this);
-    const {
-      faceName,
-      faceIndex
-    } = evalCode(this, this.actor().customFaceImageEval);
+
+    var _evalCode = evalCode(this, this.actor().customFaceImageEval),
+        faceName = _evalCode.faceName,
+        faceIndex = _evalCode.faceIndex;
+
     this.setFaceImage(faceName, faceIndex); // make the TurnOrderDisplay notice the image change
 
     if (Imported.YEP_X_TurnOrderDisplay && $gameParty.inBattle()) {

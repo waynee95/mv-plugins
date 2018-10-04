@@ -31,12 +31,48 @@ Discord Name: waynee95#4261
 */
 'use strict';
 
-const Imported = window.Imported || {}; //============================================================================
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var Imported = window.Imported || {}; //============================================================================
 // WAYModuleLoader
 //============================================================================
 
-const WAYModuleLoader = function () {
-  const plugins = {};
+var WAYModuleLoader = function () {
+  var plugins = {};
 
   function parseParameters(params) {
     if (WAY === undefined) {
@@ -46,28 +82,30 @@ const WAYModuleLoader = function () {
     return WAY.Util.parseParameters(params);
   }
 
-  function compareVersions(currentVersion, operator = '==', requiredVersion) {
-    const length = Math.max(currentVersion.length, requiredVersion.length);
-    let compare = 0;
-    const operation = {
-      '<': function () {
+  function compareVersions(currentVersion) {
+    var operator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '==';
+    var requiredVersion = arguments.length > 2 ? arguments[2] : undefined;
+    var length = Math.max(currentVersion.length, requiredVersion.length);
+    var compare = 0;
+    var operation = {
+      '<': function _() {
         return compare < 0;
       },
-      '<=': function () {
+      '<=': function _() {
         return compare <= 0;
       },
-      '==': function () {
+      '==': function _() {
         return compare === 0;
       },
-      '>': function () {
+      '>': function _() {
         return compare > 0;
       },
-      '>=': function () {
+      '>=': function _() {
         return compare >= 0;
       }
     };
 
-    for (let i = 0; i < length; i += 1) {
+    for (var i = 0; i < length; i += 1) {
       if (currentVersion[i] < requiredVersion[i]) {
         compare = -1;
         break;
@@ -81,19 +119,24 @@ const WAYModuleLoader = function () {
   }
 
   return {
-    checkRequirements(key) {
-      let list = '';
-      plugins[key].required.forEach(({
-        name,
-        version
-      }) => {
-        if (!this.isImported(name)) {
-          list += `${name}\n`;
-        } else if (version) {
-          const [requiredVersion, operator] = version.split(' ').reverse();
+    checkRequirements: function checkRequirements(key) {
+      var _this = this;
 
-          if (!this.checkVersion(name, operator, requiredVersion)) {
-            list += `${name} needs to be ${operator} version ${requiredVersion}!\n`;
+      var list = '';
+      plugins[key].required.forEach(function (_ref) {
+        var name = _ref.name,
+            version = _ref.version;
+
+        if (!_this.isImported(name)) {
+          list += "".concat(name, "\n");
+        } else if (version) {
+          var _version$split$revers = version.split(' ').reverse(),
+              _version$split$revers2 = _slicedToArray(_version$split$revers, 2),
+              requiredVersion = _version$split$revers2[0],
+              operator = _version$split$revers2[1];
+
+          if (!_this.checkVersion(name, operator, requiredVersion)) {
+            list += "".concat(name, " needs to be ").concat(operator, " version ").concat(requiredVersion, "!\n");
           }
         }
       });
@@ -102,15 +145,14 @@ const WAYModuleLoader = function () {
         WAYModuleLoader.printError(list, key);
       }
     },
-
-    printError(msg, key) {
-      const strA = `Error loading ${key}\n\n`;
-      const strB = `The following plugins are required:\n${msg}\n`;
-      const strC = `Place the required plugins above ${key}!`;
+    printError: function printError(msg, key) {
+      var strA = "Error loading ".concat(key, "\n\n");
+      var strB = "The following plugins are required:\n".concat(msg, "\n");
+      var strC = "Place the required plugins above ".concat(key, "!");
       console.error(strA + strB + strC); // eslint-disable-line no-console
 
       if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-        const gui = require('nw.gui'); //eslint-disable-line
+        var gui = require('nw.gui'); //eslint-disable-line
 
 
         gui.Window.get().showDevTools();
@@ -118,43 +160,44 @@ const WAYModuleLoader = function () {
 
       SceneManager.stop();
     },
-
-    checkVersion(key, operator, requiredVersion) {
+    checkVersion: function checkVersion(key, operator, requiredVersion) {
       if (this.isImported(key)) {
-        const currentVersion = plugins[key].version;
+        var currentVersion = plugins[key].version;
         return compareVersions(currentVersion, operator, requiredVersion);
       }
 
       return false;
     },
-
-    getModule(key) {
+    getModule: function getModule(key) {
       if (this.isImported(key)) {
         return plugins[key];
       }
 
       return false;
     },
-
-    getPluginParameters(key) {
-      return window.$plugins.filter(p => p.description.indexOf(`<${key}>`) > -1)[0].parameters;
+    getPluginParameters: function getPluginParameters(key) {
+      return window.$plugins.filter(function (p) {
+        return p.description.indexOf("<".concat(key, ">")) > -1;
+      })[0].parameters;
     },
-
-    isImported(key) {
+    isImported: function isImported(key) {
       return typeof plugins[key] !== 'undefined';
     },
+    registerPlugin: function registerPlugin(key, version, author) {
+      for (var _len = arguments.length, required = new Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
+        required[_key - 3] = arguments[_key];
+      }
 
-    registerPlugin(key, version, author, ...required) {
       if (this.isImported(key)) {
         return false;
       }
 
       plugins[key] = {
         alias: {},
-        author,
+        author: author,
         parameters: parseParameters(this.getPluginParameters(key)),
-        required,
-        version
+        required: required,
+        version: version
       };
       Imported[key] = version;
 
@@ -164,36 +207,35 @@ const WAYModuleLoader = function () {
 
       return true;
     }
-
   };
 }();
 
 WAYModuleLoader.registerPlugin('WAY_Core', '2.0.0', 'waynee95');
-const WAYCore = window.WAYCore || {};
-const WAY = WAYCore;
+var WAYCore = window.WAYCore || {};
+var WAY = WAYCore;
 
-($ => {
+(function ($) {
   //==========================================================================
   // WAY.Util
   //==========================================================================
   WAY.Util = {
-    difference(a, b) {
-      return a.filter(element => b.indexOf(element) === -1);
+    difference: function difference(a, b) {
+      return a.filter(function (element) {
+        return b.indexOf(element) === -1;
+      });
     },
+    fillArray: function fillArray(item, length) {
+      var arr = [];
 
-    fillArray(item, length) {
-      const arr = [];
-
-      for (let i = 0; i < length; i++) {
+      for (var i = 0; i < length; i++) {
         arr[i] = item;
       }
 
       return arr;
     },
-
-    filterText(text, re, action) {
-      const result = [];
-      let match = null;
+    filterText: function filterText(text, re, action) {
+      var result = [];
+      var match = null;
 
       while (match = re.exec(text)) {
         if (action(match)) {
@@ -203,74 +245,87 @@ const WAY = WAYCore;
 
       return result;
     },
-
-    floorRand(max) {
+    floorRand: function floorRand(max) {
       return Math.floor(Math.random() * max);
     },
-
-    getEventComments(eventId) {
-      const event = $dataMap.events[eventId];
-      const {
-        pages
-      } = event;
-      let allComments = '';
-      pages.forEach(page => {
-        let comments = '';
-        page.list.forEach(command => {
+    getEventComments: function getEventComments(eventId) {
+      var event = $dataMap.events[eventId];
+      var pages = event.pages;
+      var allComments = '';
+      pages.forEach(function (page) {
+        var comments = '';
+        page.list.forEach(function (command) {
           if (command.code === 108 || command.code === 408) {
-            comments += `${command.parameters[0]}\n`;
+            comments += "".concat(command.parameters[0], "\n");
           }
         });
         allComments += comments;
       });
       return allComments;
     },
+    getMultiLineNotetag: function getMultiLineNotetag(text, tag, defaultValue) {
+      var _this2 = this;
 
-    getMultiLineNotetag(text, tag, defaultValue, func = () => true) {
-      const result = [];
-      const re = new RegExp(`<(${tag})>([\\s\\S]*?)<(\\/${tag})>`, 'gi');
-      const matches = WAY.Util.filterText(text, re, match => match[1].toLowerCase() === tag.toLowerCase());
-      matches.forEach(group => result.push(func.call(this, group[2])));
+      var func = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {
+        return true;
+      };
+      var result = [];
+      var re = new RegExp("<(".concat(tag, ")>([\\s\\S]*?)<(\\/").concat(tag, ")>"), 'gi');
+      var matches = WAY.Util.filterText(text, re, function (match) {
+        return match[1].toLowerCase() === tag.toLowerCase();
+      });
+      matches.forEach(function (group) {
+        return result.push(func.call(_this2, group[2]));
+      });
       return result.length > 0 ? result[0] : defaultValue;
     },
+    getNotetag: function getNotetag(text, tag, defaultValue) {
+      var _this3 = this;
 
-    getNotetag(text, tag, defaultValue, func = () => true) {
-      const result = [];
-      const re = /<([^<>:]+)(:?)([^>]*)>/g;
-      const matches = WAY.Util.filterText(text, re, match => match[1].toLowerCase() === tag.toLowerCase());
-      matches.forEach(group => result.push(func.call(this, group[3])));
+      var func = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {
+        return true;
+      };
+      var result = [];
+      var re = /<([^<>:]+)(:?)([^>]*)>/g;
+      var matches = WAY.Util.filterText(text, re, function (match) {
+        return match[1].toLowerCase() === tag.toLowerCase();
+      });
+      matches.forEach(function (group) {
+        return result.push(func.call(_this3, group[3]));
+      });
       return result.length > 0 ? result[0] : defaultValue;
     },
+    getNotetagList: function getNotetagList(text, tag, func) {
+      var _this4 = this;
 
-    getNotetagList(text, tag, func) {
-      const result = [];
-      const re = /<([^<>:]+)(:?)([^>]*)>/g;
-      const matches = WAY.Util.filterText(text, re, match => match[1].toLowerCase() === tag.toLowerCase());
-      matches.forEach(group => result.push(func.call(this, group[3])));
+      var result = [];
+      var re = /<([^<>:]+)(:?)([^>]*)>/g;
+      var matches = WAY.Util.filterText(text, re, function (match) {
+        return match[1].toLowerCase() === tag.toLowerCase();
+      });
+      matches.forEach(function (group) {
+        return result.push(func.call(_this4, group[3]));
+      });
       return result;
     },
-
-    intersect(a, b) {
-      return a.filter(element => b.indexOf(element) > -1);
+    intersect: function intersect(a, b) {
+      return a.filter(function (element) {
+        return b.indexOf(element) > -1;
+      });
     },
-
-    isArray(obj) {
+    isArray: function isArray(obj) {
       return obj && Array.isArray(obj);
     },
-
-    isBool(value) {
+    isBool: function isBool(value) {
       return value === true || value === false || /^(:?true|false)$/i.test(value);
     },
-
-    isFloat(value) {
+    isFloat: function isFloat(value) {
       return Number(value) === value && value % 1 !== 0;
     },
-
-    isInt(value) {
+    isInt: function isInt(value) {
       return Number(value) === value && Math.floor(value) === value;
     },
-
-    isJsonString(string) {
+    isJsonString: function isJsonString(string) {
       try {
         JsonEx.parse(string);
       } catch (e) {
@@ -279,31 +334,28 @@ const WAY = WAYCore;
 
       return true;
     },
-
-    isNumber(value) {
+    isNumber: function isNumber(value) {
       return WAY.Util.isInt(value) || WAY.Util.isFloat(value);
     },
-
-    isObj(obj) {
-      return obj && typeof obj === 'object';
+    isObj: function isObj(obj) {
+      return obj && _typeof(obj) === 'object';
     },
-
-    isPlaytest() {
+    isPlaytest: function isPlaytest() {
       return Utils.isOptionValid('test');
     },
-
-    isScene(scene) {
+    isScene: function isScene(scene) {
       return SceneManager._scene instanceof scene;
     },
-
-    log(...string) {
+    log: function log() {
       if (WAY.Util.isPlaytest()) {
-        console.log(...string); // eslint-disable-line no-console
+        var _console;
+
+        (_console = console).log.apply(_console, arguments); // eslint-disable-line no-console
+
       }
     },
-
-    parseParameters(params) {
-      let obj;
+    parseParameters: function parseParameters(params) {
+      var obj;
 
       try {
         obj = JsonEx.parse(WAY.Util.isObj(params) ? JsonEx.stringify(params) : params);
@@ -312,7 +364,7 @@ const WAY = WAYCore;
       }
 
       if (WAY.Util.isObj(obj)) {
-        Object.keys(obj).forEach(key => {
+        Object.keys(obj).forEach(function (key) {
           obj[key] = WAY.Util.parseParameters(obj[key]); // If the parameter has no value, meaning it's an empty string,
           // just set it to null
 
@@ -324,27 +376,28 @@ const WAY = WAYCore;
 
       return obj;
     },
-
-    tryEval(text) {
+    tryEval: function tryEval(text) {
       try {
         return eval(text); // eslint-disable-line
       } catch (err) {
         return null;
       }
     },
-
-    toArray(str) {
+    toArray: function toArray(str) {
       if (str.contains('to')) {
-        let [from, to] = str.split('to');
+        var _str$split = str.split('to'),
+            _str$split2 = _slicedToArray(_str$split, 2),
+            from = _str$split2[0],
+            to = _str$split2[1];
+
         to = parseInt(to, 10);
         from = parseInt(from, 10);
         return WAY.Util.arrayFromRange(from, to);
       }
 
-      return JSON.parse(`[${str}]`);
+      return JSON.parse("[".concat(str, "]"));
     },
-
-    toBool(string) {
+    toBool: function toBool(string) {
       if (/^true$/i.test(string)) {
         return true;
       } else if (/^false$/i.test(string)) {
@@ -353,42 +406,37 @@ const WAY = WAYCore;
 
       return null;
     },
-
-    toInt(value) {
-      const num = parseInt(value, 10);
+    toInt: function toInt(value) {
+      var num = parseInt(value, 10);
       return num - num % 1;
     },
-
-    toObj(string) {
+    toObj: function toObj(string) {
       if (WAY.Util.isJsonString(string)) {
         return JsonEx.parse(string);
       }
 
-      const createObjProperty = pair => {
-        const [key, value] = pair.split(':').map(WAY.Util.trim);
+      var createObjProperty = function createObjProperty(pair) {
+        var _pair$split$map = pair.split(':').map(WAY.Util.trim),
+            _pair$split$map2 = _slicedToArray(_pair$split$map, 2),
+            key = _pair$split$map2[0],
+            value = _pair$split$map2[1];
 
         if (WAY.Util.isNumber(parseInt(value, 10))) {
-          return {
-            [key]: Number(value, 10)
-          };
+          return _defineProperty({}, key, Number(value, 10));
         } else if (WAY.Util.isBool(value)) {
-          return {
-            [key]: WAY.Util.toBool(value)
-          };
+          return _defineProperty({}, key, WAY.Util.toBool(value));
         }
 
-        return {
-          [key]: value
-        };
+        return _defineProperty({}, key, value);
       };
 
-      return Object.assign({}, ...string.replace(/,/g, '\n').split(/[\r\n]+/).filter(key => key !== '').map(createObjProperty));
+      return Object.assign.apply(Object, [{}].concat(_toConsumableArray(string.replace(/,/g, '\n').split(/[\r\n]+/).filter(function (key) {
+        return key !== '';
+      }).map(createObjProperty))));
     },
-
-    trim(string) {
+    trim: function trim(string) {
       return string.trim();
     }
-
   }; //==========================================================================
   // WAY.EventEmitter
   //==========================================================================
@@ -398,29 +446,47 @@ const WAY = WAYCore;
   //==========================================================================
 
   WAY.Window = {
-    TitleWindow: class TitleWindow extends Window_Base {
-      constructor(x = 0, y = 0, width = Graphics.boxWidth, height = 72) {
-        super(x, y, width, height);
-        this._title = '';
-        return this;
+    TitleWindow:
+    /*#__PURE__*/
+    function (_Window_Base) {
+      _inherits(TitleWindow, _Window_Base);
+
+      function TitleWindow() {
+        var _this5;
+
+        var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+        var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+        var width = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : Graphics.boxWidth;
+        var height = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 72;
+
+        _classCallCheck(this, TitleWindow);
+
+        _this5 = _possibleConstructorReturn(this, _getPrototypeOf(TitleWindow).call(this, x, y, width, height));
+        _this5._title = '';
+        return _possibleConstructorReturn(_this5, _assertThisInitialized(_assertThisInitialized(_this5)));
       }
 
-      setTitle(title) {
-        this._title = title;
-        this.refresh();
-        return this;
-      }
+      _createClass(TitleWindow, [{
+        key: "setTitle",
+        value: function setTitle(title) {
+          this._title = title;
+          this.refresh();
+          return this;
+        }
+      }, {
+        key: "refresh",
+        value: function refresh() {
+          this.contents.clear();
+          var text = this._title;
+          var dw = this.contents.width + this.textPadding();
+          var tw = this.textWidthEx(text);
+          var dx = Math.floor(Math.max(0, dw - tw) / 2);
+          this.drawTextEx(text, this.textPadding() + dx, 0);
+        }
+      }]);
 
-      refresh() {
-        this.contents.clear();
-        const text = this._title;
-        const dw = this.contents.width + this.textPadding();
-        const tw = this.textWidthEx(text);
-        const dx = Math.floor(Math.max(0, dw - tw) / 2);
-        this.drawTextEx(text, this.textPadding() + dx, 0);
-      }
-
-    } //==========================================================================
+      return TitleWindow;
+    }(Window_Base) //==========================================================================
     // Game_Interpreter
     //==========================================================================
 
@@ -432,8 +498,10 @@ const WAY = WAYCore;
       return false;
     }
 
-    const list = [$dataActors, $dataClasses, $dataSkills, $dataItems, $dataWeapons, $dataArmors, $dataEnemies, $dataStates];
-    list.forEach((objects, index) => loadNotetags(objects, index));
+    var list = [$dataActors, $dataClasses, $dataSkills, $dataItems, $dataWeapons, $dataArmors, $dataEnemies, $dataStates];
+    list.forEach(function (objects, index) {
+      return loadNotetags(objects, index);
+    });
     return true;
   };
 
@@ -448,10 +516,10 @@ const WAY = WAYCore;
   };
 
   function loadNotetags(objects, index) {
-    const strings = ['actor', 'class', 'skill', 'item', 'weapon', 'armor', 'enemy', 'state'];
-    objects.forEach(data => {
+    var strings = ['actor', 'class', 'skill', 'item', 'weapon', 'armor', 'enemy', 'state'];
+    objects.forEach(function (data) {
       if (data) {
-        WAY.EventEmitter.emit(`load-${strings[index]}-notetags`, data);
+        WAY.EventEmitter.emit("load-".concat(strings[index], "-notetags"), data);
       }
     });
   }
@@ -484,10 +552,10 @@ const WAY = WAYCore;
   $.alias.Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
 
   Game_Interpreter.prototype.pluginCommand = function (command, args) {
-    const actions = PluginManager.getCommand(command);
+    var actions = PluginManager.getCommand(command);
 
     if (actions) {
-      const action = actions[args[0]];
+      var action = actions[args[0]];
 
       if (typeof action === 'function') {
         action.apply(this, args.slice(1));

@@ -59,13 +59,12 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
-  const {
-    getMultiLineNotetag,
-    trim
-  } = WAY.Util;
+(function ($) {
+  var _WAY$Util = WAY.Util,
+      getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
+      trim = _WAY$Util.trim;
 
-  const parseNotetags = obj => {
+  var parseNotetags = function parseNotetags(obj) {
     obj.customOnDeathEval = getMultiLineNotetag(obj.note, 'Custom On Death Eval', null, trim);
   };
 
@@ -76,17 +75,21 @@ if (typeof WAY === 'undefined') {
   WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
   WAY.EventEmitter.on('load-state-notetags', parseNotetags);
 
-  const byCustomDeathEval = obj => obj ? obj.customOnDeathEval : '';
+  var byCustomDeathEval = function byCustomDeathEval(obj) {
+    return obj ? obj.customOnDeathEval : '';
+  };
 
-  const toCustomDeathEvalCode = (acc, obj) => `${acc}\n${obj.customOnDeathEval || ''}`;
+  var toCustomDeathEvalCode = function toCustomDeathEvalCode(acc, obj) {
+    return "".concat(acc, "\n").concat(obj.customOnDeathEval || '');
+  };
 
-  const evalCustomOnDeathEval = function (code, user, killer) {
+  var evalCustomOnDeathEval = function evalCustomOnDeathEval(code, user, killer) {
     /* eslint-disable */
-    const a = user;
-    const b = killer;
-    const s = $gameSwitches;
-    const v = $gameVariables;
-    const p = $gameParty;
+    var a = user;
+    var b = killer;
+    var s = $gameSwitches;
+    var v = $gameVariables;
+    var p = $gameParty;
 
     try {
       eval(code);
@@ -107,10 +110,10 @@ if (typeof WAY === 'undefined') {
 
 
   Game_Actor.prototype.customOnDeathEval = function () {
-    let code = Game_Battler.prototype.customOnDeathEval.call(this);
+    var code = Game_Battler.prototype.customOnDeathEval.call(this);
     code += this.equips().filter(byCustomDeathEval).reduce(toCustomDeathEvalCode, '');
-    code += `\n${this.currentClass().customOnDeathEval}` || '';
-    code += `\n${this.actor().customOnDeathEval}` || '';
+    code += "\n".concat(this.currentClass().customOnDeathEval) || '';
+    code += "\n".concat(this.actor().customOnDeathEval) || '';
     return code;
   }; //==========================================================================
   // Game_Enemy
@@ -118,8 +121,8 @@ if (typeof WAY === 'undefined') {
 
 
   Game_Enemy.prototype.customOnDeathEval = function () {
-    let code = Game_Battler.prototype.customOnDeathEval.call(this);
-    code += `\n${this.enemy().customOnDeathEval}` || '';
+    var code = Game_Battler.prototype.customOnDeathEval.call(this);
+    code += "\n".concat(this.enemy().customOnDeathEval) || '';
     return code;
   }; //==========================================================================
   // Game_Action

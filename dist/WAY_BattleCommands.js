@@ -40,4 +40,4 @@ if (typeof WAY === 'undefined') {
   WAYModuleLoader.registerPlugin('WAY_BattleCommands', '0.0.0', 'waynee95');
 }
 
-($ => {})(WAYModuleLoader.getModule('WAY_BattleCommands'));
+(function ($) {})(WAYModuleLoader.getModule('WAY_BattleCommands'));

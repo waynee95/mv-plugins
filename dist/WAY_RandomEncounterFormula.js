@@ -50,9 +50,9 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
+(function ($) {
   Game_Player.prototype.makeEncounterCount = function () {
-    const n = $gameMap.encounterStep(); // eslint-disable-line no-unused-vars
+    var n = $gameMap.encounterStep(); // eslint-disable-line no-unused-vars
 
     this._encounterCount = eval($.parameters.encounterFormula); // eslint-disable-line no-eval
   };

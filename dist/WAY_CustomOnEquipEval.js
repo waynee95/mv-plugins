@@ -73,15 +73,14 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
-  const {
-    getMultiLineNotetag,
-    trim
-  } = WAY.Util;
-  const CUSTOM_ON_EQUIP_EVAL = 'customOnEquipEval';
-  const CUSTOM_ON_REMOVE_EQUIP_EVAL = 'customOnRemoveEquipEval';
+(function ($) {
+  var _WAY$Util = WAY.Util,
+      getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
+      trim = _WAY$Util.trim;
+  var CUSTOM_ON_EQUIP_EVAL = 'customOnEquipEval';
+  var CUSTOM_ON_REMOVE_EQUIP_EVAL = 'customOnRemoveEquipEval';
 
-  const parseNotetags = obj => {
+  var parseNotetags = function parseNotetags(obj) {
     obj.customOnEquipEval = getMultiLineNotetag(obj.note, 'Custom On Equip Eval', null, trim);
     obj.customOnRemoveEquipEval = getMultiLineNotetag(obj.note, 'Custom On Remove Equip Eval', null, trim);
   };
@@ -89,14 +88,14 @@ if (typeof WAY === 'undefined') {
   WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
   WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
 
-  const evalCode = (user, item, type) => {
+  var evalCode = function evalCode(user, item, type) {
     if (item && item[type]) {
       /* eslint-disable */
-      const a = user;
-      const s = $gameSwitches._data;
-      const v = $gameVariables._data;
-      const p = $gameParty;
-      const code = item[type];
+      var a = user;
+      var s = $gameSwitches._data;
+      var v = $gameVariables._data;
+      var p = $gameParty;
+      var code = item[type];
 
       try {
         return eval(code);
@@ -114,13 +113,20 @@ if (typeof WAY === 'undefined') {
 
   $.alias.Game_Actor_changeEquip = Game_Actor.prototype.changeEquip;
 
-  Game_Actor.prototype.changeEquip = function (...args) {
-    const equips = this.equips();
+  Game_Actor.prototype.changeEquip = function () {
+    var _this = this;
+
+    var equips = this.equips();
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
     $.alias.Game_Actor_changeEquip.apply(this, args);
-    this.equips().forEach((item, slotId) => {
+    this.equips().forEach(function (item, slotId) {
       if (item !== equips[slotId]) {
-        evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
-        evalCode(this, equips[slotId], CUSTOM_ON_REMOVE_EQUIP_EVAL);
+        evalCode(_this, item, CUSTOM_ON_EQUIP_EVAL);
+        evalCode(_this, equips[slotId], CUSTOM_ON_REMOVE_EQUIP_EVAL);
       }
     });
   };
@@ -128,19 +134,31 @@ if (typeof WAY === 'undefined') {
   if (!Imported.YEP_EquipCore) {
     $.alias.Game_Actor_initEquips = Game_Actor.prototype.initEquips;
 
-    Game_Actor.prototype.initEquips = function (...args) {
+    Game_Actor.prototype.initEquips = function () {
+      var _this2 = this;
+
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
       $.alias.Game_Actor_initEquips.call(this, args);
-      this.equips().forEach(item => {
-        evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
+      this.equips().forEach(function (item) {
+        evalCode(_this2, item, CUSTOM_ON_EQUIP_EVAL);
       });
     };
   } else {
     $.alias.Game_Actor_equipInitEquips = Game_Actor.prototype.equipInitEquips;
 
-    Game_Actor.prototype.equipInitEquips = function (...args) {
+    Game_Actor.prototype.equipInitEquips = function () {
+      var _this3 = this;
+
+      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        args[_key3] = arguments[_key3];
+      }
+
       $.alias.Game_Actor_equipInitEquips.call(this, args);
-      this.equips().forEach(item => {
-        evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
+      this.equips().forEach(function (item) {
+        evalCode(_this3, item, CUSTOM_ON_EQUIP_EVAL);
       });
     };
   }

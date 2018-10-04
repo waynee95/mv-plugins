@@ -60,13 +60,12 @@ if (typeof WAY === 'undefined') {
   WAYModuleLoader.registerPlugin('WAY_YEP_ShopMenuCore', '1.1.1', 'waynee95');
 }
 
-($ => {
-  const {
-    getMultiLineNotetag,
-    trim
-  } = WAY.Util;
+(function ($) {
+  var _WAY$Util = WAY.Util,
+      getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
+      trim = _WAY$Util.trim;
 
-  const parseNotetags = obj => {
+  var parseNotetags = function parseNotetags(obj) {
     obj.customBuyShowEval = getMultiLineNotetag(obj.note, 'Custom Buy Show Eval', null, trim);
     obj.customBuyEnableEval = getMultiLineNotetag(obj.note, 'Custom Buy Enable Eval', null, trim);
   };
@@ -75,17 +74,17 @@ if (typeof WAY === 'undefined') {
   WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
   WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
 
-  const meetsCustomBuyShowEval = item => {
+  var meetsCustomBuyShowEval = function meetsCustomBuyShowEval(item) {
     if (!item || item.customBuyShowEval === null) {
       return true;
     }
 
-    const visible = true;
+    var visible = true;
     /* eslint-disable */
 
-    const s = $gameSwitches._data;
-    const v = $gameVariables._data;
-    const p = $gameParty;
+    var s = $gameSwitches._data;
+    var v = $gameVariables._data;
+    var p = $gameParty;
 
     try {
       eval(item.customBuyShowEval);
@@ -97,17 +96,17 @@ if (typeof WAY === 'undefined') {
     return visible;
   };
 
-  const meetsCustomBuyEnableEval = item => {
+  var meetsCustomBuyEnableEval = function meetsCustomBuyEnableEval(item) {
     if (!item || item.customBuyEnableEval === null) {
       return true;
     }
     /* eslint-disable */
 
 
-    const enable = true;
-    const s = $gameSwitches._data;
-    const v = $gameVariables._data;
-    const p = $gameParty;
+    var enable = true;
+    var s = $gameSwitches._data;
+    var v = $gameVariables._data;
+    var p = $gameParty;
 
     try {
       eval(item.customBuyEnableEval);
@@ -123,13 +122,15 @@ if (typeof WAY === 'undefined') {
 
   Window_ShopBuy.prototype.makeItemList = function () {
     $.alias.Window_ShopBuy_makeItemList.call(this);
-    this._data = this._data.filter(item => meetsCustomBuyShowEval(item));
+    this._data = this._data.filter(function (item) {
+      return meetsCustomBuyShowEval(item);
+    });
   };
 
   $.alias.Window_ShopBuy_isEnabled = Window_ShopBuy.prototype.isEnabled;
 
   Window_ShopBuy.prototype.isEnabled = function (item) {
-    const condition = $.alias.Window_ShopBuy_isEnabled.call(this, item);
+    var condition = $.alias.Window_ShopBuy_isEnabled.call(this, item);
     return condition && meetsCustomBuyEnableEval(item);
   };
 

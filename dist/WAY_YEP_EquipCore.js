@@ -81,13 +81,12 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
-  const {
-    getNotetag,
-    toArray
-  } = WAY.Util;
+(function ($) {
+  var _WAY$Util = WAY.Util,
+      getNotetag = _WAY$Util.getNotetag,
+      toArray = _WAY$Util.toArray;
 
-  const parseNotetags = obj => {
+  var parseNotetags = function parseNotetags(obj) {
     obj.restrictSlots = getNotetag(obj.note, 'Restrict Slots', null, toArray);
   };
 
@@ -98,11 +97,17 @@ if (typeof WAY === 'undefined') {
 
   $.alias.Game_Actor_setup = Game_Actor.prototype.setup;
 
-  Game_Actor.prototype.setup = function (...args) {
+  Game_Actor.prototype.setup = function () {
+    var _this = this;
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
     $.alias.Game_Actor_setup.call(this, args);
     this._sealedEquipSlots = [];
-    this.equipSlots().forEach(slot => {
-      this._sealedEquipSlots[slot] = false;
+    this.equipSlots().forEach(function (slot) {
+      _this._sealedEquipSlots[slot] = false;
     });
   };
 

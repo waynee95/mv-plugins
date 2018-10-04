@@ -66,7 +66,7 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
+(function ($) {
   //==========================================================================
   // Spriteset_Base
   //==========================================================================
@@ -115,7 +115,7 @@ if (typeof WAY === 'undefined') {
 
   Game_Screen.prototype.updateShakeY = function () {
     if (this._shakeDurationY > 0 || this._shakeY !== 0) {
-      const delta = this._shakePowerY * this._shakeSpeedY * this._shakeDirectionY / 10;
+      var delta = this._shakePowerY * this._shakeSpeedY * this._shakeDirectionY / 10;
 
       if (this._shakeDurationY <= 1 && this._shakeY * (this._shakeY + delta) < 0) {
         this._shakeY = 0;
@@ -145,9 +145,11 @@ if (typeof WAY === 'undefined') {
 
 
   PluginManager.addCommand('VerticalScreenShake', {
-    start(power = 5, speed = 5, duration = 60) {
+    start: function start() {
+      var power = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 5;
+      var speed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5;
+      var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 60;
       $gameScreen.startShakeY(power, speed, duration);
     }
-
   });
 })(WAYModuleLoader.getModule('WAY_VerticalScreenShake'));

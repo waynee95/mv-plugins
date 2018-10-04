@@ -219,6 +219,8 @@ Ko-fi: https://ko-fi.com/waynee
 */
 'use strict';
 
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 if (typeof WAY === 'undefined') {
   console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
 
@@ -240,12 +242,11 @@ if (typeof WAY === 'undefined') {
 
 window.$gameStorageSystems = null;
 
-($ => {
-  const {
-    getNotetag,
-    toArray
-  } = WAY.Util;
-  const $dataStorage = $.parameters.config;
+(function ($) {
+  var _WAY$Util = WAY.Util,
+      getNotetag = _WAY$Util.getNotetag,
+      toArray = _WAY$Util.toArray;
+  var $dataStorage = $.parameters.config;
 
   if ($dataStorage === null) {
     console.warn('WAY_StorageSystem\nPlugin Parameters are not setup properly!');
@@ -270,26 +271,22 @@ window.$gameStorageSystems = null;
 
 
   PluginManager.addCommand('StorageSystem', {
-    open(storageId = $gameStorageSystems._lastActive) {
+    open: function open() {
+      var storageId = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : $gameStorageSystems._lastActive;
       $gameStorageSystems.open(storageId);
     },
-
-    add(storageId, item, amount) {
+    add: function add(storageId, item, amount) {
       $gameStorageSystems.storage(storageId).addItem(eval(item), parseInt(amount));
     },
-
-    remove(storageId, item, amount) {
+    remove: function remove(storageId, item, amount) {
       $gameStorageSystems.storage(storageId).removeItem(eval(item), parseInt(amount));
     },
-
-    clear(storageId) {
+    clear: function clear(storageId) {
       $gameStorageSystems.storage(storageId).clear();
     },
-
-    change(storageId, maxCapacity) {
+    change: function change(storageId, maxCapacity) {
       $gameStorageSystems.storage(storageId).changeMaxCapacity(maxCapacity);
     }
-
   }); //==========================================================================
   // DataManager
   //==========================================================================
@@ -351,7 +348,7 @@ window.$gameStorageSystems = null;
   };
 
   Game_StorageSystems.prototype.storage = function (storageId) {
-    if (typeof $dataStorage[storageId] !== 'object') {
+    if (_typeof($dataStorage[storageId]) !== 'object') {
       return;
     }
 

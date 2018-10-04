@@ -58,17 +58,17 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
-  const evalText = text => {
-    const scene = SceneManager._scene;
-    let a = $gameParty.leader();
-    let item = scene instanceof Scene_ItemBase && scene._itemWindow ? scene._itemWindow.item() : a;
+(function ($) {
+  var evalText = function evalText(text) {
+    var scene = SceneManager._scene;
+    var a = $gameParty.leader();
+    var item = scene instanceof Scene_ItemBase && scene._itemWindow ? scene._itemWindow.item() : a;
     /* eslint-disable */
 
-    let skill = item;
-    const s = $gameSwitches;
-    const v = $gameVariables;
-    const p = $gameParty;
+    var skill = item;
+    var s = $gameSwitches;
+    var v = $gameVariables;
+    var p = $gameParty;
     /* eslint-enable */
 
     if (scene instanceof Scene_MenuBase) {
@@ -79,7 +79,7 @@ if (typeof WAY === 'undefined') {
       skill = scene && scene._skillWindow ? scene._skillWindow.item() : a;
     }
 
-    return text.replace(/\${[^{}\\]+(?=\})}/g, code => {
+    return text.replace(/\${[^{}\\]+(?=\})}/g, function (code) {
       try {
         return eval(code.substring(2, code.length - 1)); // eslint-disable-line no-eval
       } catch (e) {

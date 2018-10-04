@@ -60,13 +60,12 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
-  const {
-    getMultiLineNotetag,
-    trim
-  } = WAY.Util;
+(function ($) {
+  var _WAY$Util = WAY.Util,
+      getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
+      trim = _WAY$Util.trim;
 
-  const parseNotetags = obj => {
+  var parseNotetags = function parseNotetags(obj) {
     obj.customOnDiscardEval = getMultiLineNotetag(obj.note, 'Custom On Discard Eval', null, trim);
     console.log(obj.customOnDiscardEval);
   };
@@ -78,7 +77,7 @@ if (typeof WAY === 'undefined') {
 
   Scene_Item.prototype.performDiscardItem = function (item, quantity) {
     if ($gameParty.numItems(item) > 0 && item.customOnDiscardEval) {
-      for (let i = 0; i < quantity; i++) {
+      for (var i = 0; i < quantity; i++) {
         eval(item.customOnDiscardEval); // eslint-disable-line no-eval
       }
     }

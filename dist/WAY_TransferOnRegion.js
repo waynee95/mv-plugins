@@ -63,6 +63,14 @@ Discord Name: waynee95#4261
 */
 'use strict';
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 if (typeof WAY === 'undefined') {
   console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
 
@@ -81,22 +89,31 @@ if (typeof WAY === 'undefined') {
   });
 }
 
-($ => {
-  const {
-    getNotetagList,
-    toInt
-  } = WAY.Util;
-  WAY.EventEmitter.on('load-map-notetags', map => {
+(function ($) {
+  var _WAY$Util = WAY.Util,
+      getNotetagList = _WAY$Util.getNotetagList,
+      toInt = _WAY$Util.toInt;
+  WAY.EventEmitter.on('load-map-notetags', function (map) {
     map._transferData = {};
-    getNotetagList(map.note, 'Region Transfer', data => {
-      const [regionId, mapId, targetX, targetY, direction = 0, fadeType = 0] = data.split(',').map(toInt);
-      const transferDataObject = {
-        regionId,
-        mapId,
-        targetX,
-        targetY,
-        direction,
-        fadeType
+    getNotetagList(map.note, 'Region Transfer', function (data) {
+      var _data$split$map = data.split(',').map(toInt),
+          _data$split$map2 = _slicedToArray(_data$split$map, 6),
+          regionId = _data$split$map2[0],
+          mapId = _data$split$map2[1],
+          targetX = _data$split$map2[2],
+          targetY = _data$split$map2[3],
+          _data$split$map2$ = _data$split$map2[4],
+          direction = _data$split$map2$ === void 0 ? 0 : _data$split$map2$,
+          _data$split$map2$2 = _data$split$map2[5],
+          fadeType = _data$split$map2$2 === void 0 ? 0 : _data$split$map2$2;
+
+      var transferDataObject = {
+        regionId: regionId,
+        mapId: mapId,
+        targetX: targetX,
+        targetY: targetY,
+        direction: direction,
+        fadeType: fadeType
       };
       map._transferData[regionId] = transferDataObject;
     });
@@ -108,16 +125,14 @@ if (typeof WAY === 'undefined') {
 
   Game_Player.prototype.moveStraight = function (d) {
     $.alias.Game_Player_moveStraight.call(this, d);
-    const transferDataObject = $dataMap ? $dataMap._transferData[this.regionId()] : null;
+    var transferDataObject = $dataMap ? $dataMap._transferData[this.regionId()] : null;
 
     if (transferDataObject) {
-      const {
-        mapId,
-        targetX,
-        targetY,
-        direction,
-        fadeType
-      } = transferDataObject;
+      var mapId = transferDataObject.mapId,
+          targetX = transferDataObject.targetX,
+          targetY = transferDataObject.targetY,
+          direction = transferDataObject.direction,
+          fadeType = transferDataObject.fadeType;
       $gamePlayer.reserveTransfer(mapId, targetX, targetY, direction, fadeType);
     }
   };
