@@ -90,12 +90,12 @@ if (typeof WAY === 'undefined') {
   const evalFormula = (user, formula) => {
     const maxTp = 0
     /* eslint-disable */
-    const a = user;
-    const s = $gameSwitches;
-    const v = $gameVariables;
-    const p = $gameParty;
+    const a = user
+    const s = $gameSwitches
+    const v = $gameVariables
+    const p = $gameParty
     try {
-      eval(formula);
+      eval(formula)
       /* eslint-enable */
     } catch (e) {
       throw e

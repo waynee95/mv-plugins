@@ -89,13 +89,13 @@ if (typeof WAY === 'undefined') {
   const evalCode = (user, item, type) => {
     if (item && item[type]) {
       /* eslint-disable */
-      const a = user;
-      const s = $gameSwitches._data;
-      const v = $gameVariables._data;
-      const p = $gameParty;
-      const code = item[type];
+      const a = user
+      const s = $gameSwitches._data
+      const v = $gameVariables._data
+      const p = $gameParty
+      const code = item[type]
       try {
-        return eval(code);
+        return eval(code)
         /* eslint-enable */
       } catch (e) {
         throw e

@@ -90,12 +90,12 @@ if (typeof WAY === 'undefined') {
 
   const evalCode = (user, code) => {
     /* eslint-disable */
-    const a = user;
-    const s = $gameSwitches._data;
-    const v = $gameVariables._data;
-    const p = $gameParty;
-    let faceName = user._defaultFaceName;
-    let faceIndex = user._defaultFaceIndex;
+    const a = user
+    const s = $gameSwitches._data
+    const v = $gameVariables._data
+    const p = $gameParty
+    let faceName = user._defaultFaceName
+    let faceIndex = user._defaultFaceIndex
     try {
       eval(code);
       /* eslint-enable */

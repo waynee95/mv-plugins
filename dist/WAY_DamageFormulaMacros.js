@@ -87,7 +87,7 @@ if (typeof WAY === 'undefined') {
   WAY.EventEmitter.on('load-item-notetags', replaceMacros);
   WAY.EventEmitter.on('load-skill-notetags', replaceMacros);
 })(WAYModuleLoader.getModule('WAY_DamageFormulaMacros'));
-/* ~struct~macro:
+/*~struct~macro:
 @param name
 @text Macro Name
 @desc Name of the macro. Put this name into the damage formula.

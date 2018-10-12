@@ -73,11 +73,11 @@ if (typeof WAY === 'undefined') {
 
   const evalCustomOnDeathEval = function (code, user, killer) {
     /* eslint-disable */
-    const a = user;
-    const b = killer;
-    const s = $gameSwitches;
-    const v = $gameVariables;
-    const p = $gameParty;
+    const a = user
+    const b = killer
+    const s = $gameSwitches
+    const v = $gameVariables
+    const p = $gameParty
     try {
       eval(code);
       /* eslint-enable */

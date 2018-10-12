@@ -1189,7 +1189,7 @@ function Game_StorageSystem() {
   this.initialize.apply(this, arguments);
 } // -----------------------------------------------------------------------------
 
-/* ~struct~storage:
+/*~struct~storage:
 @param background
 @text Menu Background
 @type file
@@ -1279,7 +1279,7 @@ function Game_StorageSystem() {
 @parent Scene Settings
 */
 
-/* ~struct~help:
+/*~struct~help:
 @param x
 @text Help Window X
 @type text
@@ -1301,7 +1301,7 @@ function Game_StorageSystem() {
 @default 108
 */
 
-/* ~struct~title:
+/*~struct~title:
 @param x
 @text Title Window X
 @type text
@@ -1323,7 +1323,7 @@ function Game_StorageSystem() {
 @default 72
 */
 
-/* ~struct~command:
+/*~struct~command:
 @param align
 @text Command Window Align
 @type select
@@ -1370,7 +1370,7 @@ function Game_StorageSystem() {
 @default Remove
 */
 
-/* ~struct~category:
+/*~struct~category:
 @param align
 @text Category Window Align
 @type select
@@ -1407,7 +1407,7 @@ function Game_StorageSystem() {
 @default 4
 */
 
-/* ~struct~item:
+/*~struct~item:
 @param x
 @text Item Window X
 @type text
@@ -1435,7 +1435,7 @@ function Game_StorageSystem() {
 @default 2
 */
 
-/* ~struct~info:
+/*~struct~info:
 @param x
 @text Info Window X
 @type text
@@ -1452,7 +1452,7 @@ function Game_StorageSystem() {
 @default Graphics.boxWidth
 */
 
-/* ~struct~number:
+/*~struct~number:
 @param x
 @text Number Window X
 @type text

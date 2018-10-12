@@ -130,13 +130,13 @@ if (typeof WAY === 'undefined') {
   function customCostTextEval (skill, cost, code, a) {
     const text = ''
     /* eslint-disable */
-    const user = a;
-    const subject = a;
-    const s = $gameSwitches._data;
-    const v = $gameVariables._data;
-    const p = $gameParty;
+    const user = a
+    const subject = a
+    const s = $gameSwitches._data
+    const v = $gameVariables._data
+    const p = $gameParty
     try {
-      eval(code);
+      eval(code)
       /* eslint-enable */
     } catch (e) {
       throw e

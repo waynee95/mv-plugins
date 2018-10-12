@@ -99,12 +99,12 @@ if (typeof WAY === 'undefined') {
     const { customNameEval } = item
     if (!customNameEval || customNameEval === '') return item.name
     /* eslint-disable */
-    let name = '';
-    const s = $gameSwitches;
-    const v = $gameVariables;
-    const p = $gameParty;
+    let name = ''
+    const s = $gameSwitches
+    const v = $gameVariables
+    const p = $gameParty
     try {
-      eval(customNameEval);
+      eval(customNameEval)
       /* eslint-enable */
     } catch (e) {
       throw e
@@ -116,12 +116,12 @@ if (typeof WAY === 'undefined') {
     const { customTextColorEval } = item
     if (!customTextColorEval || customTextColorEval === '') return 0
     /* eslint-disable */
-    let textColor = 0;
-    const s = $gameSwitches;
-    const v = $gameVariables;
-    const p = $gameParty;
+    let textColor = 0
+    const s = $gameSwitches
+    const v = $gameVariables
+    const p = $gameParty
     try {
-      eval(customTextColorEval);
+      eval(customTextColorEval)
       /* eslint-enable */
     } catch (e) {
       throw e

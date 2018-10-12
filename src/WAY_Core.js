@@ -99,7 +99,7 @@ const WAYModuleLoader = (function () {
       const strC = `Place the required plugins above ${key}!`
       console.error(strA + strB + strC) // eslint-disable-line no-console
       if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-                const gui = require('nw.gui'); //eslint-disable-line
+        const gui = require('nw.gui') //eslint-disable-line
         gui.Window.get().showDevTools()
       }
       SceneManager.stop()
@@ -287,7 +287,7 @@ const WAY = WAYCore;
     },
     tryEval (text) {
       try {
-                return eval(text); // eslint-disable-line
+        return eval(text) // eslint-disable-line
       } catch (err) {
         return null
       }

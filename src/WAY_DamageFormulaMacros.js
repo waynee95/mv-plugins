@@ -54,7 +54,7 @@ Discord Name: waynee95#4261
 if (typeof WAY === 'undefined') {
   console.error('You need to install WAY_Core!') // eslint-disable-line no-console
   if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-        var gui = require('nw.gui'); //eslint-disable-line
+    var gui = require('nw.gui'); //eslint-disable-line
     gui.Window.get().showDevTools()
   }
   SceneManager.stop()
@@ -81,7 +81,7 @@ if (typeof WAY === 'undefined') {
   WAY.EventEmitter.on('load-skill-notetags', replaceMacros)
 })(WAYModuleLoader.getModule('WAY_DamageFormulaMacros'))
 
-/* ~struct~macro:
+/*~struct~macro:
 @param name
 @text Macro Name
 @desc Name of the macro. Put this name into the damage formula.
