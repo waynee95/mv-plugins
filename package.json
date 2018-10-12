@@ -8,7 +8,7 @@
     "build:dist": "babel src -d dist",
     "build:game": "babel src -d game/js/plugins",
     "build": "npm run build:game && npm run build:dist",
-    "watch": "babel src -d game/js/plugins --watch"
+    "watch": "babel --watch --verbose src -d game/js/plugins"
   },
   "repository": {
     "type": "git",
