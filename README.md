@@ -1,5 +1,7 @@
 # mv-plugins
-> waynee95's Plugin Collection for RPG Maker MV 
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
+> waynee95's Plugin Collection for RPG Maker MV.
 
 I develop my plugins using ES6 (ECMAScript 6) and the transpile them with Babel to ES5 (ECMAScript 5). <br>
 In this repo you find two folders:
