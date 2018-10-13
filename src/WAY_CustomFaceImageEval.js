@@ -3,7 +3,7 @@
 // WAY_CustomFaceImageEval.js
 // ===========================================================================
 /*:
-@plugindesc v1.1.1 Set different face images using Lunatic Code. <WAY_CustomFaceImageEval>
+@plugindesc v1.1.2 Set different face images using Lunatic Code. <WAY_CustomFaceImageEval>
 
 @author waynee95
 
@@ -70,7 +70,7 @@ if (typeof WAY === 'undefined') {
   }
   SceneManager.stop()
 } else {
-  WAYModuleLoader.registerPlugin('WAY_CustomFaceImageEval', '1.1,0', 'waynee95', {
+  WAYModuleLoader.registerPlugin('WAY_CustomFaceImageEval', '1.1.2', 'waynee95', {
     name: 'WAY_Core',
     version: '>= 2.0.0'
   })
@@ -122,7 +122,7 @@ if (typeof WAY === 'undefined') {
     this.setFaceImage(faceName, faceIndex)
 
     // make the TurnOrderDisplay notice the image change
-    if (Imported.YEP_X_TurnOrderDisplay && $gameParty.inBattle()) {
+    if (Imported.YEP_X_TurnOrderDisplay && $gameParty.inBattle() && BattleManager._performedBattlers) {
       BattleManager.refreshTurnOrderDisplay()
     }
   }
