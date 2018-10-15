@@ -3,7 +3,7 @@
 // WAY_CustomOnEquipEval.js
 // ===========================================================================
 /*:
-@plugindesc v1.1.0 Run code when an actor equips or unequips an item. <WAY_CustomOnEquipEval>
+@plugindesc v1.2.0 Run code when an actor equips or unequips an item. <WAY_CustomOnEquipEval>
 
 @author waynee95
 
@@ -62,7 +62,7 @@ if (typeof WAY === 'undefined') {
   }
   SceneManager.stop()
 } else {
-  WAYModuleLoader.registerPlugin('WAY_CustomOnEquipEval', '1.1.0', 'waynee95', {
+  WAYModuleLoader.registerPlugin('WAY_CustomOnEquipEval', '1.2.0', 'waynee95', {
     name: 'WAY_Core',
     version: '>= 2.0.0'
   })
@@ -114,8 +114,8 @@ if (typeof WAY === 'undefined') {
     $.alias.Game_Actor_changeEquip.apply(this, args)
     this.equips().forEach((item, slotId) => {
       if (item !== equips[slotId]) {
-        evalCode(this, item, CUSTOM_ON_EQUIP_EVAL)
         evalCode(this, equips[slotId], CUSTOM_ON_REMOVE_EQUIP_EVAL)
+        evalCode(this, item, CUSTOM_ON_EQUIP_EVAL)
       }
     })
   }
