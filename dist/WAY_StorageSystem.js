@@ -1,10 +1,10 @@
 /* globals WAY, WAYModuleLoader */
-// ===========================================================================
+//===========================================================================
 // WAY_StorageSystem.js
-// ===========================================================================
+//===========================================================================
 
 /*:
-@plugindesc v2.0.0 This plugin allows you create different storage systems where
+@plugindesc v2.0.1 This plugin allows you create different storage systems where
 the player can store his items. <WAY_StorageSystem>
 
 @param config
@@ -228,7 +228,7 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_StorageSystem', '2.0.0', 'waynee95', {
+  WAYModuleLoader.registerPlugin('WAY_StorageSystem', '2.0.1', 'waynee95', {
     name: 'WAY_Core',
     version: '>= 2.0.0'
   });
@@ -379,7 +379,7 @@ window.$gameStorageSystems = null;
 
   Game_StorageSystem.prototype.initialize = function (storageId) {
     var storage = $dataStorage[storageId];
-    this._storageId = storageId;
+    this._storageId = parseInt(storageId);
     this._title = storage.titleText;
     this._allowedTypes = storage.allowedTypes;
     this._maxCapacity = storage.maxCapacity;
@@ -454,6 +454,7 @@ window.$gameStorageSystems = null;
   };
 
   Game_StorageSystem.prototype.addItem = function (item, amount) {
+    if (!this.canStoreItem(item)) return;
     var container = this.itemContainer(item);
 
     if (container) {
@@ -488,6 +489,14 @@ window.$gameStorageSystems = null;
 
   Game_StorageSystem.prototype.isTypeAllowed = function (type) {
     return type && this._allowedTypes.contains(type.toLowerCase());
+  };
+
+  Game_StorageSystem.prototype.canStoreItem = function (item) {
+    if (item && item.onlyInStorage.length > 0) {
+      return item.onlyInStorage.contains(this._storageId);
+    }
+
+    return true;
   };
 
   Game_StorageSystem.prototype.numItems = function (item) {
@@ -740,7 +749,7 @@ window.$gameStorageSystems = null;
 
   if (!Imported.YEP_X_ItemCategories) {
     Window_StorageItemList.prototype.includes = function (item) {
-      if (item && item.onlyInStorage.length > 0 && !item.onlyInStorage.contains(this._storage._storageId)) {
+      if (!this._storage.canStoreItem(item)) {
         return false;
       }
 
@@ -767,7 +776,7 @@ window.$gameStorageSystems = null;
   } else {
     // Imported.YEP_X_ItemCategories
     Window_StorageItemList.prototype.includes = function (item) {
-      if (item && item.onlyInStorage.length > 0 && !item.onlyInStorage.contains(this._storage.id())) {
+      if (!this._storage.canStoreItem(item)) {
         return false;
       }
 
@@ -826,9 +835,9 @@ window.$gameStorageSystems = null;
   Window_StorageInfo.prototype.refresh = function () {
     this.contents.clear();
     this.drawTextEx(this.text(), this.textPadding(), 0);
-  }; //==========================================================================
+  }; //= =========================================================================
   // Window_StorageNumber
-  //==========================================================================
+  //= =========================================================================
 
 
   Window_StorageNumber.prototype = Object.create(Window_ShopNumber.prototype);
@@ -1187,7 +1196,7 @@ function Game_StorageSystems() {
 
 function Game_StorageSystem() {
   this.initialize.apply(this, arguments);
-} // -----------------------------------------------------------------------------
+} //-----------------------------------------------------------------------------
 
 /*~struct~storage:
 @param background
