@@ -3,7 +3,7 @@
 // WAY_StorageSystem.js
 //===========================================================================
 /*:
-@plugindesc v2.1.0 This plugin allows you create different storage systems where
+@plugindesc v2.1.1 This plugin allows you create different storage systems where
 the player can store his items. <WAY_StorageSystem>
 
 @param config
@@ -64,10 +64,10 @@ When your are using YEP_X_ItemCategories, this paramter must be set to true.
 
 Allowed Item Types - Define which items can be stored in the storage system.
 You can use the following types:
- - Items
- - Weapons
- - Armors
- - KeyItems
+ - items
+ - weapons
+ - armors
+ - keyitems
 
 If you want more categories, you can use YEP_X_ItemCategories. Just add the
 category name to the allowed types list.
@@ -226,7 +226,7 @@ if (typeof WAY === 'undefined') {
   }
   SceneManager.stop()
 } else {
-  WAYModuleLoader.registerPlugin('WAY_StorageSystem', '2.1.0', 'waynee95', {
+  WAYModuleLoader.registerPlugin('WAY_StorageSystem', '2.1.1', 'waynee95', {
     name: 'WAY_Core',
     version: '>= 2.0.0'
   })
@@ -1156,7 +1156,7 @@ function Game_StorageSystem () {
 @param allowedTypes
 @text Allowed Item Types
 @type text[]
-@default ["items","armors","weapons","keyItems"]
+@default ["items","armors","weapons","keyitems"]
 
 @param storageMode
 @text Storage Mode
