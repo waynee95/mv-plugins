@@ -3,7 +3,7 @@
 // WAY_StorageSystem.js
 //===========================================================================
 /*:
-@plugindesc v2.0.3 This plugin allows you create different storage systems where
+@plugindesc v2.1.0 This plugin allows you create different storage systems where
 the player can store his items. <WAY_StorageSystem>
 
 @param config
@@ -71,6 +71,10 @@ You can use the following types:
 
 If you want more categories, you can use YEP_X_ItemCategories. Just add the
 category name to the allowed types list.
+
+Mode - Can either be "Add/Remove", "Only Add" or "Only Remove". First one would
+be your classical storage chest and the "Only Remove" option would be handy for
+creating loot boxes for example.
 
 ==============================================================================
  ■ Scene Settings
@@ -222,13 +226,12 @@ if (typeof WAY === 'undefined') {
   }
   SceneManager.stop()
 } else {
-  WAYModuleLoader.registerPlugin('WAY_StorageSystem', '2.0.3', 'waynee95', {
+  WAYModuleLoader.registerPlugin('WAY_StorageSystem', '2.1.0', 'waynee95', {
     name: 'WAY_Core',
     version: '>= 2.0.0'
   })
 }
 
-// Global variable
 window.$gameStorageSystems = null;
 
 ($ => {
@@ -558,7 +561,9 @@ window.$gameStorageSystems = null;
   }
 
   Window_StorageCommand.prototype.setup = function () {
-    var data = $gameStorageSystems.current().data().command
+    var data = $gameStorageSystems.current().data()
+    this._storageMode = data.storageMode
+    data = data.command
     this._align = data.align
     this._rows = data.rows
     this._cols = data.cols
@@ -584,8 +589,14 @@ window.$gameStorageSystems = null;
   }
 
   Window_StorageCommand.prototype.makeCommandList = function () {
-    this.addCommand(this._addText, 'add')
-    this.addCommand(this._removeText, 'remove')
+    if (this._storageMode === 'Remove') {
+      this.addCommand(this._removeText, 'remove')
+    } else if (this._storageMode === 'Add') {
+      this.addCommand(this._addText, 'add')
+    } else {
+      this.addCommand(this._addText, 'add')
+      this.addCommand(this._removeText, 'remove')
+    }
   }
 
   Window_StorageCommand.prototype.lastOption = function () {
@@ -1146,6 +1157,14 @@ function Game_StorageSystem () {
 @text Allowed Item Types
 @type text[]
 @default ["items","armors","weapons","keyItems"]
+
+@param storageMode
+@text Storage Mode
+@type combo
+@option "Add/Remove"
+@option "Add"
+@option "Remove"
+@default "Add/Remove"
 
 @param Scene Settings
 @default Customize window parameters.
