@@ -1,13 +1,16 @@
-/* globals WAY, WAYModuleLoader */
+/* globals WAY, WAYModuleLoader, Window_InBattleStateList */
 // ===========================================================================
 // WAY_EvalText.js
 // ===========================================================================
 /*:
-@plugindesc v1.1.0 Use JavaScript Code in textboxes. <WAY_EvalText>
+@plugindesc v1.2.0 Use JavaScript Code in textboxes. <WAY_EvalText>
 
 @author waynee95
 
 @help
+>>> If you are using YEP_X_InBattleStatus, make sure to place this plugin
+below that!
+
 ==============================================================================
  ■ Usage
 ==============================================================================
@@ -35,6 +38,8 @@ More info here: https://github.com/waynee95/mv-plugins/blob/master/LICENSE
 Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
+
+You can support me on https://ko-fi.com/waynee.
 */
 
 'use strict'
@@ -47,7 +52,7 @@ if (typeof WAY === 'undefined') {
   }
   SceneManager.stop()
 } else {
-  WAYModuleLoader.registerPlugin('WAY_EvalText', '1.1.0', 'waynee95', {
+  WAYModuleLoader.registerPlugin('WAY_EvalText', '1.2.0', 'waynee95', {
     name: 'WAY_Core',
     version: '>= 2.0.0'
   })
@@ -77,7 +82,16 @@ if (typeof WAY === 'undefined') {
         ? scene._skillWindow.item()
         : a
     }
-    return text.replace(/\${[^{}\\]+(?=\})}/g, code => {
+    // Fix for YEP_X_InBattleStatusWindow
+    if (
+      Imported.YEP_X_InBattleStatus &&
+      $gameParty.inBattle() &&
+      SceneManager._scene._inBattleStatusWindow.visible
+    ) {
+      a = SceneManager._scene._inBattleStatusWindow._battler
+    }
+
+    return text.replace(/\${[^{}\\]+(?=\})}/g, function (code) {
       try {
         return eval(code.substring(2, code.length - 1)) // eslint-disable-line no-eval
       } catch (e) {
@@ -86,9 +100,26 @@ if (typeof WAY === 'undefined') {
     })
   }
 
-  //==========================================================================
+  // Fix for YEP_X_InBattleStatusWindow
+  if (Imported.YEP_X_InBattleStatusWindow) {
+    $.alias.Window_InBattleStateList =
+      Window_InBattleStateList.prototype.setBattler
+    Window_InBattleStateList.prototype.setBattler = function (battler) {
+      this._battler = battler
+      this._parentWindow.setBattler(battler)
+      this.refresh()
+      this.select(0)
+      this._helpWindow.refresh()
+      if (this._statusWindow) {
+        var index = $gameParty.battleMembers().indexOf(battler)
+        this._statusWindow.select(index)
+      }
+    }
+  }
+
+  //= =========================================================================
   // Window_Base
-  //==========================================================================
+  //= =========================================================================
   $.alias.WindowBase_convertEscapeCharacters = Window_Base.prototype.convertEscapeCharacters
   Window_Base.prototype.convertEscapeCharacters = function (text) {
     return $.alias.WindowBase_convertEscapeCharacters.call(this, evalText(text))
