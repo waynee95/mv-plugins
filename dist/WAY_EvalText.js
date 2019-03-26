@@ -4,7 +4,7 @@
 // ===========================================================================
 
 /*:
-@plugindesc v1.2.0 Use JavaScript Code in textboxes. <WAY_EvalText>
+@plugindesc v1.2.1 Use JavaScript Code in textboxes. <WAY_EvalText>
 
 @author waynee95
 
@@ -56,7 +56,7 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_EvalText', '1.2.0', 'waynee95', {
+  WAYModuleLoader.registerPlugin('WAY_EvalText', '1.2.1', 'waynee95', {
     name: 'WAY_Core',
     version: '>= 2.0.0'
   });
@@ -98,24 +98,13 @@ if (typeof WAY === 'undefined') {
   }; // Fix for YEP_X_InBattleStatusWindow
 
 
-  if (Imported.YEP_X_InBattleStatusWindow) {
+  if (Imported.YEP_X_InBattleStatus) {
     $.alias.Window_InBattleStateList = Window_InBattleStateList.prototype.setBattler;
 
     Window_InBattleStateList.prototype.setBattler = function (battler) {
-      this._battler = battler;
-
-      this._parentWindow.setBattler(battler);
-
-      this.refresh();
-      this.select(0);
+      $.alias.Window_InBattleStateList.call(this, battler);
 
       this._helpWindow.refresh();
-
-      if (this._statusWindow) {
-        var index = $gameParty.battleMembers().indexOf(battler);
-
-        this._statusWindow.select(index);
-      }
     };
   } //= =========================================================================
   // Window_Base
