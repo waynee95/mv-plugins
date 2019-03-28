@@ -4,7 +4,7 @@
 //===========================================================================
 
 /*:
-@plugindesc v2.1.1 This plugin allows you create different storage systems where
+@plugindesc v2.2.0 This plugin allows you create different storage systems where
 the player can store his items. <WAY_StorageSystem>
 
 @param config
@@ -232,7 +232,7 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_StorageSystem', '2.1.1', 'waynee95', {
+  WAYModuleLoader.registerPlugin('WAY_StorageSystem', '2.2.0', 'waynee95', {
     name: 'WAY_Core',
     version: '>= 2.0.0'
   });
@@ -704,7 +704,7 @@ window.$gameStorageSystems = null;
   Window_StorageCategory.prototype.update = function () {
     Window_HorzCommand.prototype.update.call(this);
 
-    if (this._itemWindow) {
+    if (this.visible) {
       this._itemWindow.setCategory(this.currentSymbol());
 
       this._itemWindow.setExt(this.currentExt());
@@ -846,9 +846,9 @@ window.$gameStorageSystems = null;
   Window_StorageInfo.prototype.refresh = function () {
     this.contents.clear();
     this.drawTextEx(this.text(), this.textPadding(), 0);
-  }; //= =========================================================================
+  }; //==========================================================================
   // Window_StorageNumber
-  //= =========================================================================
+  //==========================================================================
 
 
   Window_StorageNumber.prototype = Object.create(Window_ShopNumber.prototype);
@@ -1030,6 +1030,15 @@ window.$gameStorageSystems = null;
     this._itemWindow.setHandler('cancel', this.onItemCancel.bind(this));
 
     this.addWindow(this._itemWindow);
+    this.showWholeStorage();
+  };
+
+  Scene_Storage.prototype.showWholeStorage = function () {
+    this._itemWindow.setMode('remove');
+
+    this._itemWindow.setCategory('AllItems');
+
+    this._itemWindow.refresh();
   };
 
   Scene_Storage.prototype.createNumberWindow = function () {
@@ -1102,6 +1111,8 @@ window.$gameStorageSystems = null;
     this._commandWindow.show();
 
     this._commandWindow.activate();
+
+    this.showWholeStorage();
   };
 
   Scene_Storage.prototype.onItemOk = function () {
@@ -1139,6 +1150,8 @@ window.$gameStorageSystems = null;
       this._itemWindow.setCategory('none');
 
       this._commandWindow.activate();
+
+      this.showWholeStorage();
     }
   };
 
@@ -1170,7 +1183,7 @@ window.$gameStorageSystems = null;
     SoundManager.playCancel();
     this.endNumberInput();
   };
-})(WAYModuleLoader.getModule('WAY_StorageSystem')); // -----------------------------------------------------------------------------
+})(WAYModuleLoader.getModule('WAY_StorageSystem')); //-----------------------------------------------------------------------------
 
 
 function Window_StorageTitle() {
@@ -1501,4 +1514,4 @@ function Game_StorageSystem() {
 @type text
 @default
 */
-// -----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
