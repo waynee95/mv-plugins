@@ -4,7 +4,7 @@
 //=============================================================================
 
 /*:
-@plugindesc v1.0.0 This plugin allows you to create Achievements to your game. <WAY_Achievements>
+@plugindesc v1.1.0 This plugin allows you to create Achievements to your game. <WAY_Achievements>
 
 @author waynee95
 
@@ -103,7 +103,9 @@ How to add an achievement to the game:
 2. Click on the Achievement List parameter
 3. Click on an empty slot
 4. Now you can create an achivement
-*   Category Name: The category this achievement should appear in.
+*   Category Name: The category this achievement should appear in. (Note: You
+*                  can have an achievement be part of multiple categories, just
+*                  seperate each category by a space)
 *   Name: The name of the achievement.
 *   Hidden Achievement: Whether this achievement will be visible
 *                       in the menu before it's unlocked.
@@ -196,7 +198,7 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_Achievements', '1.0.0', 'waynee95', {
+  WAYModuleLoader.registerPlugin('WAY_Achievements', '1.1.0', 'waynee95', {
     name: 'WAY_Core',
     version: '>= 2.0.0'
   });
@@ -434,7 +436,11 @@ var $gameAchievements = null; //eslint-disable-line
       key: "includes",
       value: function includes(achievement) {
         if (this._category) {
-          return achievement ? this._category.toLowerCase() === achievement.category.toLowerCase() : false;
+          var _categories = achievement.category.split(" ").map(function (s) {
+            return s.toLowerCase();
+          });
+
+          return achievement ? _categories.contains(this._category.toLowerCase()) : false;
         }
 
         return false;
