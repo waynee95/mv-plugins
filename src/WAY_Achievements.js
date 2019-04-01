@@ -119,6 +119,8 @@ How to add an achievement to the game:
 *              $gameParty.gold() >= 1000
 *              $gameSystem.battleCount() >= 10
 *              $gameSwitches.value(10)
+*              !$gameSwitches.value(10) (You can use the negation operator)
+*              $gameSwitches.value(1) && !$gameSwitches.value(2) (You can also chain conditions)
 *              $gameVariables.value(2) >= 340
 *              $gameActors.actor(1).level >= 20
 *              ... etc
