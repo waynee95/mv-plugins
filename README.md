@@ -1,5 +1,4 @@
 # mv-plugins
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 > waynee95's Plugin Collection for RPG Maker MV.
 
