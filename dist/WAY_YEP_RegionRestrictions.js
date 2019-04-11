@@ -40,13 +40,13 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -54,7 +54,7 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_YEP_RegionRestrictions', '1.2.1', 'waynee95');
+  WAYModuleLoader.registerPlugin("WAY_YEP_RegionRestrictions", "1.2.1", "waynee95");
 }
 
 (function ($) {
@@ -74,8 +74,8 @@ if (typeof WAY === 'undefined') {
           events = _$dataMap.events;
       events.forEach(function (event) {
         if (event) {
-          event._bypassRestriction = getNotetag(event.note, 'Bypass Restriction', [], toArray);
-          event._forceRestriction = getNotetag(event.note, 'Force Restriction', [], toArray);
+          event._bypassRestriction = getNotetag(event.note, "Bypass Restriction", [], toArray);
+          event._forceRestriction = getNotetag(event.note, "Force Restriction", [], toArray);
         }
       });
     }
@@ -158,8 +158,8 @@ if (typeof WAY === 'undefined') {
 
       $.alias.Game_SpawnEvent_init.apply(this, args);
       var event = this.event();
-      event._bypassRestriction = getNotetag(event.note, 'Bypass Restriction', [], toArray);
-      event._forceRestriction = getNotetag(event.note, 'Force Restriction', [], toArray);
+      event._bypassRestriction = getNotetag(event.note, "Bypass Restriction", [], toArray);
+      event._forceRestriction = getNotetag(event.note, "Force Restriction", [], toArray);
     };
   }
-})(WAYModuleLoader.getModule('WAY_YEP_RegionRestrictions'));
+})(WAYModuleLoader.getModule("WAY_YEP_RegionRestrictions"));

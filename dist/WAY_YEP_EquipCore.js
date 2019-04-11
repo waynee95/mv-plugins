@@ -60,13 +60,13 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -74,9 +74,9 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_YEP_EquipCore', '1.2.1', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
+  WAYModuleLoader.registerPlugin("WAY_YEP_EquipCore", "1.2.1", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
   });
 }
 
@@ -86,11 +86,11 @@ if (typeof WAY === 'undefined') {
       toArray = _WAY$Util.toArray;
 
   var parseNotetags = function parseNotetags(obj) {
-    obj.restrictSlots = getNotetag(obj.note, 'Restrict Slots', null, toArray);
+    obj.restrictSlots = getNotetag(obj.note, "Restrict Slots", null, toArray);
   };
 
-  WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
-  WAY.EventEmitter.on('load-armor-notetags', parseNotetags); //==========================================================================
+  WAY.EventEmitter.on("load-weapon-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-armor-notetags", parseNotetags); //==========================================================================
   // Game_Actor
   //==========================================================================
 
@@ -157,4 +157,4 @@ if (typeof WAY === 'undefined') {
 
     return $.alias.Window_EquipItem_isEnabled.call(this, item);
   };
-})(WAYModuleLoader.getModule('WAY_YEP_EquipCore'));
+})(WAYModuleLoader.getModule("WAY_YEP_EquipCore"));

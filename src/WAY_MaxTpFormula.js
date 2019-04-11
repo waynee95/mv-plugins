@@ -49,74 +49,74 @@ Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
 
-'use strict'
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!') // eslint-disable-line no-console
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
-    gui.Window.get().showDevTools()
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
+    gui.Window.get().showDevTools();
   }
-  SceneManager.stop()
+  SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_MaxTpFormula', '1.1.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
-  })
+  WAYModuleLoader.registerPlugin("WAY_MaxTpFormula", "1.1.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
+  });
 }
 
 ($ => {
-  const { getMultiLineNotetag, trim } = WAY.Util
-  const { defaultFormula } = $.parameters
+  const { getMultiLineNotetag, trim } = WAY.Util;
+  const { defaultFormula } = $.parameters;
 
   const parseNotetags = obj => {
-    obj.tpFormula = getMultiLineNotetag(obj.note, 'Max TP Formula', null, trim)
-  }
+    obj.tpFormula = getMultiLineNotetag(obj.note, "Max TP Formula", null, trim);
+  };
 
-  WAY.EventEmitter.on('load-actor-notetags', parseNotetags)
-  WAY.EventEmitter.on('load-class-notetags', parseNotetags)
-  WAY.EventEmitter.on('load-enemy-notetags', parseNotetags)
+  WAY.EventEmitter.on("load-actor-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-class-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-enemy-notetags", parseNotetags);
 
   Object.defineProperties(Game_BattlerBase.prototype, {
     // Max TP
     mtp: {
-      get () {
-        return this.maxTp()
+      get() {
+        return this.maxTp();
       },
       configurable: true
     }
-  })
+  });
 
   const evalFormula = (user, formula) => {
-    const maxTp = 0
+    const maxTp = 0;
     /* eslint-disable */
-    const a = user
-    const s = $gameSwitches
-    const v = $gameVariables
-    const p = $gameParty
+    const a = user;
+    const s = $gameSwitches;
+    const v = $gameVariables;
+    const p = $gameParty;
     try {
-      eval(formula)
+      eval(formula);
       /* eslint-enable */
     } catch (e) {
-      throw e
+      throw e;
     }
-    return maxTp
-  }
+    return maxTp;
+  };
 
   //==========================================================================
   // Game_Actor
   //==========================================================================
-  Game_Actor.prototype.maxTp = function () {
+  Game_Actor.prototype.maxTp = function() {
     return evalFormula(
       this,
       this.currentClass().tpFormula || this.actor().tpFormula || defaultFormula
-    )
-  }
+    );
+  };
 
   //==========================================================================
   // Game_Enemy
   //==========================================================================
-  Game_Enemy.prototype.maxTp = function () {
-    return evalFormula(this, this.enemy().tpFormula || defaultFormula)
-  }
-})(WAYModuleLoader.getModule('WAY_MaxTpFormula'))
+  Game_Enemy.prototype.maxTp = function() {
+    return evalFormula(this, this.enemy().tpFormula || defaultFormula);
+  };
+})(WAYModuleLoader.getModule("WAY_MaxTpFormula"));

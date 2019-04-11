@@ -52,89 +52,94 @@ Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
 
-'use strict'
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!') // eslint-disable-line no-console
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
-    gui.Window.get().showDevTools()
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
+    gui.Window.get().showDevTools();
   }
-  SceneManager.stop()
+  SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_CustomOnEquipEval', '1.2.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
-  })
+  WAYModuleLoader.registerPlugin("WAY_CustomOnEquipEval", "1.2.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
+  });
 }
 
 ($ => {
-  const { getMultiLineNotetag, trim } = WAY.Util
-  const CUSTOM_ON_EQUIP_EVAL = 'customOnEquipEval'
-  const CUSTOM_ON_REMOVE_EQUIP_EVAL = 'customOnRemoveEquipEval'
+  const { getMultiLineNotetag, trim } = WAY.Util;
+  const CUSTOM_ON_EQUIP_EVAL = "customOnEquipEval";
+  const CUSTOM_ON_REMOVE_EQUIP_EVAL = "customOnRemoveEquipEval";
 
   const parseNotetags = obj => {
-    obj.customOnEquipEval = getMultiLineNotetag(obj.note, 'Custom On Equip Eval', null, trim)
-    obj.customOnRemoveEquipEval = getMultiLineNotetag(
+    obj.customOnEquipEval = getMultiLineNotetag(
       obj.note,
-      'Custom On Remove Equip Eval',
+      "Custom On Equip Eval",
       null,
       trim
-    )
-  }
+    );
+    obj.customOnRemoveEquipEval = getMultiLineNotetag(
+      obj.note,
+      "Custom On Remove Equip Eval",
+      null,
+      trim
+    );
+  };
 
-  WAY.EventEmitter.on('load-weapon-notetags', parseNotetags)
-  WAY.EventEmitter.on('load-armor-notetags', parseNotetags)
+  WAY.EventEmitter.on("load-weapon-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-armor-notetags", parseNotetags);
 
   const evalCode = (user, item, type) => {
     if (item && item[type]) {
       /* eslint-disable */
-      const a = user
-      const s = $gameSwitches._data
-      const v = $gameVariables._data
-      const p = $gameParty
-      const code = item[type]
+      const a = user;
+      const s = $gameSwitches._data;
+      const v = $gameVariables._data;
+      const p = $gameParty;
+      const code = item[type];
       try {
-        return eval(code)
+        return eval(code);
         /* eslint-enable */
       } catch (e) {
-        throw e
+        throw e;
       }
     }
 
-    return false
-  }
+    return false;
+  };
 
   //==========================================================================
   // Game_Actor
   //==========================================================================
-  $.alias.Game_Actor_changeEquip = Game_Actor.prototype.changeEquip
-  Game_Actor.prototype.changeEquip = function (...args) {
-    const equips = this.equips()
-    $.alias.Game_Actor_changeEquip.apply(this, args)
+  $.alias.Game_Actor_changeEquip = Game_Actor.prototype.changeEquip;
+  Game_Actor.prototype.changeEquip = function(...args) {
+    const equips = this.equips();
+    $.alias.Game_Actor_changeEquip.apply(this, args);
     this.equips().forEach((item, slotId) => {
       if (item !== equips[slotId]) {
-        evalCode(this, equips[slotId], CUSTOM_ON_REMOVE_EQUIP_EVAL)
-        evalCode(this, item, CUSTOM_ON_EQUIP_EVAL)
+        evalCode(this, equips[slotId], CUSTOM_ON_REMOVE_EQUIP_EVAL);
+        evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
       }
-    })
-  }
+    });
+  };
 
   if (!Imported.YEP_EquipCore) {
-    $.alias.Game_Actor_initEquips = Game_Actor.prototype.initEquips
-    Game_Actor.prototype.initEquips = function (...args) {
-      $.alias.Game_Actor_initEquips.call(this, args)
+    $.alias.Game_Actor_initEquips = Game_Actor.prototype.initEquips;
+    Game_Actor.prototype.initEquips = function(...args) {
+      $.alias.Game_Actor_initEquips.call(this, args);
       this.equips().forEach(item => {
-        evalCode(this, item, CUSTOM_ON_EQUIP_EVAL)
-      })
-    }
+        evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
+      });
+    };
   } else {
-    $.alias.Game_Actor_equipInitEquips = Game_Actor.prototype.equipInitEquips
-    Game_Actor.prototype.equipInitEquips = function (...args) {
-      $.alias.Game_Actor_equipInitEquips.call(this, args)
+    $.alias.Game_Actor_equipInitEquips = Game_Actor.prototype.equipInitEquips;
+    Game_Actor.prototype.equipInitEquips = function(...args) {
+      $.alias.Game_Actor_equipInitEquips.call(this, args);
       this.equips().forEach(item => {
-        evalCode(this, item, CUSTOM_ON_EQUIP_EVAL)
-      })
-    }
+        evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
+      });
+    };
   }
-})(WAYModuleLoader.getModule('WAY_CustomOnEquipEval'))
+})(WAYModuleLoader.getModule("WAY_CustomOnEquipEval"));

@@ -60,49 +60,66 @@ Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
 
-'use strict'
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!') // eslint-disable-line no-console
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
-    gui.Window.get().showDevTools()
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
+    gui.Window.get().showDevTools();
   }
-  SceneManager.stop()
+  SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_TransferOnRegion', '1.0.2', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
-  })
+  WAYModuleLoader.registerPlugin("WAY_TransferOnRegion", "1.0.2", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
+  });
 }
 
 ($ => {
-  const { getNotetagList, toInt } = WAY.Util
+  const { getNotetagList, toInt } = WAY.Util;
 
-  WAY.EventEmitter.on('load-map-notetags', map => {
-    map._transferData = {}
-    getNotetagList(map.note, 'Region Transfer', data => {
-      const [regionId,
+  WAY.EventEmitter.on("load-map-notetags", map => {
+    map._transferData = {};
+    getNotetagList(map.note, "Region Transfer", data => {
+      const [
+        regionId,
         mapId,
         targetX,
         targetY,
         direction = 0,
-        fadeType = 0] = data.split(',').map(toInt)
-      const transferDataObject = { regionId, mapId, targetX, targetY, direction, fadeType }
-      map._transferData[regionId] = transferDataObject
-    })
-  })
+        fadeType = 0
+      ] = data.split(",").map(toInt);
+      const transferDataObject = {
+        regionId,
+        mapId,
+        targetX,
+        targetY,
+        direction,
+        fadeType
+      };
+      map._transferData[regionId] = transferDataObject;
+    });
+  });
 
   //==========================================================================
   //  Game_Player
   //==========================================================================
-  $.alias.Game_Player_moveStraight = Game_Player.prototype.moveStraight
-  Game_Player.prototype.moveStraight = function (d) {
-    $.alias.Game_Player_moveStraight.call(this, d)
-    const transferDataObject = $dataMap ? $dataMap._transferData[this.regionId()] : null
+  $.alias.Game_Player_moveStraight = Game_Player.prototype.moveStraight;
+  Game_Player.prototype.moveStraight = function(d) {
+    $.alias.Game_Player_moveStraight.call(this, d);
+    const transferDataObject = $dataMap
+      ? $dataMap._transferData[this.regionId()]
+      : null;
     if (transferDataObject) {
-      const { mapId, targetX, targetY, direction, fadeType } = transferDataObject
-      $gamePlayer.reserveTransfer(mapId, targetX, targetY, direction, fadeType)
+      const {
+        mapId,
+        targetX,
+        targetY,
+        direction,
+        fadeType
+      } = transferDataObject;
+      $gamePlayer.reserveTransfer(mapId, targetX, targetY, direction, fadeType);
     }
-  }
-})(WAYModuleLoader.getModule('WAY_TransferOnRegion'))
+  };
+})(WAYModuleLoader.getModule("WAY_TransferOnRegion"));

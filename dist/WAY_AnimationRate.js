@@ -35,13 +35,13 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -49,9 +49,9 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_AnimationRate', '1.1.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
+  WAYModuleLoader.registerPlugin("WAY_AnimationRate", "1.1.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
   });
 }
 
@@ -70,4 +70,4 @@ if (typeof WAY === 'undefined') {
       this._rate = $.parameters.animationRate;
     }
   };
-})(WAYModuleLoader.getModule('WAY_AnimationRate'));
+})(WAYModuleLoader.getModule("WAY_AnimationRate"));

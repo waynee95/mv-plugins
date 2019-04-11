@@ -28,7 +28,7 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -40,11 +40,11 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -82,24 +82,24 @@ var WAYModuleLoader = function () {
   }
 
   function compareVersions(currentVersion) {
-    var operator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '==';
+    var operator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "==";
     var requiredVersion = arguments.length > 2 ? arguments[2] : undefined;
     var length = Math.max(currentVersion.length, requiredVersion.length);
     var compare = 0;
     var operation = {
-      '<': function _() {
+      "<": function _() {
         return compare < 0;
       },
-      '<=': function _() {
+      "<=": function _() {
         return compare <= 0;
       },
-      '==': function _() {
+      "==": function _() {
         return compare === 0;
       },
-      '>': function _() {
+      ">": function _() {
         return compare > 0;
       },
-      '>=': function _() {
+      ">=": function _() {
         return compare >= 0;
       }
     };
@@ -121,7 +121,7 @@ var WAYModuleLoader = function () {
     checkRequirements: function checkRequirements(key) {
       var _this = this;
 
-      var list = '';
+      var list = "";
       plugins[key].required.forEach(function (_ref) {
         var name = _ref.name,
             version = _ref.version;
@@ -129,7 +129,7 @@ var WAYModuleLoader = function () {
         if (!_this.isImported(name)) {
           list += "".concat(name, "\n");
         } else if (version) {
-          var _version$split$revers = version.split(' ').reverse(),
+          var _version$split$revers = version.split(" ").reverse(),
               _version$split$revers2 = _slicedToArray(_version$split$revers, 2),
               requiredVersion = _version$split$revers2[0],
               operator = _version$split$revers2[1];
@@ -150,8 +150,8 @@ var WAYModuleLoader = function () {
       var strC = "Place the required plugins above ".concat(key, "!");
       console.error(strA + strB + strC); // eslint-disable-line no-console
 
-      if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-        var gui = require('nw.gui'); //eslint-disable-line
+      if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+        var gui = require("nw.gui"); //eslint-disable-line
 
 
         gui.Window.get().showDevTools();
@@ -180,15 +180,15 @@ var WAYModuleLoader = function () {
       })[0].parameters;
     },
     isImported: function isImported(key) {
-      return typeof plugins[key] !== 'undefined';
+      return typeof plugins[key] !== "undefined";
     },
     registerPlugin: function registerPlugin(key, version, author) {
-      for (var _len = arguments.length, required = new Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
-        required[_key - 3] = arguments[_key];
-      }
-
       if (this.isImported(key)) {
         return false;
+      }
+
+      for (var _len = arguments.length, required = new Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
+        required[_key - 3] = arguments[_key];
       }
 
       plugins[key] = {
@@ -209,7 +209,7 @@ var WAYModuleLoader = function () {
   };
 }();
 
-WAYModuleLoader.registerPlugin('WAY_Core', '2.0.0', 'waynee95');
+WAYModuleLoader.registerPlugin("WAY_Core", "2.0.0", "waynee95");
 var WAYCore = window.WAYCore || {};
 var WAY = WAYCore;
 
@@ -250,9 +250,9 @@ var WAY = WAYCore;
     getEventComments: function getEventComments(eventId) {
       var event = $dataMap.events[eventId];
       var pages = event.pages;
-      var allComments = '';
+      var allComments = "";
       pages.forEach(function (page) {
-        var comments = '';
+        var comments = "";
         page.list.forEach(function (command) {
           if (command.code === 108 || command.code === 408) {
             comments += "".concat(command.parameters[0], "\n");
@@ -269,7 +269,7 @@ var WAY = WAYCore;
         return true;
       };
       var result = [];
-      var re = new RegExp("<(".concat(tag, ")>([\\s\\S]*?)<(\\/").concat(tag, ")>"), 'gi');
+      var re = new RegExp("<(".concat(tag, ")>([\\s\\S]*?)<(\\/").concat(tag, ")>"), "gi");
       var matches = WAY.Util.filterText(text, re, function (match) {
         return match[1].toLowerCase() === tag.toLowerCase();
       });
@@ -337,10 +337,10 @@ var WAY = WAYCore;
       return WAY.Util.isInt(value) || WAY.Util.isFloat(value);
     },
     isObj: function isObj(obj) {
-      return obj && _typeof(obj) === 'object';
+      return obj && _typeof(obj) === "object";
     },
     isPlaytest: function isPlaytest() {
-      return Utils.isOptionValid('test');
+      return Utils.isOptionValid("test");
     },
     isScene: function isScene(scene) {
       return SceneManager._scene instanceof scene;
@@ -367,7 +367,7 @@ var WAY = WAYCore;
           obj[key] = WAY.Util.parseParameters(obj[key]); // If the parameter has no value, meaning it's an empty string,
           // just set it to null
 
-          if (obj[key] === '') {
+          if (obj[key] === "") {
             obj[key] = null;
           }
         });
@@ -383,8 +383,8 @@ var WAY = WAYCore;
       }
     },
     toArray: function toArray(str) {
-      if (str.contains('to')) {
-        var _str$split = str.split('to'),
+      if (str.contains("to")) {
+        var _str$split = str.split("to"),
             _str$split2 = _slicedToArray(_str$split, 2),
             from = _str$split2[0],
             to = _str$split2[1];
@@ -415,7 +415,7 @@ var WAY = WAYCore;
       }
 
       var createObjProperty = function createObjProperty(pair) {
-        var _pair$split$map = pair.split(':').map(WAY.Util.trim),
+        var _pair$split$map = pair.split(":").map(WAY.Util.trim),
             _pair$split$map2 = _slicedToArray(_pair$split$map, 2),
             key = _pair$split$map2[0],
             value = _pair$split$map2[1];
@@ -429,8 +429,8 @@ var WAY = WAYCore;
         return _defineProperty({}, key, value);
       };
 
-      return Object.assign.apply(Object, [{}].concat(_toConsumableArray(string.replace(/,/g, '\n').split(/[\r\n]+/).filter(function (key) {
-        return key !== '';
+      return Object.assign.apply(Object, [{}].concat(_toConsumableArray(string.replace(/,/g, "\n").split(/[\r\n]+/).filter(function (key) {
+        return key !== "";
       }).map(createObjProperty))));
     },
     trim: function trim(string) {
@@ -461,8 +461,8 @@ var WAY = WAYCore;
         _classCallCheck(this, TitleWindow);
 
         _this5 = _possibleConstructorReturn(this, _getPrototypeOf(TitleWindow).call(this, x, y, width, height));
-        _this5._title = '';
-        return _possibleConstructorReturn(_this5, _assertThisInitialized(_assertThisInitialized(_this5)));
+        _this5._title = "";
+        return _possibleConstructorReturn(_this5, _assertThisInitialized(_this5));
       }
 
       _createClass(TitleWindow, [{
@@ -485,11 +485,11 @@ var WAY = WAYCore;
       }]);
 
       return TitleWindow;
-    }(Window_Base) //==========================================================================
-    // Game_Interpreter
-    //==========================================================================
+    }(Window_Base)
+  }; //==========================================================================
+  // Game_Interpreter
+  //==========================================================================
 
-  };
   $.alias.DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
 
   DataManager.isDatabaseLoaded = function () {
@@ -510,22 +510,21 @@ var WAY = WAYCore;
     $.alias.DataManager_onLoad.call(this, object);
 
     if (object === $dataMap) {
-      WAY.EventEmitter.emit('load-map-notetags', $dataMap);
+      WAY.EventEmitter.emit("load-map-notetags", $dataMap);
     }
   };
 
   function loadNotetags(objects, index) {
-    var strings = ['actor', 'class', 'skill', 'item', 'weapon', 'armor', 'enemy', 'state'];
+    var strings = ["actor", "class", "skill", "item", "weapon", "armor", "enemy", "state"];
     objects.forEach(function (data) {
       if (data) {
         WAY.EventEmitter.emit("load-".concat(strings[index], "-notetags"), data);
       }
     });
-  }
-
-  ; //==========================================================================
+  } //==========================================================================
   // PluginManager
   //==========================================================================
+
 
   PluginManager._commands = {};
 
@@ -534,7 +533,7 @@ var WAY = WAYCore;
   };
 
   PluginManager.isCommand = function (command) {
-    return typeof PluginManager._commands[command] !== 'undefined';
+    return typeof PluginManager._commands[command] !== "undefined";
   };
 
   PluginManager.getCommand = function (command) {
@@ -556,7 +555,7 @@ var WAY = WAYCore;
     if (actions) {
       var action = actions[args[0]];
 
-      if (typeof action === 'function') {
+      if (typeof action === "function") {
         action.apply(this, args.slice(1));
       }
     } else {
@@ -572,4 +571,4 @@ var WAY = WAYCore;
       return this.drawTextEx(text, 0, this.contents.height);
     };
   }
-})(WAYModuleLoader.getModule('WAY_Core'));
+})(WAYModuleLoader.getModule("WAY_Core"));

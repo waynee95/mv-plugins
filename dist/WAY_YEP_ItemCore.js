@@ -60,13 +60,13 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -74,9 +74,9 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_YEP_ItemCore', '1.2.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
+  WAYModuleLoader.registerPlugin("WAY_YEP_ItemCore", "1.2.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
   });
 }
 
@@ -88,22 +88,22 @@ if (typeof WAY === 'undefined') {
       toInt = _WAY$Util.toInt;
 
   var parseNotetags = function parseNotetags(obj) {
-    obj.customNameEval = getMultiLineNotetag(obj.note, 'Custom Name Eval', null, trim);
-    obj.customTextColorEval = getMultiLineNotetag(obj.note, 'custom textcolor eval', null, trim);
-    obj.iconBackground = getNotetag(obj.note, 'Icon Background', null, toInt);
+    obj.customNameEval = getMultiLineNotetag(obj.note, "Custom Name Eval", null, trim);
+    obj.customTextColorEval = getMultiLineNotetag(obj.note, "custom textcolor eval", null, trim);
+    obj.iconBackground = getNotetag(obj.note, "Icon Background", null, toInt);
   };
 
-  WAY.EventEmitter.on('load-item-notetags', parseNotetags);
-  WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
-  WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
-  WAY.EventEmitter.on('load-skill-notetags', parseNotetags);
+  WAY.EventEmitter.on("load-item-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-weapon-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-armor-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-skill-notetags", parseNotetags);
 
   var evalCustomName = function evalCustomName(item) {
     var customNameEval = item.customNameEval;
-    if (!customNameEval || customNameEval === '') return item.name;
+    if (!customNameEval || customNameEval === "") return item.name;
     /* eslint-disable */
 
-    var name = '';
+    var name = "";
     var s = $gameSwitches;
     var v = $gameVariables;
     var p = $gameParty;
@@ -120,7 +120,7 @@ if (typeof WAY === 'undefined') {
 
   var evalCustomTextColor = function evalCustomTextColor(item) {
     var customTextColorEval = item.customTextColorEval;
-    if (!customTextColorEval || customTextColorEval === '') return 0;
+    if (!customTextColorEval || customTextColorEval === "") return 0;
     /* eslint-disable */
 
     var textColor = 0;
@@ -166,4 +166,4 @@ if (typeof WAY === 'undefined') {
       this.resetTextColor();
     }
   };
-})(WAYModuleLoader.getModule('WAY_YEP_ItemCore'));
+})(WAYModuleLoader.getModule("WAY_YEP_ItemCore"));

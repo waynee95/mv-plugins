@@ -35,37 +35,37 @@ Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
 
-'use strict'
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!') // eslint-disable-line no-console
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
-    gui.Window.get().showDevTools()
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
+    gui.Window.get().showDevTools();
   }
-  SceneManager.stop()
+  SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_MapControlSwitch', '1.1.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
-  })
+  WAYModuleLoader.registerPlugin("WAY_MapControlSwitch", "1.1.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
+  });
 }
 
 (() => {
-  const { getNotetagList } = WAY.Util
+  const { getNotetagList } = WAY.Util;
 
-  const toInt = number => number - number % 1
-  const trim = str => str.trim()
+  const toInt = number => number - (number % 1);
+  const trim = str => str.trim();
 
-  WAY.EventEmitter.on('load-map-notetags', map => {
-    map.switches = getNotetagList(map.note, 'Control Switch', data => {
-      let [switchId, value] = data.split(',').map(trim)
-      switchId = toInt(switchId)
-      value = value === 'on'
-      return { switchId, value }
-    })
+  WAY.EventEmitter.on("load-map-notetags", map => {
+    map.switches = getNotetagList(map.note, "Control Switch", data => {
+      let [switchId, value] = data.split(",").map(trim);
+      switchId = toInt(switchId);
+      value = value === "on";
+      return { switchId, value };
+    });
     map.switches.forEach(({ switchId, value }) => {
-      $gameSwitches.setValue(switchId, value)
-    })
-  })
-})(WAYModuleLoader.getModule('WAY_MapControlSwitch'))
+      $gameSwitches.setValue(switchId, value);
+    });
+  });
+})(WAYModuleLoader.getModule("WAY_MapControlSwitch"));

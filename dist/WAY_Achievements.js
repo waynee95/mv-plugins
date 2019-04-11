@@ -164,7 +164,7 @@ Discord Name: waynee95#4261
 
 You can support me at https://ko-fi.com/waynee
 */
-'use strict';
+"use strict";
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
@@ -188,10 +188,10 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
     var gui = require("nw.gui"); //eslint-disable-line
 
 
@@ -200,9 +200,9 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_Achievements', '1.1.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
+  WAYModuleLoader.registerPlugin("WAY_Achievements", "1.1.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
   });
 }
 
@@ -236,16 +236,16 @@ var $gameAchievements = null; //eslint-disable-line
     function Game_Achievement(id) {
       _classCallCheck(this, Game_Achievement);
 
-      this.category = '';
+      this.category = "";
       this.id = id;
       this.hidden = false;
       this.isCompleted = false;
       this.completeIcon = 0;
-      this.condition = '';
-      this.description = '';
-      this.notCompletedDescription = '';
+      this.condition = "";
+      this.description = "";
+      this.notCompletedDescription = "";
       this.incompleteIcon = 0;
-      this.name = '';
+      this.name = "";
       this.points = 0;
       this.onCompleteCommonEvent = 0;
     }
@@ -285,7 +285,7 @@ var $gameAchievements = null; //eslint-disable-line
     _createClass(Game_Achievements, [{
       key: "achievement",
       value: function achievement(id) {
-        if (_typeof($dataAchievements[id]) !== 'object') {
+        if (_typeof($dataAchievements[id]) !== "object") {
           return null;
         }
 
@@ -430,7 +430,7 @@ var $gameAchievements = null; //eslint-disable-line
       _classCallCheck(this, Window_AchievementList);
 
       _this4 = _possibleConstructorReturn(this, _getPrototypeOf(Window_AchievementList).call(this, x, y, width, height));
-      _this4._category = '';
+      _this4._category = "";
       return _this4;
     }
 
@@ -529,7 +529,7 @@ var $gameAchievements = null; //eslint-disable-line
     _createClass(Scene_Achievements, [{
       key: "createBackground",
       value: function createBackground() {
-        if (background !== '') {
+        if (background !== "") {
           this._backgroundSprite = new Sprite();
           this._backgroundSprite.bitmap = ImageManager.loadPicture(background);
           this.addChild(this._backgroundSprite);
@@ -577,9 +577,9 @@ var $gameAchievements = null; //eslint-disable-line
         var wy = this._helpWindow.y + this._helpWindow.height;
         this._categoryWindow = new Window_AchievementCategories(wy);
 
-        this._categoryWindow.setHandler('ok', this.onCategoryOk.bind(this));
+        this._categoryWindow.setHandler("ok", this.onCategoryOk.bind(this));
 
-        this._categoryWindow.setHandler('cancel', this.onCategoryCancel.bind(this));
+        this._categoryWindow.setHandler("cancel", this.onCategoryCancel.bind(this));
 
         this.addWindow(this._categoryWindow);
       }
@@ -592,7 +592,7 @@ var $gameAchievements = null; //eslint-disable-line
 
         this._categoryWindow.setItemWindow(this._itemWindow);
 
-        this._itemWindow.setHandler('cancel', this.onItemCancel.bind(this));
+        this._itemWindow.setHandler("cancel", this.onItemCancel.bind(this));
 
         this._itemWindow.setHelpWindow(this._helpWindow);
       }
@@ -678,7 +678,7 @@ var $gameAchievements = null; //eslint-disable-line
           return notifyMessage.format(name, this._achievement.points);
         }
 
-        return '';
+        return "";
       }
     }, {
       key: "update",
@@ -763,8 +763,8 @@ var $gameAchievements = null; //eslint-disable-line
   };
 
   Window_MenuCommand.prototype.addAchievementCommand = function () {
-    if (this.findSymbol('achievements') > -1) return;
-    this.addCommand(commandName, 'achievements');
+    if (this.findSymbol("achievements") > -1) return;
+    this.addCommand(commandName, "achievements");
   }; //============================================================================
   // Scene_Menu
   //============================================================================
@@ -775,7 +775,7 @@ var $gameAchievements = null; //eslint-disable-line
   Scene_Menu.prototype.createCommandWindow = function () {
     $.alias.Scene_Menu_createCommandWindow.call(this);
 
-    this._commandWindow.setHandler('achievements', this.commandAchievements.bind(this));
+    this._commandWindow.setHandler("achievements", this.commandAchievements.bind(this));
   };
 
   Scene_Menu.prototype.commandAchievements = function () {
@@ -820,7 +820,7 @@ var $gameAchievements = null; //eslint-disable-line
     $.alias.Scene_Map_createAllWindows.call(this);
     this.createNotificationWindow();
   };
-})(WAYModuleLoader.getModule('WAY_Achievements')); //-----------------------------------------------------------------------------
+})(WAYModuleLoader.getModule("WAY_Achievements")); //-----------------------------------------------------------------------------
 
 /*~struct~Achievement:
 @param category

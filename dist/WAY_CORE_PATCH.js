@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -22,14 +22,14 @@ var WAYCore = {};
       key: "once",
       value: function once(eventName, handler) {
         this.setupEventNameSpace(eventName);
-        this.registerEventHandler(eventName, 'once', handler);
+        this.registerEventHandler(eventName, "once", handler);
         return this;
       }
     }, {
       key: "on",
       value: function on(eventName, handler) {
         this.setupEventNameSpace(eventName);
-        this.registerEventHandler(eventName, 'on', handler);
+        this.registerEventHandler(eventName, "on", handler);
         return this;
       }
     }, {
@@ -67,7 +67,7 @@ var WAYCore = {};
     }, {
       key: "callHandler",
       value: function callHandler(handler, args) {
-        if (typeof handler === 'function') {
+        if (typeof handler === "function") {
           handler.apply(this, args);
         }
       }

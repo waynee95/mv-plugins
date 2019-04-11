@@ -49,13 +49,13 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -63,9 +63,9 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_DamageFormulaMacros', '1.1.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
+  WAYModuleLoader.registerPlugin("WAY_DamageFormulaMacros", "1.1.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
   });
 }
 
@@ -78,15 +78,15 @@ if (typeof WAY === 'undefined') {
           formula = _ref.formula;
 
       if (obj.damage.formula.indexOf(name) > -1) {
-        var regex = new RegExp(name, 'g');
+        var regex = new RegExp(name, "g");
         obj.damage.formula = obj.damage.formula.replace(regex, formula);
       }
     });
   };
 
-  WAY.EventEmitter.on('load-item-notetags', replaceMacros);
-  WAY.EventEmitter.on('load-skill-notetags', replaceMacros);
-})(WAYModuleLoader.getModule('WAY_DamageFormulaMacros'));
+  WAY.EventEmitter.on("load-item-notetags", replaceMacros);
+  WAY.EventEmitter.on("load-skill-notetags", replaceMacros);
+})(WAYModuleLoader.getModule("WAY_DamageFormulaMacros"));
 /*~struct~macro:
 @param name
 @text Macro Name

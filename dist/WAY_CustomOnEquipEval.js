@@ -52,13 +52,13 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -66,9 +66,9 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_CustomOnEquipEval', '1.2.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
+  WAYModuleLoader.registerPlugin("WAY_CustomOnEquipEval", "1.2.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
   });
 }
 
@@ -76,16 +76,16 @@ if (typeof WAY === 'undefined') {
   var _WAY$Util = WAY.Util,
       getMultiLineNotetag = _WAY$Util.getMultiLineNotetag,
       trim = _WAY$Util.trim;
-  var CUSTOM_ON_EQUIP_EVAL = 'customOnEquipEval';
-  var CUSTOM_ON_REMOVE_EQUIP_EVAL = 'customOnRemoveEquipEval';
+  var CUSTOM_ON_EQUIP_EVAL = "customOnEquipEval";
+  var CUSTOM_ON_REMOVE_EQUIP_EVAL = "customOnRemoveEquipEval";
 
   var parseNotetags = function parseNotetags(obj) {
-    obj.customOnEquipEval = getMultiLineNotetag(obj.note, 'Custom On Equip Eval', null, trim);
-    obj.customOnRemoveEquipEval = getMultiLineNotetag(obj.note, 'Custom On Remove Equip Eval', null, trim);
+    obj.customOnEquipEval = getMultiLineNotetag(obj.note, "Custom On Equip Eval", null, trim);
+    obj.customOnRemoveEquipEval = getMultiLineNotetag(obj.note, "Custom On Remove Equip Eval", null, trim);
   };
 
-  WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
-  WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
+  WAY.EventEmitter.on("load-weapon-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-armor-notetags", parseNotetags);
 
   var evalCode = function evalCode(user, item, type) {
     if (item && item[type]) {
@@ -161,4 +161,4 @@ if (typeof WAY === 'undefined') {
       });
     };
   }
-})(WAYModuleLoader.getModule('WAY_CustomOnEquipEval'));
+})(WAYModuleLoader.getModule("WAY_CustomOnEquipEval"));

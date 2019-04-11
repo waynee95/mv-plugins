@@ -60,70 +60,82 @@ Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
 
-'use strict'
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!') // eslint-disable-line no-console
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
-    gui.Window.get().showDevTools()
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
+    gui.Window.get().showDevTools();
   }
-  SceneManager.stop()
+  SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_CustomFaceImageEval', '1.1.2', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
-  })
+  WAYModuleLoader.registerPlugin(
+    "WAY_CustomFaceImageEval",
+    "1.1.2",
+    "waynee95",
+    {
+      name: "WAY_Core",
+      version: ">= 2.0.0"
+    }
+  );
 }
 
 ($ => {
-  const { getMultiLineNotetag, trim } = WAY.Util
+  const { getMultiLineNotetag, trim } = WAY.Util;
 
-  WAY.EventEmitter.on('load-actor-notetags', actor => {
+  WAY.EventEmitter.on("load-actor-notetags", actor => {
     actor.customFaceImageEval = getMultiLineNotetag(
       actor.note,
-      'Custom Face Image Eval',
+      "Custom Face Image Eval",
       null,
       trim
-    )
-  })
+    );
+  });
 
   const evalCode = (user, code) => {
     /* eslint-disable */
-    const a = user
-    const s = $gameSwitches._data
-    const v = $gameVariables._data
-    const p = $gameParty
-    let faceName = user._defaultFaceName
-    let faceIndex = user._defaultFaceIndex
+    const a = user;
+    const s = $gameSwitches._data;
+    const v = $gameVariables._data;
+    const p = $gameParty;
+    let faceName = user._defaultFaceName;
+    let faceIndex = user._defaultFaceIndex;
     try {
       eval(code);
       /* eslint-enable */
     } catch (e) {
-      throw e
+      throw e;
     }
-    return { faceName, faceIndex }
-  }
+    return { faceName, faceIndex };
+  };
 
   //==========================================================================
   // Game_Actor
   //==========================================================================
-  $.alias.Game_Actor_initImages = Game_Actor.prototype.initImages
-  Game_Actor.prototype.initImages = function () {
-    $.alias.Game_Actor_initImages.call(this)
-    this._defaultFaceName = this._faceName
-    this._defaultFaceIndex = this._faceIndex
-  }
+  $.alias.Game_Actor_initImages = Game_Actor.prototype.initImages;
+  Game_Actor.prototype.initImages = function() {
+    $.alias.Game_Actor_initImages.call(this);
+    this._defaultFaceName = this._faceName;
+    this._defaultFaceIndex = this._faceIndex;
+  };
 
-  $.alias.Game_Actor_refresh = Game_Actor.prototype.refresh
-  Game_Actor.prototype.refresh = function () {
-    $.alias.Game_Actor_refresh.call(this)
-    const { faceName, faceIndex } = evalCode(this, this.actor().customFaceImageEval)
-    this.setFaceImage(faceName, faceIndex)
+  $.alias.Game_Actor_refresh = Game_Actor.prototype.refresh;
+  Game_Actor.prototype.refresh = function() {
+    $.alias.Game_Actor_refresh.call(this);
+    const { faceName, faceIndex } = evalCode(
+      this,
+      this.actor().customFaceImageEval
+    );
+    this.setFaceImage(faceName, faceIndex);
 
     // make the TurnOrderDisplay notice the image change
-    if (Imported.YEP_X_TurnOrderDisplay && $gameParty.inBattle() && BattleManager._performedBattlers) {
-      BattleManager.refreshTurnOrderDisplay()
+    if (
+      Imported.YEP_X_TurnOrderDisplay &&
+      $gameParty.inBattle() &&
+      BattleManager._performedBattlers
+    ) {
+      BattleManager.refreshTurnOrderDisplay();
     }
-  }
-})(WAYModuleLoader.getModule('WAY_CustomFaceImageEval'))
+  };
+})(WAYModuleLoader.getModule("WAY_CustomFaceImageEval"));

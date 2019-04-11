@@ -42,45 +42,42 @@ Discord Name: waynee95#4261
 You can support me on https://ko-fi.com/waynee.
 */
 
-'use strict'
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!') // eslint-disable-line no-console
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-        var gui = require('nw.gui'); //eslint-disable-line
-    gui.Window.get().showDevTools()
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
+    gui.Window.get().showDevTools();
   }
-  SceneManager.stop()
+  SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_EvalText', '1.2.1', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
-  })
+  WAYModuleLoader.registerPlugin("WAY_EvalText", "1.2.1", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
+  });
 }
 
 ($ => {
   const evalText = text => {
-    const scene = SceneManager._scene
-    let a = $gameParty.leader()
-    let item = scene instanceof Scene_ItemBase && scene._itemWindow
-      ? scene._itemWindow.item()
-      : a
+    const scene = SceneManager._scene;
+    let a = $gameParty.leader();
+    let item =
+      scene instanceof Scene_ItemBase && scene._itemWindow
+        ? scene._itemWindow.item()
+        : a;
     /* eslint-disable */
-    let skill = item
-    const s = $gameSwitches
-    const v = $gameVariables
-    const p = $gameParty
+    let skill = item;
+    const s = $gameSwitches;
+    const v = $gameVariables;
+    const p = $gameParty;
     /* eslint-enable */
     if (scene instanceof Scene_MenuBase) {
-      a = $gameParty.menuActor()
+      a = $gameParty.menuActor();
     } else if (scene instanceof Scene_Battle) {
-      a = BattleManager.actor()
-      item = scene && scene._itemWindow
-        ? scene._itemWindow.item()
-        : a
-      skill = scene && scene._skillWindow
-        ? scene._skillWindow.item()
-        : a
+      a = BattleManager.actor();
+      item = scene && scene._itemWindow ? scene._itemWindow.item() : a;
+      skill = scene && scene._skillWindow ? scene._skillWindow.item() : a;
     }
     // Fix for YEP_X_InBattleStatusWindow
     if (
@@ -88,33 +85,37 @@ if (typeof WAY === 'undefined') {
       $gameParty.inBattle() &&
       SceneManager._scene._inBattleStatusWindow.visible
     ) {
-      a = SceneManager._scene._inBattleStatusWindow._battler
+      a = SceneManager._scene._inBattleStatusWindow._battler;
     }
 
-    return text.replace(/\${[^{}\\]+(?=\})}/g, function (code) {
+    return text.replace(/\${[^{}\\]+(?=\})}/g, function(code) {
       try {
-        return eval(code.substring(2, code.length - 1)) // eslint-disable-line no-eval
+        return eval(code.substring(2, code.length - 1)); // eslint-disable-line no-eval
       } catch (e) {
-        return ''
+        return "";
       }
-    })
-  }
+    });
+  };
 
   // Fix for YEP_X_InBattleStatusWindow
   if (Imported.YEP_X_InBattleStatus) {
     $.alias.Window_InBattleStateList =
-      Window_InBattleStateList.prototype.setBattler
-    Window_InBattleStateList.prototype.setBattler = function (battler) {
-      $.alias.Window_InBattleStateList.call(this, battler)
-      this._helpWindow.refresh()
-    }
+      Window_InBattleStateList.prototype.setBattler;
+    Window_InBattleStateList.prototype.setBattler = function(battler) {
+      $.alias.Window_InBattleStateList.call(this, battler);
+      this._helpWindow.refresh();
+    };
   }
 
   //= =========================================================================
   // Window_Base
   //= =========================================================================
-  $.alias.WindowBase_convertEscapeCharacters = Window_Base.prototype.convertEscapeCharacters
-  Window_Base.prototype.convertEscapeCharacters = function (text) {
-    return $.alias.WindowBase_convertEscapeCharacters.call(this, evalText(text))
-  }
-})(WAYModuleLoader.getModule('WAY_EvalText'))
+  $.alias.WindowBase_convertEscapeCharacters =
+    Window_Base.prototype.convertEscapeCharacters;
+  Window_Base.prototype.convertEscapeCharacters = function(text) {
+    return $.alias.WindowBase_convertEscapeCharacters.call(
+      this,
+      evalText(text)
+    );
+  };
+})(WAYModuleLoader.getModule("WAY_EvalText"));

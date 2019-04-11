@@ -35,7 +35,7 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
@@ -45,11 +45,11 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -57,9 +57,9 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_MapControlSwitch', '1.1.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
+  WAYModuleLoader.registerPlugin("WAY_MapControlSwitch", "1.1.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
   });
 }
 
@@ -74,15 +74,15 @@ if (typeof WAY === 'undefined') {
     return str.trim();
   };
 
-  WAY.EventEmitter.on('load-map-notetags', function (map) {
-    map.switches = getNotetagList(map.note, 'Control Switch', function (data) {
-      var _data$split$map = data.split(',').map(trim),
+  WAY.EventEmitter.on("load-map-notetags", function (map) {
+    map.switches = getNotetagList(map.note, "Control Switch", function (data) {
+      var _data$split$map = data.split(",").map(trim),
           _data$split$map2 = _slicedToArray(_data$split$map, 2),
           switchId = _data$split$map2[0],
           value = _data$split$map2[1];
 
       switchId = toInt(switchId);
-      value = value === 'on';
+      value = value === "on";
       return {
         switchId: switchId,
         value: value
@@ -94,4 +94,4 @@ if (typeof WAY === 'undefined') {
       $gameSwitches.setValue(switchId, value);
     });
   });
-})(WAYModuleLoader.getModule('WAY_MapControlSwitch'));
+})(WAYModuleLoader.getModule("WAY_MapControlSwitch"));

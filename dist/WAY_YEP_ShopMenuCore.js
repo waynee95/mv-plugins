@@ -42,13 +42,13 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -56,7 +56,7 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_YEP_ShopMenuCore', '1.1.1', 'waynee95');
+  WAYModuleLoader.registerPlugin("WAY_YEP_ShopMenuCore", "1.1.1", "waynee95");
 }
 
 (function ($) {
@@ -65,13 +65,13 @@ if (typeof WAY === 'undefined') {
       trim = _WAY$Util.trim;
 
   var parseNotetags = function parseNotetags(obj) {
-    obj.customBuyShowEval = getMultiLineNotetag(obj.note, 'Custom Buy Show Eval', null, trim);
-    obj.customBuyEnableEval = getMultiLineNotetag(obj.note, 'Custom Buy Enable Eval', null, trim);
+    obj.customBuyShowEval = getMultiLineNotetag(obj.note, "Custom Buy Show Eval", null, trim);
+    obj.customBuyEnableEval = getMultiLineNotetag(obj.note, "Custom Buy Enable Eval", null, trim);
   };
 
-  WAY.EventEmitter.on('load-item-notetags', parseNotetags);
-  WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
-  WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
+  WAY.EventEmitter.on("load-item-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-weapon-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-armor-notetags", parseNotetags);
 
   var meetsCustomBuyShowEval = function meetsCustomBuyShowEval(item) {
     if (!item || item.customBuyShowEval === null) {
@@ -140,4 +140,4 @@ if (typeof WAY === 'undefined') {
 
     this._buyWindow.refresh();
   };
-})(WAYModuleLoader.getModule('WAY_YEP_ShopMenuCore'));
+})(WAYModuleLoader.getModule("WAY_YEP_ShopMenuCore"));

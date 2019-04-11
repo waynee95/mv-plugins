@@ -36,7 +36,7 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -46,11 +46,11 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -58,9 +58,9 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_YEP_EquipBattleSkills', '1.2.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
+  WAYModuleLoader.registerPlugin("WAY_YEP_EquipBattleSkills", "1.2.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
   });
 }
 
@@ -69,12 +69,12 @@ if (typeof WAY === 'undefined') {
       getNotetag = _WAY$Util.getNotetag,
       getNotetagList = _WAY$Util.getNotetagList,
       toArray = _WAY$Util.toArray;
-  WAY.EventEmitter.on('load-skill-notetags', function (obj) {
-    obj.lockSkill = getNotetag(obj.note, 'Lock Skill', false);
+  WAY.EventEmitter.on("load-skill-notetags", function (obj) {
+    obj.lockSkill = getNotetag(obj.note, "Lock Skill", false);
   });
-  WAY.EventEmitter.on('load-class-notetags', function (obj) {
+  WAY.EventEmitter.on("load-class-notetags", function (obj) {
     obj.lockedSkills = [];
-    getNotetagList(obj.note, 'Lock Skills', function (data) {
+    getNotetagList(obj.note, "Lock Skills", function (data) {
       var _obj$lockedSkills;
 
       var arr = toArray(data);
@@ -119,4 +119,4 @@ if (typeof WAY === 'undefined') {
 
     return true;
   };
-})(WAYModuleLoader.getModule('WAY_YEP_EquipBattleSkills'));
+})(WAYModuleLoader.getModule("WAY_YEP_EquipBattleSkills"));

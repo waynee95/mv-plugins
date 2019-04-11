@@ -29,25 +29,30 @@ Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
 
-'use strict'
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!') // eslint-disable-line no-console
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
-    gui.Window.get().showDevTools()
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
+    gui.Window.get().showDevTools();
   }
-  SceneManager.stop()
+  SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_RandomEncounterFormula', '1.1.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
-  })
+  WAYModuleLoader.registerPlugin(
+    "WAY_RandomEncounterFormula",
+    "1.1.0",
+    "waynee95",
+    {
+      name: "WAY_Core",
+      version: ">= 2.0.0"
+    }
+  );
 }
 
 ($ => {
-  Game_Player.prototype.makeEncounterCount = function () {
-    const n = $gameMap.encounterStep() // eslint-disable-line no-unused-vars
-    this._encounterCount = eval($.parameters.encounterFormula) // eslint-disable-line no-eval
-  }
-})(WAYModuleLoader.getModule('WAY_RandomEncounterFormula'))
+  Game_Player.prototype.makeEncounterCount = function() {
+    const n = $gameMap.encounterStep(); // eslint-disable-line no-unused-vars
+    this._encounterCount = eval($.parameters.encounterFormula); // eslint-disable-line no-eval
+  };
+})(WAYModuleLoader.getModule("WAY_RandomEncounterFormula"));

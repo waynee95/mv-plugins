@@ -60,97 +60,102 @@ Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
 
-'use strict'
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!') // eslint-disable-line no-console
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
-    gui.Window.get().showDevTools()
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
+    gui.Window.get().showDevTools();
   }
-  SceneManager.stop()
+  SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_YEP_ItemCore', '1.2.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
-  })
+  WAYModuleLoader.registerPlugin("WAY_YEP_ItemCore", "1.2.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
+  });
 }
 
 (() => {
-  const { getNotetag, getMultiLineNotetag, trim, toInt } = WAY.Util
+  const { getNotetag, getMultiLineNotetag, trim, toInt } = WAY.Util;
 
   const parseNotetags = obj => {
-    obj.customNameEval = getMultiLineNotetag(obj.note, 'Custom Name Eval', null, trim)
-    obj.customTextColorEval = getMultiLineNotetag(
+    obj.customNameEval = getMultiLineNotetag(
       obj.note,
-      'custom textcolor eval',
+      "Custom Name Eval",
       null,
       trim
-    )
-    obj.iconBackground = getNotetag(obj.note, 'Icon Background', null, toInt)
-  }
+    );
+    obj.customTextColorEval = getMultiLineNotetag(
+      obj.note,
+      "custom textcolor eval",
+      null,
+      trim
+    );
+    obj.iconBackground = getNotetag(obj.note, "Icon Background", null, toInt);
+  };
 
-  WAY.EventEmitter.on('load-item-notetags', parseNotetags)
-  WAY.EventEmitter.on('load-weapon-notetags', parseNotetags)
-  WAY.EventEmitter.on('load-armor-notetags', parseNotetags)
-  WAY.EventEmitter.on('load-skill-notetags', parseNotetags)
+  WAY.EventEmitter.on("load-item-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-weapon-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-armor-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-skill-notetags", parseNotetags);
 
   const evalCustomName = item => {
-    const { customNameEval } = item
-    if (!customNameEval || customNameEval === '') return item.name
+    const { customNameEval } = item;
+    if (!customNameEval || customNameEval === "") return item.name;
     /* eslint-disable */
-    let name = ''
-    const s = $gameSwitches
-    const v = $gameVariables
-    const p = $gameParty
+    let name = "";
+    const s = $gameSwitches;
+    const v = $gameVariables;
+    const p = $gameParty;
     try {
-      eval(customNameEval)
+      eval(customNameEval);
       /* eslint-enable */
     } catch (e) {
-      throw e
+      throw e;
     }
-    return name
-  }
+    return name;
+  };
 
   const evalCustomTextColor = item => {
-    const { customTextColorEval } = item
-    if (!customTextColorEval || customTextColorEval === '') return 0
+    const { customTextColorEval } = item;
+    if (!customTextColorEval || customTextColorEval === "") return 0;
     /* eslint-disable */
-    let textColor = 0
-    const s = $gameSwitches
-    const v = $gameVariables
-    const p = $gameParty
+    let textColor = 0;
+    const s = $gameSwitches;
+    const v = $gameVariables;
+    const p = $gameParty;
     try {
-      eval(customTextColorEval)
+      eval(customTextColorEval);
       /* eslint-enable */
     } catch (e) {
-      throw e
+      throw e;
     }
-    return textColor
-  }
+    return textColor;
+  };
 
   //==========================================================================
   // Window_Base
   //==========================================================================
-  Window_Base.prototype.setItemTextColorEval = function (item) {
-    if (!item) return
-    this._resetTextColor = evalCustomTextColor(item) || item.textColor
-  }
+  Window_Base.prototype.setItemTextColorEval = function(item) {
+    if (!item) return;
+    this._resetTextColor = evalCustomTextColor(item) || item.textColor;
+  };
 
-  Window_Base.prototype.drawItemName = function (item, x, y, width = 312) {
+  Window_Base.prototype.drawItemName = function(item, x, y, width = 312) {
     if (item) {
-      this.setItemTextColor(item)
-      this.setItemTextColorEval(item)
-      const iconBoxWidth = Window_Base._iconWidth + 4
+      this.setItemTextColor(item);
+      this.setItemTextColorEval(item);
+      const iconBoxWidth = Window_Base._iconWidth + 4;
       if (item.iconBackground) {
-        this.drawIcon(item.iconBackground, x + 2, y + 2)
+        this.drawIcon(item.iconBackground, x + 2, y + 2);
       }
-      this.drawIcon(item.iconIndex, x + 2, y + 2)
-      const itemName = evalCustomName(item)
-      this.resetTextColor()
-      this.drawText(itemName, x + iconBoxWidth, y, width - iconBoxWidth)
-      this._resetTextColor = undefined
-      this.resetTextColor()
+      this.drawIcon(item.iconIndex, x + 2, y + 2);
+      const itemName = evalCustomName(item);
+      this.resetTextColor();
+      this.drawText(itemName, x + iconBoxWidth, y, width - iconBoxWidth);
+      this._resetTextColor = undefined;
+      this.resetTextColor();
     }
-  }
-})(WAYModuleLoader.getModule('WAY_YEP_ItemCore'))
+  };
+})(WAYModuleLoader.getModule("WAY_YEP_ItemCore"));

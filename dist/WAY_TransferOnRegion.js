@@ -60,7 +60,7 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
@@ -70,11 +70,11 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -82,9 +82,9 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_TransferOnRegion', '1.0.2', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
+  WAYModuleLoader.registerPlugin("WAY_TransferOnRegion", "1.0.2", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
   });
 }
 
@@ -92,10 +92,10 @@ if (typeof WAY === 'undefined') {
   var _WAY$Util = WAY.Util,
       getNotetagList = _WAY$Util.getNotetagList,
       toInt = _WAY$Util.toInt;
-  WAY.EventEmitter.on('load-map-notetags', function (map) {
+  WAY.EventEmitter.on("load-map-notetags", function (map) {
     map._transferData = {};
-    getNotetagList(map.note, 'Region Transfer', function (data) {
-      var _data$split$map = data.split(',').map(toInt),
+    getNotetagList(map.note, "Region Transfer", function (data) {
+      var _data$split$map = data.split(",").map(toInt),
           _data$split$map2 = _slicedToArray(_data$split$map, 6),
           regionId = _data$split$map2[0],
           mapId = _data$split$map2[1],
@@ -135,4 +135,4 @@ if (typeof WAY === 'undefined') {
       $gamePlayer.reserveTransfer(mapId, targetX, targetY, direction, fadeType);
     }
   };
-})(WAYModuleLoader.getModule('WAY_TransferOnRegion'));
+})(WAYModuleLoader.getModule("WAY_TransferOnRegion"));

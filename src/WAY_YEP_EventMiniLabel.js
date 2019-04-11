@@ -32,43 +32,48 @@ Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
 
-'use strict'
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!') // eslint-disable-line no-console
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
-    gui.Window.get().showDevTools()
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
+    gui.Window.get().showDevTools();
   }
-  SceneManager.stop()
+  SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_YEP_EventMiniLabel', '1.1.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
-  })
+  WAYModuleLoader.registerPlugin(
+    "WAY_YEP_EventMiniLabel",
+    "1.1.0",
+    "waynee95",
+    {
+      name: "WAY_Core",
+      version: ">= 2.0.0"
+    }
+  );
 }
 
 (() => {
   //==========================================================================
   // PluginManager
   //==========================================================================
-  PluginManager.addCommand('MiniLabelText', {
-    set (eventId, ...miniLabelText) {
-      const spriteset = SceneManager._scene._spriteset
+  PluginManager.addCommand("MiniLabelText", {
+    set(eventId, ...miniLabelText) {
+      const spriteset = SceneManager._scene._spriteset;
       if (!spriteset) {
-        return
+        return;
       }
-      const event = $gameMap.event(eventId)
+      const event = $gameMap.event(eventId);
       if (!event) {
-        return
+        return;
       }
       const miniLabel = spriteset._characterSprites.filter(
         sprite => sprite._character === event
-      )[0]._miniLabel
+      )[0]._miniLabel;
       if (!miniLabel) {
-        return
+        return;
       }
-      miniLabel.setText(miniLabelText.toString().replace(/,/g, ' '))
+      miniLabel.setText(miniLabelText.toString().replace(/,/g, " "));
     }
-  })
-})(WAYModuleLoader.getModule('WAY_YEP_EventMiniLabel'))
+  });
+})(WAYModuleLoader.getModule("WAY_YEP_EventMiniLabel"));

@@ -32,13 +32,13 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -46,9 +46,9 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_YEP_EventMiniLabel', '1.1.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
+  WAYModuleLoader.registerPlugin("WAY_YEP_EventMiniLabel", "1.1.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
   });
 }
 
@@ -56,7 +56,7 @@ if (typeof WAY === 'undefined') {
   //==========================================================================
   // PluginManager
   //==========================================================================
-  PluginManager.addCommand('MiniLabelText', {
+  PluginManager.addCommand("MiniLabelText", {
     set: function set(eventId) {
       var spriteset = SceneManager._scene._spriteset;
 
@@ -82,7 +82,7 @@ if (typeof WAY === 'undefined') {
         miniLabelText[_key - 1] = arguments[_key];
       }
 
-      miniLabel.setText(miniLabelText.toString().replace(/,/g, ' '));
+      miniLabel.setText(miniLabelText.toString().replace(/,/g, " "));
     }
   });
-})(WAYModuleLoader.getModule('WAY_YEP_EventMiniLabel'));
+})(WAYModuleLoader.getModule("WAY_YEP_EventMiniLabel"));

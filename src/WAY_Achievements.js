@@ -164,26 +164,26 @@ Discord Name: waynee95#4261
 You can support me at https://ko-fi.com/waynee
 */
 
-'use strict'
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!') // eslint-disable-line no-console
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
     var gui = require("nw.gui"); //eslint-disable-line
-    gui.Window.get().showDevTools()
+    gui.Window.get().showDevTools();
   }
-  SceneManager.stop()
+  SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_Achievements', '1.1.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
-  })
+  WAYModuleLoader.registerPlugin("WAY_Achievements", "1.1.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
+  });
 }
 
 var $gameAchievements = null; //eslint-disable-line
 
 ($ => {
-  const { TitleWindow } = WAY.Window
+  const { TitleWindow } = WAY.Window;
 
   const {
     background,
@@ -200,30 +200,30 @@ var $gameAchievements = null; //eslint-disable-line
     notifyWindowHeight,
     showCommand,
     titleText
-  } = $.parameters
+  } = $.parameters;
 
-  const $dataAchievements = [null].concat($.parameters.achievementList)
+  const $dataAchievements = [null].concat($.parameters.achievementList);
 
   //===========================================================================
   // Game_Achievement
   //===========================================================================
   class Game_Achievement {
-    constructor (id) {
-      this.category = ''
-      this.id = id
-      this.hidden = false
-      this.isCompleted = false
-      this.completeIcon = 0
-      this.condition = ''
-      this.description = ''
-      this.notCompletedDescription = ''
-      this.incompleteIcon = 0
-      this.name = ''
-      this.points = 0
-      this.onCompleteCommonEvent = 0
+    constructor(id) {
+      this.category = "";
+      this.id = id;
+      this.hidden = false;
+      this.isCompleted = false;
+      this.completeIcon = 0;
+      this.condition = "";
+      this.description = "";
+      this.notCompletedDescription = "";
+      this.incompleteIcon = 0;
+      this.name = "";
+      this.points = 0;
+      this.onCompleteCommonEvent = 0;
     }
-    check () {
-      return eval(this.condition)
+    check() {
+      return eval(this.condition);
     }
   }
 
@@ -231,49 +231,49 @@ var $gameAchievements = null; //eslint-disable-line
   // Game_Achievements
   //===========================================================================
   class Game_Achievements {
-    constructor (data) {
+    constructor(data) {
       if (!data) {
         this._data = $dataAchievements.map((achievement, index) =>
           Object.assign(new Game_Achievement(index), achievement)
-        )
+        );
       } else {
         this._data = data.map((achievement, index) =>
           Object.assign(new Game_Achievement(index), achievement)
-        )
+        );
       }
-      this._notifyQueue = []
+      this._notifyQueue = [];
     }
-    achievement (id) {
-      if (typeof $dataAchievements[id] !== 'object') {
-        return null
+    achievement(id) {
+      if (typeof $dataAchievements[id] !== "object") {
+        return null;
       }
       if ($dataAchievements[id]) {
-        return this._data[id]
+        return this._data[id];
       }
-      return null
+      return null;
     }
-    update () {
+    update() {
       this._data.forEach(achievement => {
         if (achievement && !achievement.isCompleted && achievement.check()) {
-          achievement.isCompleted = true
+          achievement.isCompleted = true;
           if (achievement.onCompleteCommonEvent) {
-            const commonEventId = achievement.onCompleteCommonEvent
-            $gameTemp.reserveCommonEvent(commonEventId)
+            const commonEventId = achievement.onCompleteCommonEvent;
+            $gameTemp.reserveCommonEvent(commonEventId);
           }
-          this._notifyQueue.push(achievement)
+          this._notifyQueue.push(achievement);
         }
-      })
+      });
     }
-    currentPoints () {
+    currentPoints() {
       return this._data
         .filter(achievement => achievement.isCompleted)
         .map(achievement => achievement.points)
-        .reduce((acc, value) => acc + value, 0)
+        .reduce((acc, value) => acc + value, 0);
     }
-    maxPoints () {
+    maxPoints() {
       return this._data
         .map(achievement => achievement.points)
-        .reduce((acc, value) => acc + value, 0)
+        .reduce((acc, value) => acc + value, 0);
     }
   }
 
@@ -281,9 +281,9 @@ var $gameAchievements = null; //eslint-disable-line
   // Window_AchievementCategories
   //===========================================================================
   class Window_AchievementCategories extends Window_Command {
-    constructor (y) {
-      super(0, y)
-      this.select(0)
+    constructor(y) {
+      super(0, y);
+      this.select(0);
     }
     /* eslint-disable */
     windowWidth() {
@@ -299,23 +299,23 @@ var $gameAchievements = null; //eslint-disable-line
       return 4;
     }
     /* eslint-enable */
-    windowHeight () {
-      return this.fittingHeight(this.numVisibleRows())
+    windowHeight() {
+      return this.fittingHeight(this.numVisibleRows());
     }
-    makeCommandList () {
+    makeCommandList() {
       categories.forEach(command => {
-        this.addCommand(command, command)
-      })
+        this.addCommand(command, command);
+      });
     }
-    update () {
-      super.update()
+    update() {
+      super.update();
       if (this._itemWindow) {
-        this._itemWindow.setCategory(this.currentSymbol())
+        this._itemWindow.setCategory(this.currentSymbol());
       }
     }
-    setItemWindow (itemWindow) {
-      this._itemWindow = itemWindow
-      this.update()
+    setItemWindow(itemWindow) {
+      this._itemWindow = itemWindow;
+      this.update();
     }
   }
 
@@ -323,43 +323,45 @@ var $gameAchievements = null; //eslint-disable-line
   // Window_AchievementList
   //===========================================================================
   class Window_AchievementList extends Window_ItemList {
-    constructor (x, y, width, height) {
-      super(x, y, width, height)
-      this._category = ''
+    constructor(x, y, width, height) {
+      super(x, y, width, height);
+      this._category = "";
     }
-    includes (achievement) {
+    includes(achievement) {
       if (this._category) {
-        const categories = achievement.category.split(" ").map(s => s.toLowerCase());
+        const categories = achievement.category
+          .split(" ")
+          .map(s => s.toLowerCase());
         return achievement
           ? categories.contains(this._category.toLowerCase())
-          : false
+          : false;
       }
-      return false
+      return false;
     }
-    makeItemList () {
+    makeItemList() {
       this._data = $gameAchievements._data
         .slice(1)
         .filter(achievement => this.includes(achievement))
         .filter(achievement => {
           if (achievement.hidden) {
-            return achievement.isCompleted
+            return achievement.isCompleted;
           }
-          return achievement
-        })
+          return achievement;
+        });
     }
-    drawItem (index) {
-      const achievement = this._data[index]
+    drawItem(index) {
+      const achievement = this._data[index];
       if (achievement) {
-        const rect = this.itemRect(index)
-        rect.width -= this.textPadding()
+        const rect = this.itemRect(index);
+        rect.width -= this.textPadding();
         const iconIndex = achievement.isCompleted
           ? achievement.completeIcon
-          : achievement.incompleteIcon
-        this.changePaintOpacity(this.isEnabled(achievement))
-        this.drawIcon(iconIndex, rect.x + 2, rect.y + 2)
-        const textX = rect.x + Window_Base._iconWidth + 4
-        this.drawText(achievement.name, textX, rect.y)
-        this.changePaintOpacity(1)
+          : achievement.incompleteIcon;
+        this.changePaintOpacity(this.isEnabled(achievement));
+        this.drawIcon(iconIndex, rect.x + 2, rect.y + 2);
+        const textX = rect.x + Window_Base._iconWidth + 4;
+        this.drawText(achievement.name, textX, rect.y);
+        this.changePaintOpacity(1);
       }
     }
     /* eslint-disable */
@@ -370,16 +372,16 @@ var $gameAchievements = null; //eslint-disable-line
       return false;
     }
     /* eslint-enable */
-    updateHelp () {
-      const achievement = this.item()
+    updateHelp() {
+      const achievement = this.item();
       if (achievement) {
         let text = achievement.isCompleted
           ? achievement.description
-          : achievement.notCompletedDescription
+          : achievement.notCompletedDescription;
         if (text === null) {
-          text = achievement.description
+          text = achievement.description;
         }
-        this._helpWindow.setText(text)
+        this._helpWindow.setText(text);
       }
     }
   }
@@ -388,78 +390,78 @@ var $gameAchievements = null; //eslint-disable-line
   // Scene_Achievements
   //===========================================================================
   class Scene_Achievements extends Scene_MenuBase {
-    createBackground () {
-      if (background !== '') {
-        this._backgroundSprite = new Sprite()
-        this._backgroundSprite.bitmap = ImageManager.loadPicture(background)
-        this.addChild(this._backgroundSprite)
+    createBackground() {
+      if (background !== "") {
+        this._backgroundSprite = new Sprite();
+        this._backgroundSprite.bitmap = ImageManager.loadPicture(background);
+        this.addChild(this._backgroundSprite);
       }
     }
-    create () {
-      super.create()
-      this.createTitleWindow()
-      this.createPointsWindow()
-      this.createHelpWindow()
-      this.createCategoryWindow()
-      this.createItemWindow()
+    create() {
+      super.create();
+      this.createTitleWindow();
+      this.createPointsWindow();
+      this.createHelpWindow();
+      this.createCategoryWindow();
+      this.createItemWindow();
     }
-    createTitleWindow () {
-      const ww = (Graphics.boxWidth / 4) * 3
-      this._titleWindow = new TitleWindow(0, 0, ww, 72).setTitle(titleText)
-      this.addWindow(this._titleWindow)
+    createTitleWindow() {
+      const ww = (Graphics.boxWidth / 4) * 3;
+      this._titleWindow = new TitleWindow(0, 0, ww, 72).setTitle(titleText);
+      this.addWindow(this._titleWindow);
     }
-    createPointsWindow () {
-      const wx = this._titleWindow.width
-      const ww = Graphics.boxWidth / 4
-      const current = $gameAchievements.currentPoints()
-      const max = $gameAchievements.maxPoints()
-      const text = pointsTitle.format(current, max)
-      this._titleWindow = new TitleWindow(wx, 0, ww, 72).setTitle(text)
-      this.addWindow(this._titleWindow)
+    createPointsWindow() {
+      const wx = this._titleWindow.width;
+      const ww = Graphics.boxWidth / 4;
+      const current = $gameAchievements.currentPoints();
+      const max = $gameAchievements.maxPoints();
+      const text = pointsTitle.format(current, max);
+      this._titleWindow = new TitleWindow(wx, 0, ww, 72).setTitle(text);
+      this.addWindow(this._titleWindow);
     }
-    createHelpWindow () {
-      this._helpWindow = new Window_Help()
-      this._helpWindow.y = this._titleWindow.height
-      this.addWindow(this._helpWindow)
+    createHelpWindow() {
+      this._helpWindow = new Window_Help();
+      this._helpWindow.y = this._titleWindow.height;
+      this.addWindow(this._helpWindow);
     }
-    createCategoryWindow () {
-      const wy = this._helpWindow.y + this._helpWindow.height
-      this._categoryWindow = new Window_AchievementCategories(wy)
-      this._categoryWindow.setHandler('ok', this.onCategoryOk.bind(this))
+    createCategoryWindow() {
+      const wy = this._helpWindow.y + this._helpWindow.height;
+      this._categoryWindow = new Window_AchievementCategories(wy);
+      this._categoryWindow.setHandler("ok", this.onCategoryOk.bind(this));
       this._categoryWindow.setHandler(
-        'cancel',
+        "cancel",
         this.onCategoryCancel.bind(this)
-      )
-      this.addWindow(this._categoryWindow)
+      );
+      this.addWindow(this._categoryWindow);
     }
-    createItemWindow () {
-      const wy = this._categoryWindow.y + this._categoryWindow.height
+    createItemWindow() {
+      const wy = this._categoryWindow.y + this._categoryWindow.height;
       this._itemWindow = new Window_AchievementList(
         0,
         wy,
         Graphics.boxWidth,
         Graphics.boxHeight - wy
-      )
-      this.addWindow(this._itemWindow)
-      this._categoryWindow.setItemWindow(this._itemWindow)
-      this._itemWindow.setHandler('cancel', this.onItemCancel.bind(this))
-      this._itemWindow.setHelpWindow(this._helpWindow)
+      );
+      this.addWindow(this._itemWindow);
+      this._categoryWindow.setItemWindow(this._itemWindow);
+      this._itemWindow.setHandler("cancel", this.onItemCancel.bind(this));
+      this._itemWindow.setHelpWindow(this._helpWindow);
     }
-    onCategoryOk () {
-      this._itemWindow.activate()
-      this._itemWindow.refresh()
-      this._itemWindow.select(0)
+    onCategoryOk() {
+      this._itemWindow.activate();
+      this._itemWindow.refresh();
+      this._itemWindow.select(0);
     }
-    onCategoryCancel () {
-      this.popScene()
+    onCategoryCancel() {
+      this.popScene();
     }
-    onItemCancel () {
-      this._itemWindow.deselect()
-      this._helpWindow.clear()
-      this._categoryWindow.activate()
+    onItemCancel() {
+      this._itemWindow.deselect();
+      this._helpWindow.clear();
+      this._categoryWindow.activate();
     }
-    onCancel () {
-      this.popScene()
+    onCancel() {
+      this.popScene();
     }
   }
 
@@ -467,66 +469,66 @@ var $gameAchievements = null; //eslint-disable-line
   // Window_AchievementNotification
   //===========================================================================
   class Window_AchievementNotification extends Window_Base {
-    constructor (x, y, width, height) {
-      super(x, y, width, height)
-      this.opacity = 0
-      this.contentsOpacity = 0
-      this._showCount = 0
-      this._achievement = null
-      this.refresh()
+    constructor(x, y, width, height) {
+      super(x, y, width, height);
+      this.opacity = 0;
+      this.contentsOpacity = 0;
+      this._showCount = 0;
+      this._achievement = null;
+      this.refresh();
     }
-    loadWindowskin () {
-      this.windowskin = ImageManager.loadSystem(notifyWindowSkin)
+    loadWindowskin() {
+      this.windowskin = ImageManager.loadSystem(notifyWindowSkin);
     }
-    updateFadeIn () {
-      this.opacity += 16
-      this.contentsOpacity += 16
+    updateFadeIn() {
+      this.opacity += 16;
+      this.contentsOpacity += 16;
     }
-    updateFadeOut () {
-      this.opacity -= 16
-      this.contentsOpacity -= 16
+    updateFadeOut() {
+      this.opacity -= 16;
+      this.contentsOpacity -= 16;
     }
-    text () {
+    text() {
       if (this._achievement) {
         const name = `\x1bI[${this._achievement.completeIcon}]${
           this._achievement.name
-        }`
-        return notifyMessage.format(name, this._achievement.points)
+        }`;
+        return notifyMessage.format(name, this._achievement.points);
       }
-      return ''
+      return "";
     }
-    update () {
-      Window_Base.prototype.update.call(this)
+    update() {
+      Window_Base.prototype.update.call(this);
       if ($gameAchievements._notifyQueue.length) {
         if (!this._achievement && this.contentsOpacity < 1) {
-          this._achievement = $gameAchievements._notifyQueue[0]
-          this.refresh()
-          this._showCount = notifyShowFrames
-          if (notifySound && notifySound.name) AudioManager.playSe(notifySound)
+          this._achievement = $gameAchievements._notifyQueue[0];
+          this.refresh();
+          this._showCount = notifyShowFrames;
+          if (notifySound && notifySound.name) AudioManager.playSe(notifySound);
         }
         if (this._achievement) {
           if (this._showCount > 0) {
-            this.updateFadeIn()
-            this._showCount--
+            this.updateFadeIn();
+            this._showCount--;
           } else if (this.contentsOpacity > 0) {
-            this.updateFadeOut()
+            this.updateFadeOut();
           } else {
-            this._achievement = null
-            $gameAchievements._notifyQueue.shift()
+            this._achievement = null;
+            $gameAchievements._notifyQueue.shift();
           }
         }
       }
     }
-    adjustWidthBasedOnText () {
+    adjustWidthBasedOnText() {
       this.width = Math.ceil(
         this.textWidthEx(this.text()) + this.standardPadding() * 2
-      )
-      this.createContents()
+      );
+      this.createContents();
     }
-    refresh () {
+    refresh() {
       if (this._achievement) {
-        this.adjustWidthBasedOnText()
-        this.drawTextEx(this.text(), 0, 0)
+        this.adjustWidthBasedOnText();
+        this.drawTextEx(this.text(), 0, 0);
       }
     }
   }
@@ -534,99 +536,99 @@ var $gameAchievements = null; //eslint-disable-line
   //===========================================================================
   // DataManager
   //===========================================================================
-  $.alias.DataManager_createGameObjects = DataManager.createGameObjects
-  DataManager.createGameObjects = function () {
-    $.alias.DataManager_createGameObjects.call(this)
-    $gameAchievements = new Game_Achievements()
-  }
+  $.alias.DataManager_createGameObjects = DataManager.createGameObjects;
+  DataManager.createGameObjects = function() {
+    $.alias.DataManager_createGameObjects.call(this);
+    $gameAchievements = new Game_Achievements();
+  };
 
-  $.alias.DataManager_makeSaveContents = DataManager.makeSaveContents
-  DataManager.makeSaveContents = function () {
-    const contents = $.alias.DataManager_makeSaveContents.call(this)
-    contents.achievements = $gameAchievements._data
-    return contents
-  }
+  $.alias.DataManager_makeSaveContents = DataManager.makeSaveContents;
+  DataManager.makeSaveContents = function() {
+    const contents = $.alias.DataManager_makeSaveContents.call(this);
+    contents.achievements = $gameAchievements._data;
+    return contents;
+  };
 
-  $.alias.DataManager_extractSaveContents = DataManager.extractSaveContents
-  DataManager.extractSaveContents = function (contents) {
-    $.alias.DataManager_extractSaveContents.call(this, contents)
-    const data = contents.achievements
-    $gameAchievements = new Game_Achievements(data)
-  }
+  $.alias.DataManager_extractSaveContents = DataManager.extractSaveContents;
+  DataManager.extractSaveContents = function(contents) {
+    $.alias.DataManager_extractSaveContents.call(this, contents);
+    const data = contents.achievements;
+    $gameAchievements = new Game_Achievements(data);
+  };
 
   //===========================================================================
   // Window_MenuCommand
   //===========================================================================
   $.alias.Window_MenuCommand_addOriginalCommands =
-    Window_MenuCommand.prototype.addOriginalCommands
-  Window_MenuCommand.prototype.addOriginalCommands = function () {
-    $.alias.Window_MenuCommand_addOriginalCommands.call(this)
-    if (showCommand) this.addAchievementCommand()
-  }
+    Window_MenuCommand.prototype.addOriginalCommands;
+  Window_MenuCommand.prototype.addOriginalCommands = function() {
+    $.alias.Window_MenuCommand_addOriginalCommands.call(this);
+    if (showCommand) this.addAchievementCommand();
+  };
 
-  Window_MenuCommand.prototype.addAchievementCommand = function () {
-    if (this.findSymbol('achievements') > -1) return
-    this.addCommand(commandName, 'achievements')
-  }
+  Window_MenuCommand.prototype.addAchievementCommand = function() {
+    if (this.findSymbol("achievements") > -1) return;
+    this.addCommand(commandName, "achievements");
+  };
 
   //============================================================================
   // Scene_Menu
   //============================================================================
   $.alias.Scene_Menu_createCommandWindow =
-    Scene_Menu.prototype.createCommandWindow
-  Scene_Menu.prototype.createCommandWindow = function () {
-    $.alias.Scene_Menu_createCommandWindow.call(this)
+    Scene_Menu.prototype.createCommandWindow;
+  Scene_Menu.prototype.createCommandWindow = function() {
+    $.alias.Scene_Menu_createCommandWindow.call(this);
     this._commandWindow.setHandler(
-      'achievements',
+      "achievements",
       this.commandAchievements.bind(this)
-    )
-  }
+    );
+  };
 
-  Scene_Menu.prototype.commandAchievements = function () {
-    SceneManager.push(Scene_Achievements)
-  }
+  Scene_Menu.prototype.commandAchievements = function() {
+    SceneManager.push(Scene_Achievements);
+  };
 
-Scene_Base.prototype.createNotificationWindow = function () {
+  Scene_Base.prototype.createNotificationWindow = function() {
     this._achievementNotificationWindow = new Window_AchievementNotification(
       notifyWindowX,
       notifyWindowY,
       notifyWindowWidth,
       notifyWindowHeight
-    )
-    this.addChild(this._achievementNotificationWindow)
-  }
+    );
+    this.addChild(this._achievementNotificationWindow);
+  };
 
   //===========================================================================
   //  Scene_Battle
   //===========================================================================
-  $.alias.Scene_Battle_update = Scene_Battle.prototype.update
-  Scene_Battle.prototype.update = function () {
-    $.alias.Scene_Battle_update.call(this)
-    $gameAchievements.update()
-  }
+  $.alias.Scene_Battle_update = Scene_Battle.prototype.update;
+  Scene_Battle.prototype.update = function() {
+    $.alias.Scene_Battle_update.call(this);
+    $gameAchievements.update();
+  };
 
-  $.alias.Scene_Battle_createAllWindows = Scene_Battle.prototype.createAllWindows
-  Scene_Battle.prototype.createAllWindows = function () {
-    $.alias.Scene_Battle_createAllWindows.call(this)
-    this.createNotificationWindow()
-  }
+  $.alias.Scene_Battle_createAllWindows =
+    Scene_Battle.prototype.createAllWindows;
+  Scene_Battle.prototype.createAllWindows = function() {
+    $.alias.Scene_Battle_createAllWindows.call(this);
+    this.createNotificationWindow();
+  };
 
   //===========================================================================
   //  Scene_Map
   //===========================================================================
-  $.alias.Scene_Map_update = Scene_Map.prototype.update
-  Scene_Map.prototype.update = function () {
-    $.alias.Scene_Map_update.call(this)
-    $gameAchievements.update()
-  }
+  $.alias.Scene_Map_update = Scene_Map.prototype.update;
+  Scene_Map.prototype.update = function() {
+    $.alias.Scene_Map_update.call(this);
+    $gameAchievements.update();
+  };
 
-  $.alias.Scene_Map_createAllWindows = Scene_Map.prototype.createAllWindows
-  Scene_Map.prototype.createAllWindows = function () {
-    $.alias.Scene_Map_createAllWindows.call(this)
-    this.createNotificationWindow()
-  }
-
-})(WAYModuleLoader.getModule('WAY_Achievements'))
+  $.alias.Scene_Map_createAllWindows = Scene_Map.prototype.createAllWindows;
+  Scene_Map.prototype.createAllWindows = function() {
+    $.alias.Scene_Map_createAllWindows.call(this);
+    this.createNotificationWindow();
+  };
+})(WAYModuleLoader.getModule("WAY_Achievements"));
 
 //-----------------------------------------------------------------------------
 

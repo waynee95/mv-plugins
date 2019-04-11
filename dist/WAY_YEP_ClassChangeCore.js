@@ -37,13 +37,13 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -51,9 +51,9 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_YEP_ClassChangeCore', '1.1.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
+  WAYModuleLoader.registerPlugin("WAY_YEP_ClassChangeCore", "1.1.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
   });
 }
 
@@ -143,7 +143,7 @@ if (typeof WAY === 'undefined') {
   Window_ActorCommand.prototype.addClassChangeCommand = function () {
     var enabled = this._actor.canChangeClass();
 
-    this.addCommand(classChangeCommand, 'class', enabled);
+    this.addCommand(classChangeCommand, "class", enabled);
   }; //==========================================================================
   // Scene_Battle
   //==========================================================================
@@ -154,7 +154,7 @@ if (typeof WAY === 'undefined') {
   Scene_Battle.prototype.createActorCommandWindow = function () {
     $.alias.Scene_Battle_createActorCommandWindow.call(this);
     var commandWindow = this._actorCommandWindow;
-    commandWindow.setHandler('class', this.commandChangeClass.bind(this));
+    commandWindow.setHandler("class", this.commandChangeClass.bind(this));
   };
 
   Scene_Battle.prototype.commandChangeClass = function () {
@@ -166,7 +166,7 @@ if (typeof WAY === 'undefined') {
     savedBattleBgm = AudioManager.saveBgm();
     savedBattleBgs = AudioManager.saveBgs();
     SceneManager.push(Scene_Class);
-    BattleManager._phase = 'input';
+    BattleManager._phase = "input";
     bypassBattleStart = true;
   }; //==========================================================================
   // Game_Battler
@@ -207,4 +207,4 @@ if (typeof WAY === 'undefined') {
     this._classChangeCooldown = this._classChangeCooldown || 0;
     this._classChangeCooldown -= 1;
   };
-})(WAYModuleLoader.getModule('WAY_YEP_ClassChangeCore'));
+})(WAYModuleLoader.getModule("WAY_YEP_ClassChangeCore"));

@@ -49,13 +49,13 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -63,9 +63,9 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_MaxTpFormula', '1.1.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
+  WAYModuleLoader.registerPlugin("WAY_MaxTpFormula", "1.1.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
   });
 }
 
@@ -76,12 +76,12 @@ if (typeof WAY === 'undefined') {
   var defaultFormula = $.parameters.defaultFormula;
 
   var parseNotetags = function parseNotetags(obj) {
-    obj.tpFormula = getMultiLineNotetag(obj.note, 'Max TP Formula', null, trim);
+    obj.tpFormula = getMultiLineNotetag(obj.note, "Max TP Formula", null, trim);
   };
 
-  WAY.EventEmitter.on('load-actor-notetags', parseNotetags);
-  WAY.EventEmitter.on('load-class-notetags', parseNotetags);
-  WAY.EventEmitter.on('load-enemy-notetags', parseNotetags);
+  WAY.EventEmitter.on("load-actor-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-class-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-enemy-notetags", parseNotetags);
   Object.defineProperties(Game_BattlerBase.prototype, {
     // Max TP
     mtp: {
@@ -124,4 +124,4 @@ if (typeof WAY === 'undefined') {
   Game_Enemy.prototype.maxTp = function () {
     return evalFormula(this, this.enemy().tpFormula || defaultFormula);
   };
-})(WAYModuleLoader.getModule('WAY_MaxTpFormula'));
+})(WAYModuleLoader.getModule("WAY_MaxTpFormula"));

@@ -29,7 +29,7 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
@@ -39,11 +39,11 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -51,17 +51,17 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_YEP_TurnOrderDisplay', '1.2.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
+  WAYModuleLoader.registerPlugin("WAY_YEP_TurnOrderDisplay", "1.2.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
   });
 }
 
 (function ($) {
   var getNotetag = WAY.Util.getNotetag;
-  WAY.EventEmitter.on('load-enemy-notetags', function (enemy) {
-    getNotetag(enemy.note, 'Turn Order Image', null, function (str) {
-      var _str$split = str.split(','),
+  WAY.EventEmitter.on("load-enemy-notetags", function (enemy) {
+    getNotetag(enemy.note, "Turn Order Image", null, function (str) {
+      var _str$split = str.split(","),
           _str$split2 = _slicedToArray(_str$split, 2),
           filename = _str$split2[0],
           faceIndex = _str$split2[1];
@@ -129,4 +129,4 @@ if (typeof WAY === 'undefined') {
       _this.drawLetter();
     });
   };
-})(WAYModuleLoader.getModule('WAY_YEP_TurnOrderDisplay'));
+})(WAYModuleLoader.getModule("WAY_YEP_TurnOrderDisplay"));

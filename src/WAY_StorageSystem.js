@@ -216,912 +216,953 @@ Discord Name: waynee95#4261
 Ko-fi: https://ko-fi.com/waynee
 */
 
-'use strict'
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!') // eslint-disable-line no-console
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-     var gui = require('nw.gui'); //eslint-disable-line
-    gui.Window.get().showDevTools()
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
+    gui.Window.get().showDevTools();
   }
-  SceneManager.stop()
+  SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_StorageSystem', '2.2.1', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
-  })
+  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.2.1", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
+  });
 }
 
 window.$gameStorageSystems = null;
 
 ($ => {
-  const {
-    getNotetag,
-    toArray
-  } = WAY.Util
+  const { getNotetag, toArray } = WAY.Util;
 
-  const $dataStorage = $.parameters.config
+  const $dataStorage = $.parameters.config;
 
   if ($dataStorage === null) {
-    console.warn('WAY_StorageSystem\nPlugin Parameters are not setup properly!')
-    if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-      if (!require('nw.gui').Window.get().isDevToolsOpen()) {
-        require('nw.gui').Window.get().showDevTools()
+    console.warn(
+      "WAY_StorageSystem\nPlugin Parameters are not setup properly!"
+    );
+    if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+      if (
+        !require("nw.gui")
+          .Window.get()
+          .isDevToolsOpen()
+      ) {
+        require("nw.gui")
+          .Window.get()
+          .showDevTools();
       }
     }
   }
 
-  WAY.EventEmitter.on('load-item-notetags', parseNotetags)
-  WAY.EventEmitter.on('load-weapon-notetags', parseNotetags)
-  WAY.EventEmitter.on('load-armor-notetags', parseNotetags)
+  WAY.EventEmitter.on("load-item-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-weapon-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-armor-notetags", parseNotetags);
 
-  function parseNotetags (obj) {
-    obj.cannotStore = getNotetag(obj.note, 'Cannot Store', false)
-    obj.onlyInStorage = getNotetag(obj.note, 'Can Store Only In', [], toArray)
+  function parseNotetags(obj) {
+    obj.cannotStore = getNotetag(obj.note, "Cannot Store", false);
+    obj.onlyInStorage = getNotetag(obj.note, "Can Store Only In", [], toArray);
   }
 
   //==========================================================================
   // PluginManager
   //==========================================================================
-  PluginManager.addCommand('StorageSystem', {
-    open (storageId = $gameStorageSystems._lastActive) {
-      $gameStorageSystems.open(storageId)
+  PluginManager.addCommand("StorageSystem", {
+    open(storageId = $gameStorageSystems._lastActive) {
+      $gameStorageSystems.open(storageId);
     },
-    add (storageId, item, amount) {
-      $gameStorageSystems.storage(storageId).addItem(eval(item), parseInt(amount))
+    add(storageId, item, amount) {
+      $gameStorageSystems
+        .storage(storageId)
+        .addItem(eval(item), parseInt(amount));
     },
-    remove (storageId, item, amount) {
-      $gameStorageSystems.storage(storageId).removeItem(eval(item), parseInt(amount))
+    remove(storageId, item, amount) {
+      $gameStorageSystems
+        .storage(storageId)
+        .removeItem(eval(item), parseInt(amount));
     },
-    clear (storageId) {
-      $gameStorageSystems.storage(storageId).clear()
+    clear(storageId) {
+      $gameStorageSystems.storage(storageId).clear();
     },
-    change (storageId, maxCapacity) {
-      $gameStorageSystems.storage(storageId).changeMaxCapacity(maxCapacity)
+    change(storageId, maxCapacity) {
+      $gameStorageSystems.storage(storageId).changeMaxCapacity(maxCapacity);
     }
-  })
+  });
 
   //==========================================================================
   // DataManager
   //==========================================================================
-  var _DataManager_createGameObjects = DataManager.createGameObjects
-  DataManager.createGameObjects = function () {
-    _DataManager_createGameObjects.call(this)
-    $gameStorageSystems = new Game_StorageSystems()
-  }
+  var _DataManager_createGameObjects = DataManager.createGameObjects;
+  DataManager.createGameObjects = function() {
+    _DataManager_createGameObjects.call(this);
+    $gameStorageSystems = new Game_StorageSystems();
+  };
 
-  var _DataManager_makeSaveContents = DataManager.makeSaveContents
-  DataManager.makeSaveContents = function () {
-    var contents = _DataManager_makeSaveContents.call(this)
-    contents.storageSystems = $gameStorageSystems
-    return contents
-  }
+  var _DataManager_makeSaveContents = DataManager.makeSaveContents;
+  DataManager.makeSaveContents = function() {
+    var contents = _DataManager_makeSaveContents.call(this);
+    contents.storageSystems = $gameStorageSystems;
+    return contents;
+  };
 
-  var _DataManager_extractSaveContents = DataManager.extractSaveContents
-  DataManager.extractSaveContents = function (contents) {
-    _DataManager_extractSaveContents.call(this, contents)
-    $gameStorageSystems = contents.storageSystems
+  var _DataManager_extractSaveContents = DataManager.extractSaveContents;
+  DataManager.extractSaveContents = function(contents) {
+    _DataManager_extractSaveContents.call(this, contents);
+    $gameStorageSystems = contents.storageSystems;
     if ($gameStorageSystems == undefined) {
-      $gameStorageSystems = new Game_StorageSystems()
+      $gameStorageSystems = new Game_StorageSystems();
     }
-  }
+  };
 
   if (Imported.YEP_X_NewGamePlus) {
-    var _DataManager_prepareNewGamePlusData = DataManager.prepareNewGamePlusData
-    DataManager.prepareNewGamePlusData = function () {
-      _DataManager_prepareNewGamePlusData.call(this)
-      this._ngpData.storageSystems = JsonEx.makeDeepCopy($gameStorageSystems)
-    }
+    var _DataManager_prepareNewGamePlusData =
+      DataManager.prepareNewGamePlusData;
+    DataManager.prepareNewGamePlusData = function() {
+      _DataManager_prepareNewGamePlusData.call(this);
+      this._ngpData.storageSystems = JsonEx.makeDeepCopy($gameStorageSystems);
+    };
 
-    var _DataManager_carryOverNewGamePlusData = DataManager.carryOverNewGamePlusData
-    DataManager.carryOverNewGamePlusData = function () {
-      _DataManager_carryOverNewGamePlusData.call(this)
-      $gameStorageSystems = this._ngpData.storageSystems
-    }
+    var _DataManager_carryOverNewGamePlusData =
+      DataManager.carryOverNewGamePlusData;
+    DataManager.carryOverNewGamePlusData = function() {
+      _DataManager_carryOverNewGamePlusData.call(this);
+      $gameStorageSystems = this._ngpData.storageSystems;
+    };
   } // Imported YEP_X_NewGamePlus
 
   //==========================================================================
   // Game_StorageSystems
   //==========================================================================
-  Game_StorageSystems.prototype.initialize = function () {
-    this._data = []
-    this._lastActive = 0
-  }
+  Game_StorageSystems.prototype.initialize = function() {
+    this._data = [];
+    this._lastActive = 0;
+  };
 
-  Game_StorageSystems.prototype.storage = function (storageId) {
-    if (typeof $dataStorage[storageId] !== 'object') {
-      return
+  Game_StorageSystems.prototype.storage = function(storageId) {
+    if (typeof $dataStorage[storageId] !== "object") {
+      return;
     }
     if ($dataStorage[storageId]) {
       if (!this._data[storageId]) {
-        this._data[storageId] = new Game_StorageSystem(storageId)
+        this._data[storageId] = new Game_StorageSystem(storageId);
       }
-      return this._data[storageId]
+      return this._data[storageId];
     }
-    return null
-  }
+    return null;
+  };
 
-  Game_StorageSystems.prototype.current = function () {
-    return this.storage(this._lastActive)
-  }
+  Game_StorageSystems.prototype.current = function() {
+    return this.storage(this._lastActive);
+  };
 
-  Game_StorageSystems.prototype.open = function (storageId) {
-    if (typeof storageId !== 'undefined') {
-      this._lastActive = storageId
+  Game_StorageSystems.prototype.open = function(storageId) {
+    if (typeof storageId !== "undefined") {
+      this._lastActive = storageId;
     }
     if (!this.current()) {
-      return
+      return;
     }
-    SceneManager.push(Scene_Storage)
-  }
+    SceneManager.push(Scene_Storage);
+  };
 
   //==========================================================================
   // Game_StorageSystem
   //==========================================================================
-  Game_StorageSystem.prototype.initialize = function (storageId) {
-    var storage = $dataStorage[storageId]
-    this._storageId = parseInt(storageId)
-    this._title = storage.titleText
-    this._allowedTypes = storage.allowedTypes
-    this._maxCapacity = storage.maxCapacity
-    this._stackSize = (storage.stackSize !== 'none') ? parseInt(storage.stackSize) : 'none'
-    this.clear()
-  }
+  Game_StorageSystem.prototype.initialize = function(storageId) {
+    var storage = $dataStorage[storageId];
+    this._storageId = parseInt(storageId);
+    this._title = storage.titleText;
+    this._allowedTypes = storage.allowedTypes;
+    this._maxCapacity = storage.maxCapacity;
+    this._stackSize =
+      storage.stackSize !== "none" ? parseInt(storage.stackSize) : "none";
+    this.clear();
+  };
 
-  Game_StorageSystem.prototype.data = function () {
-    return $dataStorage[this._storageId]
-  }
+  Game_StorageSystem.prototype.data = function() {
+    return $dataStorage[this._storageId];
+  };
 
-  Game_StorageSystem.prototype.title = function () {
-    return this._title
-  }
+  Game_StorageSystem.prototype.title = function() {
+    return this._title;
+  };
 
-  Game_StorageSystem.prototype.allowedTypes = function () {
-    return this._allowedTypes
-  }
+  Game_StorageSystem.prototype.allowedTypes = function() {
+    return this._allowedTypes;
+  };
 
-  Game_StorageSystem.prototype.maxCapacity = function () {
-    return this._maxCapacity
-  }
+  Game_StorageSystem.prototype.maxCapacity = function() {
+    return this._maxCapacity;
+  };
 
-  Game_StorageSystem.prototype.changeMaxCapacity = function (capacity) {
-    this._maxCapacity = capacity
-  }
+  Game_StorageSystem.prototype.changeMaxCapacity = function(capacity) {
+    this._maxCapacity = capacity;
+  };
 
-  Game_StorageSystem.prototype.capacity = function () {
-    var sum = 0
-    if (this._stackSize === 'none') {
-      sum = this.allItems().map(function (item) {
-        return this.numItems(item)
-      }, this).reduce(function (total, current) {
-        return total + current
-      }, 0)
+  Game_StorageSystem.prototype.capacity = function() {
+    var sum = 0;
+    if (this._stackSize === "none") {
+      sum = this.allItems()
+        .map(function(item) {
+          return this.numItems(item);
+        }, this)
+        .reduce(function(total, current) {
+          return total + current;
+        }, 0);
     } else {
-      sum = this.allItems().length
+      sum = this.allItems().length;
     }
-    return sum
-  }
+    return sum;
+  };
 
-  Game_StorageSystem.prototype.items = function () {
-    return Object.keys(this._items).map(function (id) {
-      return $dataItems[id]
-    })
-  }
+  Game_StorageSystem.prototype.items = function() {
+    return Object.keys(this._items).map(function(id) {
+      return $dataItems[id];
+    });
+  };
 
-  Game_StorageSystem.prototype.weapons = function () {
-    return Object.keys(this._weapons).map(function (id) {
-      return $dataWeapons[id]
-    })
-  }
+  Game_StorageSystem.prototype.weapons = function() {
+    return Object.keys(this._weapons).map(function(id) {
+      return $dataWeapons[id];
+    });
+  };
 
-  Game_StorageSystem.prototype.armors = function () {
-    return Object.keys(this._armors).map(function (id) {
-      return $dataArmors[id]
-    })
-  }
+  Game_StorageSystem.prototype.armors = function() {
+    return Object.keys(this._armors).map(function(id) {
+      return $dataArmors[id];
+    });
+  };
 
-  Game_StorageSystem.prototype.equipItems = function () {
-    return this.weapons().concat(this.armors())
-  }
+  Game_StorageSystem.prototype.equipItems = function() {
+    return this.weapons().concat(this.armors());
+  };
 
-  Game_StorageSystem.prototype.allItems = function () {
-    return this.items().concat(this.equipItems())
-  }
+  Game_StorageSystem.prototype.allItems = function() {
+    return this.items().concat(this.equipItems());
+  };
 
-  Game_StorageSystem.prototype.isEmpty = function () {
-    return this.allItems().length === 0
-  }
+  Game_StorageSystem.prototype.isEmpty = function() {
+    return this.allItems().length === 0;
+  };
 
-  Game_StorageSystem.prototype.addItem = function (item, amount) {
-    if (!this.canStoreItem(item)) return
-    var container = this.itemContainer(item)
+  Game_StorageSystem.prototype.addItem = function(item, amount) {
+    if (!this.canStoreItem(item)) return;
+    var container = this.itemContainer(item);
     if (container) {
-      var lastNumber = this.numItems(item)
-      var newNumber = lastNumber + amount
+      var lastNumber = this.numItems(item);
+      var newNumber = lastNumber + amount;
       if (amount > 0) {
-        container[item.id] = newNumber
+        container[item.id] = newNumber;
       } else {
-        container[item.id] = newNumber.clamp(0, this.numItems(item))
+        container[item.id] = newNumber.clamp(0, this.numItems(item));
       }
       if (container[item.id] === 0) {
-        delete container[item.id]
+        delete container[item.id];
       }
     }
-  }
+  };
 
-  Game_StorageSystem.prototype.removeItem = function (item, amount) {
+  Game_StorageSystem.prototype.removeItem = function(item, amount) {
     if (arguments < 2) {
-      this.addItem(item, -this.numItems(item))
+      this.addItem(item, -this.numItems(item));
     } else {
-      this.addItem(item, -amount)
+      this.addItem(item, -amount);
     }
-  }
+  };
 
-  Game_StorageSystem.prototype.clear = function () {
-    this._items = {}
-    this._weapons = {}
-    this._armors = {}
-  }
+  Game_StorageSystem.prototype.clear = function() {
+    this._items = {};
+    this._weapons = {};
+    this._armors = {};
+  };
 
-  Game_StorageSystem.prototype.isTypeAllowed = function (type) {
-    return type && this._allowedTypes.contains(type.toLowerCase())
-  }
+  Game_StorageSystem.prototype.isTypeAllowed = function(type) {
+    return type && this._allowedTypes.contains(type.toLowerCase());
+  };
 
-  Game_StorageSystem.prototype.canStoreItem = function (item) {
+  Game_StorageSystem.prototype.canStoreItem = function(item) {
     if (item && item.onlyInStorage.length > 0) {
-      return item.onlyInStorage.contains(this._storageId)
+      return item.onlyInStorage.contains(this._storageId);
     }
 
-    return true
-  }
+    return true;
+  };
 
-  Game_StorageSystem.prototype.numItems = function (item) {
-    var container = this.itemContainer(item)
-    return container ? container[item.id] || 0 : 0
-  }
+  Game_StorageSystem.prototype.numItems = function(item) {
+    var container = this.itemContainer(item);
+    return container ? container[item.id] || 0 : 0;
+  };
 
-  Game_StorageSystem.prototype.maxItems = function (item) {
-    if (this._stackSize === 'none') {
-      return this.maxCapacity() - this.capacity()
-    } else if (this.numItems(item) > 0 || this.maxCapacity() - this.capacity() > 0) {
-      return this._stackSize - this.numItems(item)
+  Game_StorageSystem.prototype.maxItems = function(item) {
+    if (this._stackSize === "none") {
+      return this.maxCapacity() - this.capacity();
+    } else if (
+      this.numItems(item) > 0 ||
+      this.maxCapacity() - this.capacity() > 0
+    ) {
+      return this._stackSize - this.numItems(item);
     } else if (this.maxCapacity() - this.capacity() < 0) {
-      return 0
+      return 0;
     }
-  }
+  };
 
-  Game_StorageSystem.prototype.itemContainer = function (item) {
+  Game_StorageSystem.prototype.itemContainer = function(item) {
     if (!item) {
-      return null
+      return null;
     } else if (DataManager.isItem(item)) {
-      return this._items
+      return this._items;
     } else if (DataManager.isWeapon(item)) {
-      return this._weapons
+      return this._weapons;
     } else if (DataManager.isArmor(item)) {
-      return this._armors
+      return this._armors;
     } else {
-      return null
+      return null;
     }
-  }
+  };
 
-  Game_StorageSystem.prototype.getItemCategory = function (item) {
+  Game_StorageSystem.prototype.getItemCategory = function(item) {
     if (DataManager.isItem(item) && item.itypeId === 1) {
-      return 'Items'
+      return "Items";
     } else if (DataManager.isItem(item) && item.itypeId === 2) {
-      return 'KeyItems'
+      return "KeyItems";
     } else if (DataManager.isWeapon(item)) {
-      return 'Weapons'
+      return "Weapons";
     } else if (DataManager.isArmor(item)) {
-      return 'Armors'
+      return "Armors";
     } else {
-      return false
+      return false;
     }
-  }
+  };
 
   //==========================================================================
   // Window_Base
   //==========================================================================
   if (!Window_Base.prototype.textWidthEx) {
-    Window_Base.prototype.textWidthEx = function (text) {
-      return this.drawTextEx(text, 0, this.contents.height)
-    }
+    Window_Base.prototype.textWidthEx = function(text) {
+      return this.drawTextEx(text, 0, this.contents.height);
+    };
   }
 
   //==========================================================================
   // Window_StorageTitle
   //==========================================================================
-  Window_StorageTitle.prototype = Object.create(Window_Base.prototype)
-  Window_StorageTitle.prototype.constructor = Window_StorageTitle
+  Window_StorageTitle.prototype = Object.create(Window_Base.prototype);
+  Window_StorageTitle.prototype.constructor = Window_StorageTitle;
 
-  Window_StorageTitle.prototype.initialize = function (x, y, w, h) {
-    Window_Base.prototype.initialize.call(this, x, y, w, h)
-    this._title = $gameStorageSystems.current().title()
-    this.refresh()
-  }
+  Window_StorageTitle.prototype.initialize = function(x, y, w, h) {
+    Window_Base.prototype.initialize.call(this, x, y, w, h);
+    this._title = $gameStorageSystems.current().title();
+    this.refresh();
+  };
 
-  Window_StorageTitle.prototype.refresh = function () {
-    this.contents.clear()
-    var text = this._title
-    var dw = this.contents.width + this.textPadding()
-    var tw = this.textWidthEx(text)
-    var dx = Math.floor(Math.max(0, dw - tw) / 2)
-    this.drawTextEx(text, this.textPadding() + dx, 0)
-  }
+  Window_StorageTitle.prototype.refresh = function() {
+    this.contents.clear();
+    var text = this._title;
+    var dw = this.contents.width + this.textPadding();
+    var tw = this.textWidthEx(text);
+    var dx = Math.floor(Math.max(0, dw - tw) / 2);
+    this.drawTextEx(text, this.textPadding() + dx, 0);
+  };
 
   //==========================================================================
   // Window_StorageCommand
   //==========================================================================
-  Window_StorageCommand.prototype = Object.create(Window_HorzCommand.prototype)
-  Window_StorageCommand.prototype.constructor = Window_StorageCommand
+  Window_StorageCommand.prototype = Object.create(Window_HorzCommand.prototype);
+  Window_StorageCommand.prototype.constructor = Window_StorageCommand;
 
-  Window_StorageCommand.prototype.initialize = function (x, y) {
-    this.setup()
-    Window_HorzCommand.prototype.initialize.call(this, x, y)
-    this.select(0)
-  }
+  Window_StorageCommand.prototype.initialize = function(x, y) {
+    this.setup();
+    Window_HorzCommand.prototype.initialize.call(this, x, y);
+    this.select(0);
+  };
 
-  Window_StorageCommand.prototype.setup = function () {
-    var data = $gameStorageSystems.current().data()
-    this._storageMode = data.storageMode
-    data = data.command
-    this._align = data.align
-    this._rows = data.rows
-    this._cols = data.cols
-    this._width = eval(data.width)
-    this._addText = data.addText
-    this._removeText = data.removeText
-  }
+  Window_StorageCommand.prototype.setup = function() {
+    var data = $gameStorageSystems.current().data();
+    this._storageMode = data.storageMode;
+    data = data.command;
+    this._align = data.align;
+    this._rows = data.rows;
+    this._cols = data.cols;
+    this._width = eval(data.width);
+    this._addText = data.addText;
+    this._removeText = data.removeText;
+  };
 
-  Window_StorageCommand.prototype.itemAlign = function () {
-    return this._align
-  }
+  Window_StorageCommand.prototype.itemAlign = function() {
+    return this._align;
+  };
 
-  Window_StorageCommand.prototype.windowWidth = function () {
-    return this._width
-  }
+  Window_StorageCommand.prototype.windowWidth = function() {
+    return this._width;
+  };
 
-  Window_StorageCommand.prototype.numVisibleRows = function () {
-    return this._rows
-  }
+  Window_StorageCommand.prototype.numVisibleRows = function() {
+    return this._rows;
+  };
 
-  Window_StorageCommand.prototype.maxCols = function () {
-    return this._cols
-  }
+  Window_StorageCommand.prototype.maxCols = function() {
+    return this._cols;
+  };
 
-  Window_StorageCommand.prototype.makeCommandList = function () {
-    if (this._storageMode === 'Remove') {
-      this.addCommand(this._removeText, 'remove')
-    } else if (this._storageMode === 'Add') {
-      this.addCommand(this._addText, 'add')
+  Window_StorageCommand.prototype.makeCommandList = function() {
+    if (this._storageMode === "Remove") {
+      this.addCommand(this._removeText, "remove");
+    } else if (this._storageMode === "Add") {
+      this.addCommand(this._addText, "add");
     } else {
-      this.addCommand(this._addText, 'add')
-      this.addCommand(this._removeText, 'remove')
+      this.addCommand(this._addText, "add");
+      this.addCommand(this._removeText, "remove");
     }
-  }
+  };
 
-  Window_StorageCommand.prototype.lastOption = function () {
-    return this._index
-  }
+  Window_StorageCommand.prototype.lastOption = function() {
+    return this._index;
+  };
 
   //==========================================================================
   // Window_StorageCategory
   //==========================================================================
-  Window_StorageCategory.prototype = Object.create(Window_HorzCommand.prototype)
-  Window_StorageCategory.prototype.constructor = Window_StorageCategory
+  Window_StorageCategory.prototype = Object.create(
+    Window_HorzCommand.prototype
+  );
+  Window_StorageCategory.prototype.constructor = Window_StorageCategory;
 
-  Window_StorageCategory.prototype.initialize = function (x, y) {
-    this.setup()
-    Window_HorzCommand.prototype.initialize.call(this, x, y)
-  }
+  Window_StorageCategory.prototype.initialize = function(x, y) {
+    this.setup();
+    Window_HorzCommand.prototype.initialize.call(this, x, y);
+  };
 
-  Window_StorageCategory.prototype.setup = function () {
-    var data = $gameStorageSystems.current().data().category
-    this._align = data.align
-    this._rows = data.rows
-    this._cols = data.cols
-    this._width = eval(data.width)
-  }
+  Window_StorageCategory.prototype.setup = function() {
+    var data = $gameStorageSystems.current().data().category;
+    this._align = data.align;
+    this._rows = data.rows;
+    this._cols = data.cols;
+    this._width = eval(data.width);
+  };
 
-  Window_StorageCategory.prototype.itemAlign = function () {
-    return this._align
-  }
+  Window_StorageCategory.prototype.itemAlign = function() {
+    return this._align;
+  };
 
-  Window_StorageCategory.prototype.windowWidth = function () {
-    return this._width
-  }
+  Window_StorageCategory.prototype.windowWidth = function() {
+    return this._width;
+  };
 
-  Window_StorageCategory.prototype.numVisibleRows = function () {
-    return this._rows
-  }
+  Window_StorageCategory.prototype.numVisibleRows = function() {
+    return this._rows;
+  };
 
-  Window_StorageCategory.prototype.maxCols = function () {
-    return this._cols
-  }
+  Window_StorageCategory.prototype.maxCols = function() {
+    return this._cols;
+  };
 
   if (!Imported.YEP_X_ItemCategories) {
-    Window_StorageCategory.prototype.makeCommandList = function () {
-      var data = $gameStorageSystems.current().allowedTypes()
-      var length = data.length
+    Window_StorageCategory.prototype.makeCommandList = function() {
+      var data = $gameStorageSystems.current().allowedTypes();
+      var length = data.length;
       for (var i = 0; i < length; i++) {
-        var category = data[i].trim()
-        this.addItemCategory(category)
+        var category = data[i].trim();
+        this.addItemCategory(category);
       }
-    }
+    };
 
-    Window_StorageCategory.prototype.addItemCategory = function (category) {
+    Window_StorageCategory.prototype.addItemCategory = function(category) {
       if (category.match(/KeyItems/i)) {
-        return this.addCommand(TextManager.keyItem, 'keyItem')
+        return this.addCommand(TextManager.keyItem, "keyItem");
       } else if (category.match(/Items/i)) {
-        return this.addCommand(TextManager.item, 'item')
+        return this.addCommand(TextManager.item, "item");
       } else if (category.match(/Weapons/i)) {
-        return this.addCommand(TextManager.weapon, 'weapon')
+        return this.addCommand(TextManager.weapon, "weapon");
       } else if (category.match(/Armors/i)) {
-        return this.addCommand(TextManager.armor, 'armor')
+        return this.addCommand(TextManager.armor, "armor");
       }
-    }
-  } else { // Imported.YEP_X_ItemCategories
-    Window_StorageCategory.prototype.makeCommandList = function () {
-      var data = $gameStorageSystems.current().allowedTypes()
-      var length = data.length
+    };
+  } else {
+    // Imported.YEP_X_ItemCategories
+    Window_StorageCategory.prototype.makeCommandList = function() {
+      var data = $gameStorageSystems.current().allowedTypes();
+      var length = data.length;
       for (var i = 0; i < length; i++) {
-        var category = data[i].trim()
-        Window_ItemCategory.prototype.addItemCategory.call(this, category)
+        var category = data[i].trim();
+        Window_ItemCategory.prototype.addItemCategory.call(this, category);
       }
-    }
+    };
   } // Imported.YEP_X_ItemCategories
 
-  Window_StorageCategory.prototype.update = function () {
-    Window_HorzCommand.prototype.update.call(this)
+  Window_StorageCategory.prototype.update = function() {
+    Window_HorzCommand.prototype.update.call(this);
     if (this.visible) {
-      this._itemWindow.setCategory(this.currentSymbol())
-      this._itemWindow.setExt(this.currentExt())
+      this._itemWindow.setCategory(this.currentSymbol());
+      this._itemWindow.setExt(this.currentExt());
     }
-  }
+  };
 
-  Window_StorageCategory.prototype.setItemWindow = function (itemWindow) {
-    this._itemWindow = itemWindow
-    this.update()
-  }
+  Window_StorageCategory.prototype.setItemWindow = function(itemWindow) {
+    this._itemWindow = itemWindow;
+    this.update();
+  };
 
   //==========================================================================
   // Window_StorageItemList
   //==========================================================================
-  Window_StorageItemList.prototype = Object.create(Window_ItemList.prototype)
-  Window_StorageItemList.prototype.constructor = Window_StorageItemList
+  Window_StorageItemList.prototype = Object.create(Window_ItemList.prototype);
+  Window_StorageItemList.prototype.constructor = Window_StorageItemList;
 
-  Window_StorageItemList.prototype.initialize = function (x, y, w, h) {
-    this.setup()
-    Window_ItemList.prototype.initialize.call(this, x, y, w, h)
-    this._mode = 'none'
-    this._storage = $gameStorageSystems.current()
-  }
+  Window_StorageItemList.prototype.initialize = function(x, y, w, h) {
+    this.setup();
+    Window_ItemList.prototype.initialize.call(this, x, y, w, h);
+    this._mode = "none";
+    this._storage = $gameStorageSystems.current();
+  };
 
-  Window_StorageItemList.prototype.setup = function () {
-    var data = $gameStorageSystems.current().data().item
-    this._cols = data.cols
-  }
+  Window_StorageItemList.prototype.setup = function() {
+    var data = $gameStorageSystems.current().data().item;
+    this._cols = data.cols;
+  };
 
-  Window_StorageItemList.prototype.maxCols = function () {
-    return this._cols
-  }
+  Window_StorageItemList.prototype.maxCols = function() {
+    return this._cols;
+  };
 
-  Window_StorageItemList.prototype.setExt = function (ext) {
+  Window_StorageItemList.prototype.setExt = function(ext) {
     if (this._ext !== ext) {
-      this._ext = ext
-      this.refresh()
-      this.resetScroll()
+      this._ext = ext;
+      this.refresh();
+      this.resetScroll();
     }
-  }
+  };
 
-  Window_StorageItemList.prototype.setMode = function (mode) {
+  Window_StorageItemList.prototype.setMode = function(mode) {
     if (this._mode !== mode) {
-      this._mode = mode
-      this.refresh()
-      this.resetScroll()
+      this._mode = mode;
+      this.refresh();
+      this.resetScroll();
     }
-  }
+  };
 
-  Window_StorageItemList.prototype.mode = function () {
-    return this._mode
-  }
+  Window_StorageItemList.prototype.mode = function() {
+    return this._mode;
+  };
 
   if (!Imported.YEP_X_ItemCategories) {
-    Window_StorageItemList.prototype.includes = function (item) {
+    Window_StorageItemList.prototype.includes = function(item) {
       if (!this._storage.canStoreItem(item)) {
-        return false
+        return false;
       }
       switch (this._category) {
-        case 'item':
-          return DataManager.isItem(item) && item.itypeId === 1
-        case 'weapon':
-          return DataManager.isWeapon(item)
-        case 'armor':
-          return DataManager.isArmor(item)
-        case 'keyItem':
-          return DataManager.isItem(item) && item.itypeId === 2
-        case 'AllItems':
-          return this._storage.isTypeAllowed(this._storage.getItemCategory(item))
+        case "item":
+          return DataManager.isItem(item) && item.itypeId === 1;
+        case "weapon":
+          return DataManager.isWeapon(item);
+        case "armor":
+          return DataManager.isArmor(item);
+        case "keyItem":
+          return DataManager.isItem(item) && item.itypeId === 2;
+        case "AllItems":
+          return this._storage.isTypeAllowed(
+            this._storage.getItemCategory(item)
+          );
         default:
-          return false
+          return false;
       }
-    }
-  } else { // Imported.YEP_X_ItemCategories
-    Window_StorageItemList.prototype.includes = function (item) {
-      if (!item) return false
+    };
+  } else {
+    // Imported.YEP_X_ItemCategories
+    Window_StorageItemList.prototype.includes = function(item) {
+      if (!item) return false;
       if (!this._storage.canStoreItem(item)) {
-        return false
+        return false;
       }
-      if (this._category === 'AllItems') return true
-      return Window_ItemList.prototype.includes.call(this, item)
-    }
+      if (this._category === "AllItems") return true;
+      return Window_ItemList.prototype.includes.call(this, item);
+    };
   } // Imported.YEP_X_ItemCategories
 
-  Window_StorageItemList.prototype.makeItemList = function () {
-    if (this._mode === 'add') {
-      this._data = $gameParty.allItems().filter(function (item) {
-        return this.includes(item)
-      }, this)
-    } else if (this._mode === 'remove') {
-      this._data = this._storage.allItems().filter(function (item) {
-        return this.includes(item)
-      }, this)
+  Window_StorageItemList.prototype.makeItemList = function() {
+    if (this._mode === "add") {
+      this._data = $gameParty.allItems().filter(function(item) {
+        return this.includes(item);
+      }, this);
+    } else if (this._mode === "remove") {
+      this._data = this._storage.allItems().filter(function(item) {
+        return this.includes(item);
+      }, this);
     }
     if (this.includes(null)) {
-      this._data.push(null)
+      this._data.push(null);
     }
-  }
+  };
 
-  Window_StorageItemList.prototype.drawItemNumber = function (item, x, y, width) {
-    this.drawText('x', x, y, width - this.textWidth('00'), 'right')
-    var itemNum = (this._mode === 'add') ? $gameParty.numItems(item) : this._storage.numItems(item)
-    this.drawText(itemNum, x, y, width, 'right')
-  }
+  Window_StorageItemList.prototype.drawItemNumber = function(
+    item,
+    x,
+    y,
+    width
+  ) {
+    this.drawText("x", x, y, width - this.textWidth("00"), "right");
+    var itemNum =
+      this._mode === "add"
+        ? $gameParty.numItems(item)
+        : this._storage.numItems(item);
+    this.drawText(itemNum, x, y, width, "right");
+  };
 
-  Window_StorageItemList.prototype.isEnabled = function (item) {
+  Window_StorageItemList.prototype.isEnabled = function(item) {
     if (item && item.cannotStore) {
-      return false
+      return false;
     } else {
-      return item && ((this._mode === 'add') ? this._storage.maxItems(item) > 0 : $gameParty.maxItems(item) - $gameParty.numItems(item) > 0)
+      return (
+        item &&
+        (this._mode === "add"
+          ? this._storage.maxItems(item) > 0
+          : $gameParty.maxItems(item) - $gameParty.numItems(item) > 0)
+      );
     }
-  }
+  };
 
   //==========================================================================
   // Window_StorageInfo
   //==========================================================================
-  Window_StorageInfo.prototype = Object.create(Window_Base.prototype)
-  Window_StorageInfo.prototype.constructor = Window_StorageInfo
+  Window_StorageInfo.prototype = Object.create(Window_Base.prototype);
+  Window_StorageInfo.prototype.constructor = Window_StorageInfo;
 
-  Window_StorageInfo.prototype.initialize = function (x, y, w, h) {
-    Window_Base.prototype.initialize.call(this, x, y, w, h)
-    this._storage = $gameStorageSystems.current()
-    this._text = this._storage.data().infoText
-    this.refresh()
-  }
+  Window_StorageInfo.prototype.initialize = function(x, y, w, h) {
+    Window_Base.prototype.initialize.call(this, x, y, w, h);
+    this._storage = $gameStorageSystems.current();
+    this._text = this._storage.data().infoText;
+    this.refresh();
+  };
 
-  Window_StorageInfo.prototype.text = function () {
-    return this._text.replace('%1', this._storage.capacity() + '/' + this._storage.maxCapacity())
-  }
+  Window_StorageInfo.prototype.text = function() {
+    return this._text.replace(
+      "%1",
+      this._storage.capacity() + "/" + this._storage.maxCapacity()
+    );
+  };
 
-  Window_StorageInfo.prototype.refresh = function () {
-    this.contents.clear()
-    this.drawTextEx(this.text(), this.textPadding(), 0)
-  }
+  Window_StorageInfo.prototype.refresh = function() {
+    this.contents.clear();
+    this.drawTextEx(this.text(), this.textPadding(), 0);
+  };
 
   //==========================================================================
   // Window_StorageNumber
   //==========================================================================
-  Window_StorageNumber.prototype = Object.create(Window_ShopNumber.prototype)
-  Window_StorageNumber.prototype.constructor = Window_StorageNumber
+  Window_StorageNumber.prototype = Object.create(Window_ShopNumber.prototype);
+  Window_StorageNumber.prototype.constructor = Window_StorageNumber;
 
-  Window_StorageNumber.prototype.initialize = function (x, y, w, h) {
-    Window_Selectable.prototype.initialize.call(this, x, y, w, h)
-    this._storage = $gameStorageSystems.current()
-    this._item = null
-    this._max = 1
-    this._number = 1
-    this.createButtons()
-  }
+  Window_StorageNumber.prototype.initialize = function(x, y, w, h) {
+    Window_Selectable.prototype.initialize.call(this, x, y, w, h);
+    this._storage = $gameStorageSystems.current();
+    this._item = null;
+    this._max = 1;
+    this._number = 1;
+    this.createButtons();
+  };
 
-  Window_StorageNumber.prototype.setup = function (item, mode) {
-    this._item = item
-    var numItems
-    if (mode === 'add') {
-      numItems = item ? $gameParty.numItems(item) : 0
-      this._max = numItems.clamp(numItems, this._storage.maxItems(item))
+  Window_StorageNumber.prototype.setup = function(item, mode) {
+    this._item = item;
+    var numItems;
+    if (mode === "add") {
+      numItems = item ? $gameParty.numItems(item) : 0;
+      this._max = numItems.clamp(numItems, this._storage.maxItems(item));
     } else {
-      numItems = this._storage.numItems(item)
-      this._max = numItems.clamp(numItems, $gameParty.maxItems(item))
+      numItems = this._storage.numItems(item);
+      this._max = numItems.clamp(numItems, $gameParty.maxItems(item));
     }
-    this._number = 1
-    this.placeButtons()
-    this.updateButtonsVisiblity()
-    this.refresh()
-  }
+    this._number = 1;
+    this.placeButtons();
+    this.updateButtonsVisiblity();
+    this.refresh();
+  };
 
-  Window_StorageNumber.prototype.refresh = function () {
-    this.contents.clear()
-    this.drawItemName(this._item, 0, this.itemY())
-    this.drawNumber()
-    this.drawMax()
-  }
+  Window_StorageNumber.prototype.refresh = function() {
+    this.contents.clear();
+    this.drawItemName(this._item, 0, this.itemY());
+    this.drawNumber();
+    this.drawMax();
+  };
 
-  Window_StorageNumber.prototype.drawNumber = function () {
-    var x = this.cursorX()
-    var y = this.itemY()
-    var width = this.cursorWidth() - this.textPadding()
-    this.resetTextColor()
-    this.drawText(this._number, x, y, width, 'right')
-  }
+  Window_StorageNumber.prototype.drawNumber = function() {
+    var x = this.cursorX();
+    var y = this.itemY();
+    var width = this.cursorWidth() - this.textPadding();
+    this.resetTextColor();
+    this.drawText(this._number, x, y, width, "right");
+  };
 
-  Window_StorageNumber.prototype.drawMax = function () {
-    var width = this.contentsWidth() - this.textPadding()
-    this.resetTextColor()
-    this.drawText(this._max, 0, this.priceY(), width, 'right')
-  }
+  Window_StorageNumber.prototype.drawMax = function() {
+    var width = this.contentsWidth() - this.textPadding();
+    this.resetTextColor();
+    this.drawText(this._max, 0, this.priceY(), width, "right");
+  };
 
   //==========================================================================
   // Scene_Storage
   //==========================================================================
-  Scene_Storage.prototype = Object.create(Scene_MenuBase.prototype)
-  Scene_Storage.prototype.constructor = Scene_Storage
+  Scene_Storage.prototype = Object.create(Scene_MenuBase.prototype);
+  Scene_Storage.prototype.constructor = Scene_Storage;
 
-  Scene_Storage.prototype.initialize = function () {
-    this.setup()
-    Scene_MenuBase.prototype.initialize.call(this)
-    this._storage = $gameStorageSystems.current()
-  }
+  Scene_Storage.prototype.initialize = function() {
+    this.setup();
+    Scene_MenuBase.prototype.initialize.call(this);
+    this._storage = $gameStorageSystems.current();
+  };
 
-  Scene_Storage.prototype.setup = function () {
-    var data = $gameStorageSystems.current().data()
-    this._background = data.background
-    this._displayCategories = data.displayCategories
-    this._helpData = data.help
-    this._titleData = data.title
-    this._commandData = data.command
-    this._categoryData = data.category
-    this._infoData = data.info
-    this._itemData = data.item
-    this._numberData = data.number
-  }
+  Scene_Storage.prototype.setup = function() {
+    var data = $gameStorageSystems.current().data();
+    this._background = data.background;
+    this._displayCategories = data.displayCategories;
+    this._helpData = data.help;
+    this._titleData = data.title;
+    this._commandData = data.command;
+    this._categoryData = data.category;
+    this._infoData = data.info;
+    this._itemData = data.item;
+    this._numberData = data.number;
+  };
 
-  Scene_Storage.prototype.createBackground = function () {
-    if (this._background !== '') {
-      this._backgroundSprite = new Sprite()
-      this._backgroundSprite.bitmap = ImageManager.loadPicture(this._background)
-      this.addChild(this._backgroundSprite)
+  Scene_Storage.prototype.createBackground = function() {
+    if (this._background !== "") {
+      this._backgroundSprite = new Sprite();
+      this._backgroundSprite.bitmap = ImageManager.loadPicture(
+        this._background
+      );
+      this.addChild(this._backgroundSprite);
     }
-  }
+  };
 
-  Scene_Storage.prototype.create = function () {
-    Scene_MenuBase.prototype.create.call(this)
-    this.createHelpWindow()
-    this.createTitleWindow()
-    this.createCommandWindow()
+  Scene_Storage.prototype.create = function() {
+    Scene_MenuBase.prototype.create.call(this);
+    this.createHelpWindow();
+    this.createTitleWindow();
+    this.createCommandWindow();
     if (this._displayCategories) {
-      this.createCategoryWindow()
+      this.createCategoryWindow();
     }
-    this.createInfoWindow()
-    this.createItemWindow()
-    this.createNumberWindow()
-  }
+    this.createInfoWindow();
+    this.createItemWindow();
+    this.createNumberWindow();
+  };
 
-  Scene_Storage.prototype.createHelpWindow = function () {
-    this._helpWindow = new Window_Help()
-    this.addWindow(this._helpWindow)
-    this._helpWindow.x = eval(this._helpData.x)
-    this._helpWindow.y = eval(this._helpData.y)
-    this._helpWindow.width = eval(this._helpData.width)
-    this._helpWindow.height = eval(this._helpData.height)
-  }
+  Scene_Storage.prototype.createHelpWindow = function() {
+    this._helpWindow = new Window_Help();
+    this.addWindow(this._helpWindow);
+    this._helpWindow.x = eval(this._helpData.x);
+    this._helpWindow.y = eval(this._helpData.y);
+    this._helpWindow.width = eval(this._helpData.width);
+    this._helpWindow.height = eval(this._helpData.height);
+  };
 
-  Scene_Storage.prototype.createTitleWindow = function () {
-    var wx = eval(this._titleData.x)
-    var wy = eval(this._titleData.y)
-    var ww = eval(this._titleData.width)
-    var wh = eval(this._titleData.height)
-    this._titleWindow = new Window_StorageTitle(wx, wy, ww, wh)
-    this.addWindow(this._titleWindow)
-  }
+  Scene_Storage.prototype.createTitleWindow = function() {
+    var wx = eval(this._titleData.x);
+    var wy = eval(this._titleData.y);
+    var ww = eval(this._titleData.width);
+    var wh = eval(this._titleData.height);
+    this._titleWindow = new Window_StorageTitle(wx, wy, ww, wh);
+    this.addWindow(this._titleWindow);
+  };
 
-  Scene_Storage.prototype.createCommandWindow = function () {
-    var wx = eval(this._commandData.x)
-    var wy = eval(this._commandData.y)
-    this._commandWindow = new Window_StorageCommand(wx, wy)
+  Scene_Storage.prototype.createCommandWindow = function() {
+    var wx = eval(this._commandData.x);
+    var wy = eval(this._commandData.y);
+    this._commandWindow = new Window_StorageCommand(wx, wy);
     if (this._displayCategories) {
-      this._commandWindow.setHandler('add', this.onCommandOk.bind(this))
-      this._commandWindow.setHandler('remove', this.onCommandOk.bind(this))
+      this._commandWindow.setHandler("add", this.onCommandOk.bind(this));
+      this._commandWindow.setHandler("remove", this.onCommandOk.bind(this));
     } else {
-      this._commandWindow.setHandler('add', this.onCategoryOk.bind(this))
-      this._commandWindow.setHandler('remove', this.onCategoryOk.bind(this))
+      this._commandWindow.setHandler("add", this.onCategoryOk.bind(this));
+      this._commandWindow.setHandler("remove", this.onCategoryOk.bind(this));
     }
-    this._commandWindow.setHandler('cancel', this.onCommandCancel.bind(this))
-    this.addWindow(this._commandWindow)
-  }
+    this._commandWindow.setHandler("cancel", this.onCommandCancel.bind(this));
+    this.addWindow(this._commandWindow);
+  };
 
-  Scene_Storage.prototype.createCategoryWindow = function () {
-    var wx = eval(this._categoryData.x)
-    var wy = eval(this._categoryData.y)
-    this._categoryWindow = new Window_StorageCategory(wx, wy)
-    this._categoryWindow.setHandler('ok', this.onCategoryOk.bind(this))
-    this._categoryWindow.setHandler('cancel', this.onCategoryCancel.bind(this))
-    this._categoryWindow.deactivate()
-    this._categoryWindow.hide()
-    this.addWindow(this._categoryWindow)
-  }
+  Scene_Storage.prototype.createCategoryWindow = function() {
+    var wx = eval(this._categoryData.x);
+    var wy = eval(this._categoryData.y);
+    this._categoryWindow = new Window_StorageCategory(wx, wy);
+    this._categoryWindow.setHandler("ok", this.onCategoryOk.bind(this));
+    this._categoryWindow.setHandler("cancel", this.onCategoryCancel.bind(this));
+    this._categoryWindow.deactivate();
+    this._categoryWindow.hide();
+    this.addWindow(this._categoryWindow);
+  };
 
-  Scene_Storage.prototype.createInfoWindow = function () {
-    var wx = eval(this._infoData.x)
-    var wy = eval(this._infoData.y)
-    var ww = eval(this._infoData.width)
-    this._infoWindow = new Window_StorageInfo(wx, wy, ww, 80)
-    this.addWindow(this._infoWindow)
-  }
+  Scene_Storage.prototype.createInfoWindow = function() {
+    var wx = eval(this._infoData.x);
+    var wy = eval(this._infoData.y);
+    var ww = eval(this._infoData.width);
+    this._infoWindow = new Window_StorageInfo(wx, wy, ww, 80);
+    this.addWindow(this._infoWindow);
+  };
 
-  Scene_Storage.prototype.createItemWindow = function () {
-    var wx = eval(this._itemData.x)
-    var wy = eval(this._itemData.y)
-    var ww = eval(this._itemData.width)
-    var wh = eval(this._itemData.height)
-    this._itemWindow = new Window_StorageItemList(wx, wy, ww, wh)
-    this._itemWindow.setHelpWindow(this._helpWindow)
+  Scene_Storage.prototype.createItemWindow = function() {
+    var wx = eval(this._itemData.x);
+    var wy = eval(this._itemData.y);
+    var ww = eval(this._itemData.width);
+    var wh = eval(this._itemData.height);
+    this._itemWindow = new Window_StorageItemList(wx, wy, ww, wh);
+    this._itemWindow.setHelpWindow(this._helpWindow);
     if (this._displayCategories) {
-      this._categoryWindow.setItemWindow(this._itemWindow)
+      this._categoryWindow.setItemWindow(this._itemWindow);
     }
-    this._itemWindow.setHandler('ok', this.onItemOk.bind(this))
-    this._itemWindow.setHandler('cancel', this.onItemCancel.bind(this))
-    this.addWindow(this._itemWindow)
-    this.showWholeStorage()
-  }
+    this._itemWindow.setHandler("ok", this.onItemOk.bind(this));
+    this._itemWindow.setHandler("cancel", this.onItemCancel.bind(this));
+    this.addWindow(this._itemWindow);
+    this.showWholeStorage();
+  };
 
-  Scene_Storage.prototype.showWholeStorage = function () {
-    this._itemWindow.setMode('remove')
-    this._itemWindow.setCategory('AllItems')
-    this._itemWindow.refresh()
-  }
+  Scene_Storage.prototype.showWholeStorage = function() {
+    this._itemWindow.setMode("remove");
+    this._itemWindow.setCategory("AllItems");
+    this._itemWindow.refresh();
+  };
 
-  Scene_Storage.prototype.createNumberWindow = function () {
-    var wx = eval(this._numberData.x)
-    var wy = eval(this._numberData.y)
-    var ww = eval(this._numberData.width)
-    var wh = eval(this._numberData.height)
-    this._numberWindow = new Window_StorageNumber(wx, wy, ww, wh)
-    this._numberWindow.setHandler('ok', this.onNumberOk.bind(this))
-    this._numberWindow.setHandler('cancel', this.onNumberCancel.bind(this))
-    this._numberWindow.hide()
-    this.addWindow(this._numberWindow)
-  }
+  Scene_Storage.prototype.createNumberWindow = function() {
+    var wx = eval(this._numberData.x);
+    var wy = eval(this._numberData.y);
+    var ww = eval(this._numberData.width);
+    var wh = eval(this._numberData.height);
+    this._numberWindow = new Window_StorageNumber(wx, wy, ww, wh);
+    this._numberWindow.setHandler("ok", this.onNumberOk.bind(this));
+    this._numberWindow.setHandler("cancel", this.onNumberCancel.bind(this));
+    this._numberWindow.hide();
+    this.addWindow(this._numberWindow);
+  };
 
-  Scene_Storage.prototype.activateItemWindow = function () {
-    this._infoWindow.refresh()
-    this._itemWindow.refresh()
-    this._itemWindow.activate()
-  }
+  Scene_Storage.prototype.activateItemWindow = function() {
+    this._infoWindow.refresh();
+    this._itemWindow.refresh();
+    this._itemWindow.activate();
+  };
 
-  Scene_Storage.prototype.item = function () {
-    return this._itemWindow.item()
-  }
+  Scene_Storage.prototype.item = function() {
+    return this._itemWindow.item();
+  };
 
-  Scene_Storage.prototype.onCommandCancel = function () {
-    SceneManager.pop()
-  }
+  Scene_Storage.prototype.onCommandCancel = function() {
+    SceneManager.pop();
+  };
 
-  Scene_Storage.prototype.onCommandOk = function () {
-    this._itemWindow.setMode(this._commandWindow.currentSymbol())
-    this._commandWindow.deactivate()
-    this._commandWindow.hide()
-    this._categoryWindow.activate()
-    this._categoryWindow.select(0)
-    this._categoryWindow.show()
-  }
+  Scene_Storage.prototype.onCommandOk = function() {
+    this._itemWindow.setMode(this._commandWindow.currentSymbol());
+    this._commandWindow.deactivate();
+    this._commandWindow.hide();
+    this._categoryWindow.activate();
+    this._categoryWindow.select(0);
+    this._categoryWindow.show();
+  };
 
-  Scene_Storage.prototype.onCategoryOk = function () {
-    this._itemWindow.activate()
-    this._itemWindow.selectLast()
+  Scene_Storage.prototype.onCategoryOk = function() {
+    this._itemWindow.activate();
+    this._itemWindow.selectLast();
     if (!this._displayCategories) {
-      this._itemWindow.setMode(this._commandWindow.currentSymbol())
-      this._itemWindow.setCategory('AllItems')
-      this._itemWindow.refresh()
+      this._itemWindow.setMode(this._commandWindow.currentSymbol());
+      this._itemWindow.setCategory("AllItems");
+      this._itemWindow.refresh();
     }
-  }
+  };
 
-  Scene_Storage.prototype.onCategoryCancel = function () {
-    this._categoryWindow.deselect()
-    this._categoryWindow.deactivate()
-    this._categoryWindow.hide()
-    this._commandWindow.show()
-    this._commandWindow.activate()
-    this.showWholeStorage()
-  }
+  Scene_Storage.prototype.onCategoryCancel = function() {
+    this._categoryWindow.deselect();
+    this._categoryWindow.deactivate();
+    this._categoryWindow.hide();
+    this._commandWindow.show();
+    this._commandWindow.activate();
+    this.showWholeStorage();
+  };
 
-  Scene_Storage.prototype.onItemOk = function () {
-    this._item = this._itemWindow.item()
-    this._itemWindow.deactivate()
-    this._numberWindow.setup(this._item, this._itemWindow.mode())
-    this._numberWindow.show()
-    this._numberWindow.activate()
-  }
+  Scene_Storage.prototype.onItemOk = function() {
+    this._item = this._itemWindow.item();
+    this._itemWindow.deactivate();
+    this._numberWindow.setup(this._item, this._itemWindow.mode());
+    this._numberWindow.show();
+    this._numberWindow.activate();
+  };
 
-  Scene_Storage.prototype.storeItem = function (amount) {
-    this._storage.addItem(this.item(), amount)
-    $gameParty.loseItem(this.item(), amount)
-  }
+  Scene_Storage.prototype.storeItem = function(amount) {
+    this._storage.addItem(this.item(), amount);
+    $gameParty.loseItem(this.item(), amount);
+  };
 
-  Scene_Storage.prototype.depositItem = function (amount) {
-    this._storage.removeItem(this.item(), amount)
-    $gameParty.gainItem(this.item(), amount)
-  }
+  Scene_Storage.prototype.depositItem = function(amount) {
+    this._storage.removeItem(this.item(), amount);
+    $gameParty.gainItem(this.item(), amount);
+  };
 
-  Scene_Storage.prototype.onItemCancel = function () {
-    this._itemWindow.deselect()
-    this._helpWindow.clear()
+  Scene_Storage.prototype.onItemCancel = function() {
+    this._itemWindow.deselect();
+    this._helpWindow.clear();
     if (this._displayCategories) {
-      this._categoryWindow.activate()
+      this._categoryWindow.activate();
     } else {
-      this._itemWindow.setCategory('none')
-      this._commandWindow.activate()
-      this.showWholeStorage()
+      this._itemWindow.setCategory("none");
+      this._commandWindow.activate();
+      this.showWholeStorage();
     }
-  }
+  };
 
-  Scene_Storage.prototype.onNumberOk = function () {
-    SoundManager.playShop()
-    var mode = this._itemWindow.mode()
-    if (mode === 'add') {
-      this.storeItem(this._numberWindow.number())
-    } else if (mode === 'remove') {
-      this.depositItem(this._numberWindow.number())
+  Scene_Storage.prototype.onNumberOk = function() {
+    SoundManager.playShop();
+    var mode = this._itemWindow.mode();
+    if (mode === "add") {
+      this.storeItem(this._numberWindow.number());
+    } else if (mode === "remove") {
+      this.depositItem(this._numberWindow.number());
     }
-    this.endNumberInput()
-  }
+    this.endNumberInput();
+  };
 
-  Scene_Storage.prototype.endNumberInput = function () {
-    this._numberWindow.hide()
-    this._itemWindow.refresh()
-    this._infoWindow.refresh()
-    this._itemWindow.activate()
-  }
+  Scene_Storage.prototype.endNumberInput = function() {
+    this._numberWindow.hide();
+    this._itemWindow.refresh();
+    this._infoWindow.refresh();
+    this._itemWindow.activate();
+  };
 
-  Scene_Storage.prototype.onNumberCancel = function () {
-    SoundManager.playCancel()
-    this.endNumberInput()
-  }
-})(WAYModuleLoader.getModule('WAY_StorageSystem'))
+  Scene_Storage.prototype.onNumberCancel = function() {
+    SoundManager.playCancel();
+    this.endNumberInput();
+  };
+})(WAYModuleLoader.getModule("WAY_StorageSystem"));
 
 //-----------------------------------------------------------------------------
-function Window_StorageTitle () {
-  this.initialize.apply(this, arguments)
+function Window_StorageTitle() {
+  this.initialize.apply(this, arguments);
 }
 
-function Window_StorageCommand () {
-  this.initialize.apply(this, arguments)
+function Window_StorageCommand() {
+  this.initialize.apply(this, arguments);
 }
 
-function Window_StorageCategory () {
-  this.initialize.apply(this, arguments)
+function Window_StorageCategory() {
+  this.initialize.apply(this, arguments);
 }
 
-function Window_StorageItemList () {
-  this.initialize.apply(this, arguments)
+function Window_StorageItemList() {
+  this.initialize.apply(this, arguments);
 }
 
-function Window_StorageInfo () {
-  this.initialize.apply(this, arguments)
+function Window_StorageInfo() {
+  this.initialize.apply(this, arguments);
 }
 
-function Window_StorageNumber () {
-  this.initialize.apply(this, arguments)
+function Window_StorageNumber() {
+  this.initialize.apply(this, arguments);
 }
 
-function Scene_Storage () {
-  this.initialize.apply(this, arguments)
+function Scene_Storage() {
+  this.initialize.apply(this, arguments);
 }
 
-function Game_StorageSystems () {
-  this.initialize.apply(this, arguments)
+function Game_StorageSystems() {
+  this.initialize.apply(this, arguments);
 }
 
-function Game_StorageSystem () {
-  this.initialize.apply(this, arguments)
+function Game_StorageSystem() {
+  this.initialize.apply(this, arguments);
 }
 //-----------------------------------------------------------------------------
 

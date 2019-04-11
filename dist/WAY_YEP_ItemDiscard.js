@@ -39,13 +39,13 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
-'use strict';
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -53,9 +53,9 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_YEP_ItemDiscard', '1.0.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
+  WAYModuleLoader.registerPlugin("WAY_YEP_ItemDiscard", "1.0.0", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
   });
 }
 
@@ -65,13 +65,13 @@ if (typeof WAY === 'undefined') {
       trim = _WAY$Util.trim;
 
   var parseNotetags = function parseNotetags(obj) {
-    obj.customOnDiscardEval = getMultiLineNotetag(obj.note, 'Custom On Discard Eval', null, trim);
+    obj.customOnDiscardEval = getMultiLineNotetag(obj.note, "Custom On Discard Eval", null, trim);
     console.log(obj.customOnDiscardEval);
   };
 
-  WAY.EventEmitter.on('load-item-notetags', parseNotetags);
-  WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
-  WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
+  WAY.EventEmitter.on("load-item-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-weapon-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-armor-notetags", parseNotetags);
   $.alias.Scene_Item_performDiscardItem = Scene_Item.prototype.performDiscardItem;
 
   Scene_Item.prototype.performDiscardItem = function (item, quantity) {
@@ -83,4 +83,4 @@ if (typeof WAY === 'undefined') {
 
     $.alias.Scene_Item_performDiscardItem.call(this, item, quantity);
   };
-})(WAYModuleLoader.getModule('WAY_YEP_ItemDiscard'));
+})(WAYModuleLoader.getModule("WAY_YEP_ItemDiscard"));

@@ -45,95 +45,105 @@ Website: http://waynee95.me/
 Discord Name: waynee95#4261
 */
 
-'use strict'
+"use strict";
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!') // eslint-disable-line no-console
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); //eslint-disable-line
-    gui.Window.get().showDevTools()
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); //eslint-disable-line
+    gui.Window.get().showDevTools();
   }
-  SceneManager.stop()
+  SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_VerticalScreenShake', '1.1.0', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
-  })
+  WAYModuleLoader.registerPlugin(
+    "WAY_VerticalScreenShake",
+    "1.1.0",
+    "waynee95",
+    {
+      name: "WAY_Core",
+      version: ">= 2.0.0"
+    }
+  );
 }
 
 ($ => {
   //==========================================================================
   // Spriteset_Base
   //==========================================================================
-  $.alias.Spriteset_Base_updatePosition = Spriteset_Base.prototype.updatePosition
-  Spriteset_Base.prototype.updatePosition = function () {
-    $.alias.Spriteset_Base_updatePosition.call(this)
-    this.y += Math.round($gameScreen.shakeY())
-  }
+  $.alias.Spriteset_Base_updatePosition =
+    Spriteset_Base.prototype.updatePosition;
+  Spriteset_Base.prototype.updatePosition = function() {
+    $.alias.Spriteset_Base_updatePosition.call(this);
+    this.y += Math.round($gameScreen.shakeY());
+  };
 
   //==========================================================================
   // Game_Screen
   //==========================================================================
-  $.alias.Game_Screen_clear = Game_Screen.prototype.clear
-  Game_Screen.prototype.clear = function () {
-    $.alias.Game_Screen_clear.call(this)
-    this.clearShakeY()
-  }
+  $.alias.Game_Screen_clear = Game_Screen.prototype.clear;
+  Game_Screen.prototype.clear = function() {
+    $.alias.Game_Screen_clear.call(this);
+    this.clearShakeY();
+  };
 
-  $.alias.Game_Screen_onBattleStart = Game_Screen.prototype.onBattleStart
-  Game_Screen.prototype.onBattleStart = function () {
-    $.alias.Game_Screen_onBattleStart.call(this)
-    this.clearShakeY()
-  }
+  $.alias.Game_Screen_onBattleStart = Game_Screen.prototype.onBattleStart;
+  Game_Screen.prototype.onBattleStart = function() {
+    $.alias.Game_Screen_onBattleStart.call(this);
+    this.clearShakeY();
+  };
 
-  $.alias.Game_Screen_update = Game_Screen.prototype.update
-  Game_Screen.prototype.update = function () {
-    $.alias.Game_Screen_update.call(this)
-    this.updateShakeY()
-  }
+  $.alias.Game_Screen_update = Game_Screen.prototype.update;
+  Game_Screen.prototype.update = function() {
+    $.alias.Game_Screen_update.call(this);
+    this.updateShakeY();
+  };
 
-  Game_Screen.prototype.shakeY = function () {
-    return this._shakeY
-  }
+  Game_Screen.prototype.shakeY = function() {
+    return this._shakeY;
+  };
 
-  Game_Screen.prototype.clearShakeY = function () {
-    this._shakePowerY = 0
-    this._shakeSpeedY = 0
-    this._shakeDurationY = 0
-    this._shakeDirectionY = 1
-    this._shakeY = 0
-  }
+  Game_Screen.prototype.clearShakeY = function() {
+    this._shakePowerY = 0;
+    this._shakeSpeedY = 0;
+    this._shakeDurationY = 0;
+    this._shakeDirectionY = 1;
+    this._shakeY = 0;
+  };
 
-  Game_Screen.prototype.updateShakeY = function () {
+  Game_Screen.prototype.updateShakeY = function() {
     if (this._shakeDurationY > 0 || this._shakeY !== 0) {
-      const delta = (this._shakePowerY * this._shakeSpeedY * this._shakeDirectionY) / 10
-      if (this._shakeDurationY <= 1 && this._shakeY * (this._shakeY + delta) < 0) {
-        this._shakeY = 0
+      const delta =
+        (this._shakePowerY * this._shakeSpeedY * this._shakeDirectionY) / 10;
+      if (
+        this._shakeDurationY <= 1 &&
+        this._shakeY * (this._shakeY + delta) < 0
+      ) {
+        this._shakeY = 0;
       } else {
-        this._shakeY += delta
+        this._shakeY += delta;
       }
       if (this._shakeY > this._shakePowerY * 2) {
-        this._shakeDirectionY = -1
+        this._shakeDirectionY = -1;
       }
       if (this._shakeY < -this._shakePowerY * 2) {
-        this._shakeDirectionY = 1
+        this._shakeDirectionY = 1;
       }
-      this._shakeDurationY--
+      this._shakeDurationY--;
     }
-  }
+  };
 
-  Game_Screen.prototype.startShakeY = function (power, speed, duration) {
-    this._shakePowerY = power
-    this._shakeSpeedY = speed
-    this._shakeDurationY = duration
-  }
+  Game_Screen.prototype.startShakeY = function(power, speed, duration) {
+    this._shakePowerY = power;
+    this._shakeSpeedY = speed;
+    this._shakeDurationY = duration;
+  };
 
   //==========================================================================
   // PluginManager
   //==========================================================================
-  PluginManager.addCommand('VerticalScreenShake', {
-    start (power = 5, speed = 5, duration = 60) {
-      $gameScreen.startShakeY(power, speed, duration)
+  PluginManager.addCommand("VerticalScreenShake", {
+    start(power = 5, speed = 5, duration = 60) {
+      $gameScreen.startShakeY(power, speed, duration);
     }
-  })
-})(WAYModuleLoader.getModule('WAY_VerticalScreenShake'))
+  });
+})(WAYModuleLoader.getModule("WAY_VerticalScreenShake"));
