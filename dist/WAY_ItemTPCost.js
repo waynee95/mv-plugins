@@ -4,7 +4,7 @@
 // ===========================================================================
 
 /*:
-@plugindesc v1.0.0 <WAY_ItemTPCost> Allows you to set TP Costs for items.
+@plugindesc v1.0.1 <WAY_ItemTPCost> Allows you to set TP Costs for items.
 @author waynee95
 
 @help
@@ -49,7 +49,7 @@ if (typeof WAY === "undefined") {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_ItemTPCost", "1.0.0", "waynee95");
+  WAYModuleLoader.registerPlugin("WAY_ItemTPCost", "1.0.1", "waynee95");
 }
 
 (function ($) {
@@ -77,7 +77,7 @@ if (typeof WAY === "undefined") {
       }
     }
 
-    return true;
+    return 0;
   }
 
   $.alias.Game_BattlerBase_refresh = Game_BattlerBase.prototype.refresh;
