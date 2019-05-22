@@ -253,7 +253,7 @@ var $gameAchievements = null; //eslint-disable-line
     _createClass(Game_Achievement, [{
       key: "check",
       value: function check() {
-        return eval(this.condition);
+        return eval(this.condition); // eslint-disable-line no-eval
       }
     }]);
 

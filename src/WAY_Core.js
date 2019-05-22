@@ -48,19 +48,19 @@ const WAYModuleLoader = (function() {
     const length = Math.max(currentVersion.length, requiredVersion.length);
     let compare = 0;
     const operation = {
-      "<": function() {
+      "<"() {
         return compare < 0;
       },
-      "<=": function() {
+      "<="() {
         return compare <= 0;
       },
-      "==": function() {
+      "=="() {
         return compare === 0;
       },
-      ">": function() {
+      ">"() {
         return compare > 0;
       },
-      ">=": function() {
+      ">="() {
         return compare >= 0;
       }
     };

@@ -223,7 +223,7 @@ var $gameAchievements = null; //eslint-disable-line
       this.onCompleteCommonEvent = 0;
     }
     check() {
-      return eval(this.condition);
+      return eval(this.condition); // eslint-disable-line no-eval
     }
   }
 

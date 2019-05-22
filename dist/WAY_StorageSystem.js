@@ -1,4 +1,4 @@
-/* globals WAY, WAYModuleLoader */
+/* globals WAY, WAYModuleLoader, $gameStorageSystems */
 //===========================================================================
 // WAY_StorageSystem.js
 //===========================================================================
@@ -526,9 +526,9 @@ window.$gameStorageSystems = null;
       return this._weapons;
     } else if (DataManager.isArmor(item)) {
       return this._armors;
-    } else {
-      return null;
     }
+
+    return null;
   };
 
   Game_StorageSystem.prototype.getItemCategory = function (item) {
@@ -540,9 +540,9 @@ window.$gameStorageSystems = null;
       return "Weapons";
     } else if (DataManager.isArmor(item)) {
       return "Armors";
-    } else {
-      return false;
     }
+
+    return false;
   }; //==========================================================================
   // Window_Base
   //==========================================================================
@@ -824,9 +824,9 @@ window.$gameStorageSystems = null;
   Window_StorageItemList.prototype.isEnabled = function (item) {
     if (item && item.cannotStore) {
       return false;
-    } else {
-      return item && (this._mode === "add" ? this._storage.maxItems(item) > 0 : $gameParty.maxItems(item) - $gameParty.numItems(item) > 0);
     }
+
+    return item && (this._mode === "add" ? this._storage.maxItems(item) > 0 : $gameParty.maxItems(item) - $gameParty.numItems(item) > 0);
   }; //==========================================================================
   // Window_StorageInfo
   //==========================================================================

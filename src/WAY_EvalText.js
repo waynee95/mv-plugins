@@ -88,7 +88,7 @@ if (typeof WAY === "undefined") {
       a = SceneManager._scene._inBattleStatusWindow._battler;
     }
 
-    return text.replace(/\${[^{}\\]+(?=\})}/g, function(code) {
+    return text.replace(/\${[^{}\\]+(?=\})}/g, code => {
       try {
         return eval(code.substring(2, code.length - 1)); // eslint-disable-line no-eval
       } catch (e) {

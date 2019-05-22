@@ -66,7 +66,6 @@ if (typeof WAY === "undefined") {
 
   var parseNotetags = function parseNotetags(obj) {
     obj.customOnDiscardEval = getMultiLineNotetag(obj.note, "Custom On Discard Eval", null, trim);
-    console.log(obj.customOnDiscardEval);
   };
 
   WAY.EventEmitter.on("load-item-notetags", parseNotetags);

@@ -65,7 +65,6 @@ if (typeof WAY === "undefined") {
       null,
       trim
     );
-    console.log(obj.customOnDiscardEval);
   };
 
   WAY.EventEmitter.on("load-item-notetags", parseNotetags);
