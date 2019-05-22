@@ -7,7 +7,9 @@
     "build:dist": "babel src -d dist",
     "build:game": "babel src -d game/js/plugins",
     "build": "npm run build:game && npm run build:dist",
-    "watch": "babel --watch --verbose src -d game/js/plugins"
+    "watch": "babel --watch --verbose src -d game/js/plugins",
+    "lint": "node_modules/eslint/bin/eslint.js src/*.js; true",
+    "pretty": "node_modules/prettier/bin-prettier.js --write src/*.js"
   },
   "repository": {
     "type": "git",
@@ -28,6 +30,10 @@
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0"
+    "@babel/preset-env": "^7.1.0",
+    "eslint": "^5.16.0",
+    "eslint-config-recommended": "^4.0.0",
+    "eslint-plugin-rpgmaker": "^1.0.2",
+    "prettier": "^1.17.1"
   }
 }
