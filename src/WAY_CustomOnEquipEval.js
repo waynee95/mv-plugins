@@ -3,7 +3,7 @@
 // WAY_CustomOnEquipEval.js
 // ===========================================================================
 /*:
-@plugindesc v1.2.0 Run code when an actor equips or unequips an item. <WAY_CustomOnEquipEval>
+@plugindesc v1.2.1 Run code when an actor equips or unequips an item. <WAY_CustomOnEquipEval>
 
 @author waynee95
 
@@ -62,7 +62,7 @@ if (typeof WAY === "undefined") {
   }
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_CustomOnEquipEval", "1.2.0", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_CustomOnEquipEval", "1.2.1", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -128,7 +128,7 @@ if (typeof WAY === "undefined") {
   if (!Imported.YEP_EquipCore) {
     $.alias.Game_Actor_initEquips = Game_Actor.prototype.initEquips;
     Game_Actor.prototype.initEquips = function(...args) {
-      $.alias.Game_Actor_initEquips.call(this, args);
+      $.alias.Game_Actor_initEquips.apply(this, args);
       this.equips().forEach(item => {
         evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
       });
@@ -136,7 +136,7 @@ if (typeof WAY === "undefined") {
   } else {
     $.alias.Game_Actor_equipInitEquips = Game_Actor.prototype.equipInitEquips;
     Game_Actor.prototype.equipInitEquips = function(...args) {
-      $.alias.Game_Actor_equipInitEquips.call(this, args);
+      $.alias.Game_Actor_equipInitEquips.apply(this, args);
       this.equips().forEach(item => {
         evalCode(this, item, CUSTOM_ON_EQUIP_EVAL);
       });
