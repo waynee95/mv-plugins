@@ -3,7 +3,7 @@
 // WAY_Achievements.js
 //=============================================================================
 /*:
-@plugindesc v1.1.1 This plugin allows you to create Achievements to your game. <WAY_Achievements>
+@plugindesc v1.2.0 This plugin allows you to create Achievements to your game. <WAY_Achievements>
 
 @author waynee95
 
@@ -16,6 +16,11 @@
 @text Menu Command Name
 @type text
 @default Achievements
+
+@param disablePopups
+@text Disable Popups
+@type boolean
+@default false
 
 @param showCommand
 @text Show in Main Menu
@@ -174,7 +179,7 @@ if (typeof WAY === "undefined") {
   }
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_Achievements", "1.1.1", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_Achievements", "1.2.0", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -201,6 +206,8 @@ var $gameAchievements = null; //eslint-disable-line
     showCommand,
     titleText
   } = $.parameters;
+
+  let { disablePopups } = $.parameters;
 
   const $dataAchievements = [null].concat($.parameters.achievementList);
 
@@ -501,6 +508,7 @@ var $gameAchievements = null; //eslint-disable-line
     }
     update() {
       Window_Base.prototype.update.call(this);
+      if (disablePopups) return;
       if ($gameAchievements._notifyQueue.length) {
         if (!this._achievement && this.contentsOpacity < 1) {
           this._achievement = $gameAchievements._notifyQueue[0];
@@ -630,6 +638,19 @@ var $gameAchievements = null; //eslint-disable-line
     $.alias.Scene_Map_createAllWindows.call(this);
     this.createNotificationWindow();
   };
+
+  //===========================================================================
+  //  Plugin Commands
+  //===========================================================================
+  PluginManager.addCommand("Achievements", {
+    enablePopups() {
+      disablePopups = false;
+    },
+    disablePopups() {
+      disablePopups = true;
+    }
+  });
+
 })(WAYModuleLoader.getModule("WAY_Achievements"));
 
 //-----------------------------------------------------------------------------
