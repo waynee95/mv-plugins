@@ -141,6 +141,21 @@ are left, or you can check in-game how many points the player already earned and
 give rewards. You can get the current amount of points with the Scriptcall:
 $gameAchievements.currentPoints()
 
+==============================================================================
+ ■ Plugin Commands
+==============================================================================
+Main Keyword: Achievements
+
+-----------------------
+Achievements enablePopups
+-----------------------
+You can use this to command to enable popups.
+
+-----------------------
+Achievements disablePopups
+-----------------------
+You can use this command to disable popups.
+
 ===============================================================================
  ■ YEP MainMenuManager
 ===============================================================================
