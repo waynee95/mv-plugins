@@ -3,7 +3,7 @@
 // WAY_Achievements.js
 //=============================================================================
 /*:
-@plugindesc v1.2.0 This plugin allows you to create Achievements to your game. <WAY_Achievements>
+@plugindesc v1.3.0 This plugin allows you to create Achievements to your game. <WAY_Achievements>
 
 @author waynee95
 
@@ -194,7 +194,7 @@ if (typeof WAY === "undefined") {
   }
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_Achievements", "1.2.0", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_Achievements", "1.3.0", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -708,7 +708,7 @@ var $gameAchievements = null; //eslint-disable-line
 
 @param description
 @text Description
-@type text
+@type note
 @default
 
 @param notCompletedDescription
