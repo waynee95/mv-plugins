@@ -3,7 +3,7 @@
 // WAY_StorageSystem.js
 //===========================================================================
 /*:
-@plugindesc v2.2.3 This plugin allows you create different storage systems where
+@plugindesc v2.3.0 This plugin allows you create different storage systems where
 the player can store his items. <WAY_StorageSystem>
 
 @param config
@@ -15,9 +15,9 @@ the player can store his items. <WAY_StorageSystem>
 @author waynee95
 
 @help
-==============================================================================
+============================================================================
  ■ Usage
-==============================================================================
+============================================================================
 
 >>> This plugin uses the new MV1.5.0 Plugin Parameter, so I recommend you to
 update your editor. Your project can still be lower than MV1.5.0
@@ -25,8 +25,8 @@ update your editor. Your project can still be lower than MV1.5.0
 This plugin allows you create different storage systems where the player can
 store his items. This plugin does not add the ability to limit the player's
 inventory.
-You can use YEP_CoreEngine to restrict the player's inventory. Also this plugin
-is compatible with YEP_ItemCore and YEP_X_ItemCategories.
+You can use YEP_CoreEngine to restrict the player's inventory. Also this
+plugin is compatible with YEP_ItemCore and YEP_X_ItemCategories.
 
 Put this plugin at the bottom of the list.
 
@@ -39,30 +39,33 @@ How to create a storage system:
 The ids for the storage systems start at 0. So the first storage system will
 have id 0, the next id 1, ...
 
-==============================================================================
+============================================================================
  ■ Parameter Overview
-==============================================================================
+============================================================================
 Menu Background - Set an image for the Scene Background.
 
-Storage Title - Title that will be displayed in the title window. You can use
-escape codes here like \i[x], \c[x].
+Storage Title - Title that will be displayed in the title window. You can
+use escape codes here like \i[x], \c[x].
 
-Info Window Text - Text that will be displayed in the info window. %1 will be
-replaced with the current capacity of the storage.
+Info Window Text - Text that will be displayed in the info window. %1 will
+be replaced with the current capacity of the storage.
 
 Max Capacity - The maximum of items that can be stored.
 
-Item Stack Size - If this paramter is not equal to none, a stack will count as
-one item in regards of the max capacity. For example if the stack size is 8 and
-the max capacity is 20, the same item can be stored 8 times but it will only
-subtract 1 from the max capacity. This means you can store 8x20 items in the
-storage system.
+Item Stack Size - If this paramter is not equal to none, a stack will count
+as one item in regards of the max capacity. For example if the stack size
+is 8 and the max capacity is 20, the same item can be stored 8 times but
+it will only subtract 1 from the max capacity. This means you can store
+8x20 items in the storage system.
 
-Display Categories - Are the different categories displayed in the stoage system
-menu? This is only for visuals. All allowed types will be just in one list.
-When your are using YEP_X_ItemCategories, this paramter must be set to true.
+Display Categories - Are the different categories displayed in the storage
+system menu? This is only for visuals. All allowed types will be just in
+one list.
+When your are using YEP_X_ItemCategories, this paramter must be set to
+true.
 
-Allowed Item Types - Define which items can be stored in the storage system.
+Allowed Item Types - Define which items can be stored in the storage
+system.
 You can use the following types:
  - items
  - weapons
@@ -72,13 +75,19 @@ You can use the following types:
 If you want more categories, you can use YEP_X_ItemCategories. Just add the
 category name to the allowed types list.
 
-Mode - Can either be "Add/Remove", "Only Add" or "Only Remove". First one would
-be your classical storage chest and the "Only Remove" option would be handy for
-creating loot boxes for example.
+Mode - Can either be "Add/Remove", "Only Add" or "Only Remove". First one
+would be your classical storage chest and the "Only Remove" option would
+be handy for creating loot boxes for example.
 
-==============================================================================
+If you wanna customize the text for the add/remove items buttons, you can do
+that inside the Scene Settings/Command Window Settings.
+
+If you wanan customize the sound when adding/removing items, you can do that
+inside the Scene Settings/Number Window Settings.
+
+============================================================================
  ■ Scene Settings
-==============================================================================
+============================================================================
 This is the section where you can change the look of the Storage Scene. You
 can change that for every storage system individually.
 
@@ -92,9 +101,9 @@ Item Window - Displays the list of available items depending on the category.
 Info Window - Displays the current and max capacity.
 Number Window - Used for inputting how many items you want to add/remove.
 
-==============================================================================
+============================================================================
  ■ Notetags
-==============================================================================
+============================================================================
 Item, Weapon, Armor Notetags:
 
 <Cannot Store>
@@ -105,9 +114,9 @@ This makes it so that the item cannot be store in the storage system.
 This makes it so that the item can only be stored in the specified storage
 systems.
 
-==============================================================================
+============================================================================
  ■ Plugin Commands
-==============================================================================
+============================================================================
 Main Keyword: StorageSystem
 
 -----------------------
@@ -116,8 +125,8 @@ StorageSystem open id
 open - Keyword for opening a storage system.
 Keep in mind that the id starts at 0!
 
-id - The id of the storage system that will be opened. If no id is specified,
-the last opened storage system will be opened.
+id - The id of the storage system that will be opened. If no id is
+     specified, the last opened storage system will be opened.
 
 -----------------------
 StorageSystem add id item amount
@@ -159,9 +168,9 @@ id - The id of the storage system.
 
 number - New max capacity.
 
-==============================================================================
+============================================================================
  ■ Scriptcalls
-==============================================================================
+============================================================================
 Global Object: $gameStorageSystems
 
 $gameStorageSystems.open(id) - Opens a storage system. If no id is specified,
@@ -193,24 +202,24 @@ storage.isEmpty() - Returns either true or false.
 storage.addItem(item, amount) - Adds an item to a storage system. Use
 $dataItems[id], $dataWeapons[id], $dataArmors[id].
 
-storage.removeItem(item, amount) - Removes an item from the storage system. If
-no amount is specified, all items will be removed.
+storage.removeItem(item, amount) - Removes an item from the storage system.
+If no amount is specified, all items will be removed.
 
 storage.clear() - Clears a storage system.
 
 storage.changeMaxCapacity(number) - Changes the max capacity to the given
 number.
 
-==============================================================================
+============================================================================
  ■ Terms of Use
-==============================================================================
+============================================================================
 This work is licensed under the MIT license.
 
 More info here: https://github.com/waynee95/mv-plugins/blob/master/LICENSE
 
-==============================================================================
+============================================================================
  ■ Contact Information
-==============================================================================
+============================================================================
 Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
@@ -227,7 +236,7 @@ if (typeof WAY === "undefined") {
   }
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.2.3", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.3.0", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -1099,7 +1108,12 @@ window.$gameStorageSystems = null;
   };
 
   Scene_Storage.prototype.onNumberOk = function() {
-    SoundManager.playShop();
+    const okSound = this._numberData.okSound;
+    if (okSound && okSound.name) {
+      AudioManager.playSe(okSound);
+    } else {
+      SoundManager.playShop();
+    }
     const mode = this._itemWindow.mode();
     if (mode === "add") {
       this.storeItem(this._numberWindow.number());
@@ -1451,5 +1465,34 @@ function Game_StorageSystem() {
 @text Number Window Height
 @type text
 @default
+
+@param okSound
+@text Ok Sound
+@type struct<sound>
+@default
 */
+
+/*~struct~sound:
+@param name
+@text SE name
+@type file
+@dir audio/se
+@default
+
+@param volume
+@text SE Volume
+@type number
+@default 90
+
+@param pitch
+@text SE Pitch
+@type number
+@default 100
+
+@param pan
+@text SE Pan
+@type number
+@default 0
+*/
+
 //-----------------------------------------------------------------------------
