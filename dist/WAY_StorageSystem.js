@@ -4,7 +4,7 @@
 //===========================================================================
 
 /*:
-@plugindesc v2.2.2 This plugin allows you create different storage systems where
+@plugindesc v2.2.3 This plugin allows you create different storage systems where
 the player can store his items. <WAY_StorageSystem>
 
 @param config
@@ -217,15 +217,15 @@ Website: http://waynee95.me/
 Discord Name: waynee95#4261
 Ko-fi: https://ko-fi.com/waynee
 */
-'use strict';
+"use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-if (typeof WAY === 'undefined') {
-  console.error('You need to install WAY_Core!'); // eslint-disable-line no-console
+if (typeof WAY === "undefined") {
+  console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
-  if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-    var gui = require('nw.gui'); // eslint-disable-line
+  if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+    var gui = require("nw.gui"); // eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -233,9 +233,9 @@ if (typeof WAY === 'undefined') {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin('WAY_StorageSystem', '2.2.2', 'waynee95', {
-    name: 'WAY_Core',
-    version: '>= 2.0.0'
+  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.2.3", "waynee95", {
+    name: "WAY_Core",
+    version: ">= 2.0.0"
   });
 }
 
@@ -248,28 +248,28 @@ window.$gameStorageSystems = null;
   var $dataStorage = $.parameters.config;
 
   if ($dataStorage === null) {
-    console.warn('WAY_StorageSystem\nPlugin Parameters are not setup properly!');
+    console.warn("WAY_StorageSystem\nPlugin Parameters are not setup properly!");
 
-    if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-      if (!require('nw.gui').Window.get().isDevToolsOpen()) {
-        require('nw.gui').Window.get().showDevTools();
+    if (Utils.isNwjs() && Utils.isOptionValid("test")) {
+      if (!require("nw.gui").Window.get().isDevToolsOpen()) {
+        require("nw.gui").Window.get().showDevTools();
       }
     }
   }
 
-  WAY.EventEmitter.on('load-item-notetags', parseNotetags);
-  WAY.EventEmitter.on('load-weapon-notetags', parseNotetags);
-  WAY.EventEmitter.on('load-armor-notetags', parseNotetags);
+  WAY.EventEmitter.on("load-item-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-weapon-notetags", parseNotetags);
+  WAY.EventEmitter.on("load-armor-notetags", parseNotetags);
 
   function parseNotetags(obj) {
-    obj.cannotStore = getNotetag(obj.note, 'Cannot Store', false);
-    obj.onlyInStorage = getNotetag(obj.note, 'Can Store Only In', [], toArray);
+    obj.cannotStore = getNotetag(obj.note, "Cannot Store", false);
+    obj.onlyInStorage = getNotetag(obj.note, "Can Store Only In", [], toArray);
   } //==========================================================================
   // PluginManager
   //==========================================================================
 
 
-  PluginManager.addCommand('StorageSystem', {
+  PluginManager.addCommand("StorageSystem", {
     open: function open() {
       var storageId = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : $gameStorageSystems._lastActive;
       $gameStorageSystems.open(storageId);
@@ -347,7 +347,7 @@ window.$gameStorageSystems = null;
   };
 
   Game_StorageSystems.prototype.storage = function (storageId) {
-    if (_typeof($dataStorage[storageId]) !== 'object') {
+    if (_typeof($dataStorage[storageId]) !== "object") {
       return;
     }
 
@@ -367,7 +367,7 @@ window.$gameStorageSystems = null;
   };
 
   Game_StorageSystems.prototype.open = function (storageId) {
-    if (typeof storageId !== 'undefined') {
+    if (typeof storageId !== "undefined") {
       this._lastActive = storageId;
     }
 
@@ -387,7 +387,7 @@ window.$gameStorageSystems = null;
     this._title = storage.titleText;
     this._allowedTypes = storage.allowedTypes;
     this._maxCapacity = storage.maxCapacity;
-    this._stackSize = storage.stackSize !== 'none' ? parseInt(storage.stackSize) : 'none';
+    this._stackSize = storage.stackSize !== "none" ? parseInt(storage.stackSize) : "none";
     this.clear();
   };
 
@@ -414,7 +414,7 @@ window.$gameStorageSystems = null;
   Game_StorageSystem.prototype.capacity = function () {
     var sum = 0;
 
-    if (this._stackSize === 'none') {
+    if (this._stackSize === "none") {
       sum = this.allItems().map(function (item) {
         return this.numItems(item);
       }, this).reduce(function (total, current) {
@@ -513,7 +513,7 @@ window.$gameStorageSystems = null;
   };
 
   Game_StorageSystem.prototype.maxItems = function (item) {
-    if (this._stackSize === 'none') {
+    if (this._stackSize === "none") {
       return this.maxCapacity() - this.capacity();
     } else if (this.numItems(item) > 0 || this.maxCapacity() - this.capacity() > 0) {
       return this._stackSize - this.numItems(item);
@@ -538,13 +538,13 @@ window.$gameStorageSystems = null;
 
   Game_StorageSystem.prototype.getItemCategory = function (item) {
     if (DataManager.isItem(item) && item.itypeId === 1) {
-      return 'Items';
+      return "Items";
     } else if (DataManager.isItem(item) && item.itypeId === 2) {
-      return 'KeyItems';
+      return "KeyItems";
     } else if (DataManager.isWeapon(item)) {
-      return 'Weapons';
+      return "Weapons";
     } else if (DataManager.isArmor(item)) {
-      return 'Armors';
+      return "Armors";
     }
 
     return false;
@@ -621,13 +621,13 @@ window.$gameStorageSystems = null;
   };
 
   Window_StorageCommand.prototype.makeCommandList = function () {
-    if (this._storageMode === 'Remove') {
-      this.addCommand(this._removeText, 'remove');
-    } else if (this._storageMode === 'Add') {
-      this.addCommand(this._addText, 'add');
+    if (this._storageMode === "Remove") {
+      this.addCommand(this._removeText, "remove");
+    } else if (this._storageMode === "Add") {
+      this.addCommand(this._addText, "add");
     } else {
-      this.addCommand(this._addText, 'add');
-      this.addCommand(this._removeText, 'remove');
+      this.addCommand(this._addText, "add");
+      this.addCommand(this._removeText, "remove");
     }
   };
 
@@ -683,13 +683,13 @@ window.$gameStorageSystems = null;
 
     Window_StorageCategory.prototype.addItemCategory = function (category) {
       if (category.match(/KeyItems/i)) {
-        return this.addCommand(TextManager.keyItem, 'keyItem');
+        return this.addCommand(TextManager.keyItem, "keyItem");
       } else if (category.match(/Items/i)) {
-        return this.addCommand(TextManager.item, 'item');
+        return this.addCommand(TextManager.item, "item");
       } else if (category.match(/Weapons/i)) {
-        return this.addCommand(TextManager.weapon, 'weapon');
+        return this.addCommand(TextManager.weapon, "weapon");
       } else if (category.match(/Armors/i)) {
-        return this.addCommand(TextManager.armor, 'armor');
+        return this.addCommand(TextManager.armor, "armor");
       }
     };
   } else {
@@ -730,7 +730,7 @@ window.$gameStorageSystems = null;
   Window_StorageItemList.prototype.initialize = function (x, y, w, h) {
     this.setup();
     Window_ItemList.prototype.initialize.call(this, x, y, w, h);
-    this._mode = 'none';
+    this._mode = "none";
     this._storage = $gameStorageSystems.current();
   };
 
@@ -770,19 +770,19 @@ window.$gameStorageSystems = null;
       }
 
       switch (this._category) {
-        case 'item':
+        case "item":
           return DataManager.isItem(item) && item.itypeId === 1;
 
-        case 'weapon':
+        case "weapon":
           return DataManager.isWeapon(item);
 
-        case 'armor':
+        case "armor":
           return DataManager.isArmor(item);
 
-        case 'keyItem':
+        case "keyItem":
           return DataManager.isItem(item) && item.itypeId === 2;
 
-        case 'AllItems':
+        case "AllItems":
           return this._storage.isTypeAllowed(this._storage.getItemCategory(item));
 
         default:
@@ -798,18 +798,18 @@ window.$gameStorageSystems = null;
         return false;
       }
 
-      if (this._category === 'AllItems') return true;
+      if (this._category === "AllItems") return true;
       return Window_ItemList.prototype.includes.call(this, item);
     };
   } // Imported.YEP_X_ItemCategories
 
 
   Window_StorageItemList.prototype.makeItemList = function () {
-    if (this._mode === 'add') {
+    if (this._mode === "add") {
       this._data = $gameParty.allItems().filter(function (item) {
         return this.includes(item);
       }, this);
-    } else if (this._mode === 'remove') {
+    } else if (this._mode === "remove") {
       this._data = this._storage.allItems().filter(function (item) {
         return this.includes(item);
       }, this);
@@ -821,9 +821,9 @@ window.$gameStorageSystems = null;
   };
 
   Window_StorageItemList.prototype.drawItemNumber = function (item, x, y, width) {
-    this.drawText('x', x, y, width - this.textWidth('00'), 'right');
-    var itemNum = this._mode === 'add' ? $gameParty.numItems(item) : this._storage.numItems(item);
-    this.drawText(itemNum, x, y, width, 'right');
+    this.drawText("x", x, y, width - this.textWidth("00"), "right");
+    var itemNum = this._mode === "add" ? $gameParty.numItems(item) : this._storage.numItems(item);
+    this.drawText(itemNum, x, y, width, "right");
   };
 
   Window_StorageItemList.prototype.isEnabled = function (item) {
@@ -831,7 +831,7 @@ window.$gameStorageSystems = null;
       return false;
     }
 
-    return item && (this._mode === 'add' ? this._storage.maxItems(item) > 0 : $gameParty.maxItems(item) - $gameParty.numItems(item) > 0);
+    return item && (this._mode === "add" ? this._storage.maxItems(item) > 0 : $gameParty.maxItems(item) - $gameParty.numItems(item) > 0);
   }; //==========================================================================
   // Window_StorageInfo
   //==========================================================================
@@ -848,7 +848,7 @@ window.$gameStorageSystems = null;
   };
 
   Window_StorageInfo.prototype.text = function () {
-    return this._text.replace('%1', this._storage.capacity() + '/' + this._storage.maxCapacity());
+    return this._text.replace("%1", this._storage.capacity() + "/" + this._storage.maxCapacity());
   };
 
   Window_StorageInfo.prototype.refresh = function () {
@@ -875,7 +875,7 @@ window.$gameStorageSystems = null;
     this._item = item;
     var numItems;
 
-    if (mode === 'add') {
+    if (mode === "add") {
       numItems = item ? $gameParty.numItems(item) : 0;
       this._max = numItems.clamp(numItems, this._storage.maxItems(item));
     } else {
@@ -901,13 +901,13 @@ window.$gameStorageSystems = null;
     var y = this.itemY();
     var width = this.cursorWidth() - this.textPadding();
     this.resetTextColor();
-    this.drawText(this._number, x, y, width, 'right');
+    this.drawText(this._number, x, y, width, "right");
   };
 
   Window_StorageNumber.prototype.drawMax = function () {
     var width = this.contentsWidth() - this.textPadding();
     this.resetTextColor();
-    this.drawText(this._max, 0, this.priceY(), width, 'right');
+    this.drawText(this._max, 0, this.priceY(), width, "right");
   }; //==========================================================================
   // Scene_Storage
   //==========================================================================
@@ -936,7 +936,7 @@ window.$gameStorageSystems = null;
   };
 
   Scene_Storage.prototype.createBackground = function () {
-    if (this._background !== '') {
+    if (this._background !== "") {
       this._backgroundSprite = new Sprite();
       this._backgroundSprite.bitmap = ImageManager.loadPicture(this._background);
       this.addChild(this._backgroundSprite);
@@ -982,16 +982,16 @@ window.$gameStorageSystems = null;
     this._commandWindow = new Window_StorageCommand(wx, wy);
 
     if (this._displayCategories) {
-      this._commandWindow.setHandler('add', this.onCommandOk.bind(this));
+      this._commandWindow.setHandler("add", this.onCommandOk.bind(this));
 
-      this._commandWindow.setHandler('remove', this.onCommandOk.bind(this));
+      this._commandWindow.setHandler("remove", this.onCommandOk.bind(this));
     } else {
-      this._commandWindow.setHandler('add', this.onCategoryOk.bind(this));
+      this._commandWindow.setHandler("add", this.onCategoryOk.bind(this));
 
-      this._commandWindow.setHandler('remove', this.onCategoryOk.bind(this));
+      this._commandWindow.setHandler("remove", this.onCategoryOk.bind(this));
     }
 
-    this._commandWindow.setHandler('cancel', this.onCommandCancel.bind(this));
+    this._commandWindow.setHandler("cancel", this.onCommandCancel.bind(this));
 
     this.addWindow(this._commandWindow);
   };
@@ -1001,9 +1001,9 @@ window.$gameStorageSystems = null;
     var wy = eval(this._categoryData.y);
     this._categoryWindow = new Window_StorageCategory(wx, wy);
 
-    this._categoryWindow.setHandler('ok', this.onCategoryOk.bind(this));
+    this._categoryWindow.setHandler("ok", this.onCategoryOk.bind(this));
 
-    this._categoryWindow.setHandler('cancel', this.onCategoryCancel.bind(this));
+    this._categoryWindow.setHandler("cancel", this.onCategoryCancel.bind(this));
 
     this._categoryWindow.deactivate();
 
@@ -1033,18 +1033,18 @@ window.$gameStorageSystems = null;
       this._categoryWindow.setItemWindow(this._itemWindow);
     }
 
-    this._itemWindow.setHandler('ok', this.onItemOk.bind(this));
+    this._itemWindow.setHandler("ok", this.onItemOk.bind(this));
 
-    this._itemWindow.setHandler('cancel', this.onItemCancel.bind(this));
+    this._itemWindow.setHandler("cancel", this.onItemCancel.bind(this));
 
     this.addWindow(this._itemWindow);
     this.showWholeStorage();
   };
 
   Scene_Storage.prototype.showWholeStorage = function () {
-    this._itemWindow.setMode('remove');
+    this._itemWindow.setMode("remove");
 
-    this._itemWindow.setCategory('AllItems');
+    this._itemWindow.setCategory("AllItems");
 
     this._itemWindow.refresh();
   };
@@ -1056,9 +1056,9 @@ window.$gameStorageSystems = null;
     var wh = eval(this._numberData.height);
     this._numberWindow = new Window_StorageNumber(wx, wy, ww, wh);
 
-    this._numberWindow.setHandler('ok', this.onNumberOk.bind(this));
+    this._numberWindow.setHandler("ok", this.onNumberOk.bind(this));
 
-    this._numberWindow.setHandler('cancel', this.onNumberCancel.bind(this));
+    this._numberWindow.setHandler("cancel", this.onNumberCancel.bind(this));
 
     this._numberWindow.hide();
 
@@ -1103,7 +1103,7 @@ window.$gameStorageSystems = null;
     if (!this._displayCategories) {
       this._itemWindow.setMode(this._commandWindow.currentSymbol());
 
-      this._itemWindow.setCategory('AllItems');
+      this._itemWindow.setCategory("AllItems");
 
       this._itemWindow.refresh();
     }
@@ -1155,7 +1155,7 @@ window.$gameStorageSystems = null;
     if (this._displayCategories) {
       this._categoryWindow.activate();
     } else {
-      this._itemWindow.setCategory('none');
+      this._itemWindow.setCategory("none");
 
       this._commandWindow.activate();
 
@@ -1168,9 +1168,9 @@ window.$gameStorageSystems = null;
 
     var mode = this._itemWindow.mode();
 
-    if (mode === 'add') {
+    if (mode === "add") {
       this.storeItem(this._numberWindow.number());
-    } else if (mode === 'remove') {
+    } else if (mode === "remove") {
       this.depositItem(this._numberWindow.number());
     }
 
@@ -1191,7 +1191,7 @@ window.$gameStorageSystems = null;
     SoundManager.playCancel();
     this.endNumberInput();
   };
-})(WAYModuleLoader.getModule('WAY_StorageSystem')); //-----------------------------------------------------------------------------
+})(WAYModuleLoader.getModule("WAY_StorageSystem")); //-----------------------------------------------------------------------------
 
 
 function Window_StorageTitle() {
@@ -1288,8 +1288,7 @@ function Game_StorageSystem() {
 @param help
 @text Help Window Settings
 @type struct<help>
-@default {"x":"0","y":"Graphics.boxHeight - this._helpWindow.height -
-80","width":"Graphics.boxWidth","height":"108"}
+@default {"x":"0","y":"Graphics.boxHeight - this._helpWindow.height - 80","width":"Graphics.boxWidth","height":"108"}
 @parent Scene Settings
 
 @param title
@@ -1313,8 +1312,7 @@ function Game_StorageSystem() {
 @param item
 @text Item Window Settings
 @type struct<item>
-@default {"x":"0","y":"144","width":"Graphics.boxWidth","height":"Graphics.boxHeight
-- 224 - this._helpWindow.height","cols":"2"}
+@default {"x":"0","y":"144","width":"Graphics.boxWidth","height":"Graphics.boxHeight - 224 - this._helpWindow.height","cols":"2"}
 @parent Scene Settings
 
 @param info
@@ -1326,8 +1324,7 @@ function Game_StorageSystem() {
 @param number
 @text Number Window Settings
 @type struct<number>
-@default {"x":"Graphics.boxWidth / 2 -
-250","y":"168","width":"500","height":"450"}
+@default {"x":"Graphics.boxWidth / 2 - 250","y":"168","width":"500","height":"450"}
 @parent Scene Settings
 */
 
