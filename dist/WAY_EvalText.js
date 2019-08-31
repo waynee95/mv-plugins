@@ -4,38 +4,39 @@
 // ===========================================================================
 
 /*:
-@plugindesc v1.2.1 Use JavaScript Code in textboxes. <WAY_EvalText>
+@plugindesc v1.3.0 Use JavaScript Code in textboxes. <WAY_EvalText>
 
 @author waynee95
 
 @help
->>> If you are using YEP_X_InBattleStatus, make sure to place this plugin
-below that!
+>>> If you are using YEP_X_InBattleStatus and/or YEP_X_ChangeBattleEquip,
+make sure to place this plugin below them!
 
-==============================================================================
+=============================================================================
  ■ Usage
-==============================================================================
-Inside a description or message box, you can put any JavaScript Code between
-${}. It will replace that later with the result of your entered JavaScript code.
+=============================================================================
+Inside a description or message box, you can put any JavaScript Code
+between ${}. It will replace that later with the result of your entered
+JavaScript code.
 
 a - references the current selected actor (or the leader if there is no)
 p - game party
 s - game switches
 v - game variables
 p - game party
-item , skill - refers to the actual item or skill you are in. (If you are inside
-the description box of skill or item)
+item , skill - refers to the actual item or skill you are in.
+(If you are inside the description box of skill or item)
 
-==============================================================================
+=============================================================================
  ■ Terms of Use
-==============================================================================
+=============================================================================
 This work is licensed under the MIT license.
 
 More info here: https://github.com/waynee95/mv-plugins/blob/master/LICENSE
 
-==============================================================================
+=============================================================================
  ■ Contact Information
-==============================================================================
+=============================================================================
 Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
@@ -56,7 +57,7 @@ if (typeof WAY === "undefined") {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_EvalText", "1.2.1", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_EvalText", "1.3.0", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -84,8 +85,13 @@ if (typeof WAY === "undefined") {
     } // Fix for YEP_X_InBattleStatusWindow
 
 
-    if (Imported.YEP_X_InBattleStatus && $gameParty.inBattle() && SceneManager._scene._inBattleStatusWindow.visible) {
-      a = SceneManager._scene._inBattleStatusWindow._battler;
+    if (Imported.YEP_X_InBattleStatus && $gameParty.inBattle() && scene._inBattleStatusWindow && scene._inBattleStatusWindow.visible) {
+      a = scene._inBattleStatusWindow._battler;
+    } // Fix for YEP_X_ChangeEquip
+
+
+    if (Imported.YEP_X_ChangeBattleEquip && $gameParty.inBattle() && scene instanceof Scene_Equip) {
+      item = scene._slotWindow.item();
     }
 
     return text.replace(/\${[^{}\\]+(?=\})}/g, function (code) {
@@ -106,9 +112,9 @@ if (typeof WAY === "undefined") {
 
       this._helpWindow.refresh();
     };
-  } //= =========================================================================
+  } //==========================================================================
   // Window_Base
-  //= =========================================================================
+  //==========================================================================
 
 
   $.alias.WindowBase_convertEscapeCharacters = Window_Base.prototype.convertEscapeCharacters;
