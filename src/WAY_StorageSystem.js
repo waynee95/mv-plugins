@@ -3,7 +3,7 @@
 // WAY_StorageSystem.js
 //===========================================================================
 /*:
-@plugindesc v2.3.1 This plugin allows you create different storage systems where
+@plugindesc v2.3.2 This plugin allows you create different storage systems where
 the player can store his items. <WAY_StorageSystem>
 
 @param config
@@ -97,7 +97,8 @@ Help Window - Just your default Help Window.
 Title Window - Displays the title of the storage system.
 Command Window - Window for selecting if you want to add/remove an item.
 Category Window - Window for choosing an item category.
-Item Window - Displays the list of available items depending on the category.
+Item Window - Displays the list of available items depending on the
+*             category.
 Info Window - Displays the current and max capacity.
 Number Window - Used for inputting how many items you want to add/remove.
 
@@ -173,15 +174,17 @@ number - New max capacity.
 ============================================================================
 Global Object: $gameStorageSystems
 
-$gameStorageSystems.open(id) - Opens a storage system. If no id is specified,
-the last opened will be used.
+$gameStorageSystems.open(id) - Opens a storage system. If no id is
+specified, the last opened will be used.
 
-$gameStorageSystems.storage(id) - Returns the storage system with the given id.
+$gameStorageSystems.storage(id) - Returns the storage system with the
+*                                 given id.
 
 $gameStorageSystems.current() - Returns the last opened storage system.
 
 The following script calls are called on a storage system object. Replace
-storage with $gameStorageSystems.current() or $gameStorageSystems.storage(id).
+storage with $gameStorageSystems.current() or
+$gameStorageSystems.storage(id).
 
 storage.title() - Returns the title name.
 
@@ -236,7 +239,7 @@ if (typeof WAY === "undefined") {
   }
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.3.1", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.3.2", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -459,7 +462,7 @@ window.$gameStorageSystems = null;
       const lastNumber = this.numItems(item);
       const newNumber = lastNumber + amount;
       if (amount > 0) {
-        container[item.id] = newNumber;
+        container[item.id] = newNumber.clamp(0, this.maxItems());
       } else {
         container[item.id] = newNumber.clamp(0, this.numItems(item));
       }
@@ -880,7 +883,8 @@ window.$gameStorageSystems = null;
       this._max = numItems.clamp(numItems, this._storage.maxItems(item));
     } else {
       numItems = this._storage.numItems(item);
-      this._max = numItems.clamp(numItems, $gameParty.maxItems(item));
+      let max = $gameParty.maxItems(item) - $gameParty.numItems(item);
+      this._max = numItems.clamp(numItems, max);
     }
     this._number = 1;
     this.placeButtons();
