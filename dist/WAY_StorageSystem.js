@@ -4,7 +4,7 @@
 //===========================================================================
 
 /*:
-@plugindesc v2.3.2 This plugin allows you create different storage systems where
+@plugindesc v2.3.3 This plugin allows you create different storage systems where
 the player can store his items. <WAY_StorageSystem>
 
 @param config
@@ -245,7 +245,7 @@ if (typeof WAY === "undefined") {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.3.2", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.3.3", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -478,14 +478,15 @@ window.$gameStorageSystems = null;
     var container = this.itemContainer(item);
 
     if (container) {
-      var lastNumber = this.numItems(item);
-      var newNumber = lastNumber + amount;
+      var oldNumber = this.numItems(item);
 
       if (amount > 0) {
-        container[item.id] = newNumber.clamp(0, this.maxItems());
+        amount = Math.min(amount, this.maxItems(item));
       } else {
-        container[item.id] = newNumber.clamp(0, this.numItems(item));
+        amount = Math.max(amount, -this.numItems(item));
       }
+
+      container[item.id] = oldNumber + amount;
 
       if (container[item.id] === 0) {
         delete container[item.id];
@@ -527,10 +528,8 @@ window.$gameStorageSystems = null;
   Game_StorageSystem.prototype.maxItems = function (item) {
     if (this._stackSize === "none") {
       return this.maxCapacity() - this.capacity();
-    } else if (this.numItems(item) > 0 || this.maxCapacity() - this.capacity() > 0) {
-      return this._stackSize - this.numItems(item);
-    } else if (this.maxCapacity() - this.capacity() < 0) {
-      return 0;
+    } else {
+      return Math.max(parseInt(this._stackSize, 10) - this.numItems(item), 0);
     }
   };
 
@@ -895,18 +894,26 @@ window.$gameStorageSystems = null;
 
   Window_StorageNumber.prototype.setup = function (item, mode) {
     this._item = item;
-    var numItems;
+    this._number = 1;
 
     if (mode === "add") {
-      numItems = item ? $gameParty.numItems(item) : 0;
-      this._max = numItems.clamp(numItems, this._storage.maxItems(item));
+      this._max = $gameParty.numItems(item);
+
+      if (this._max > this._storage.maxItems(item)) {
+        this._max = this._storagemaxItems(item);
+      }
     } else {
-      numItems = this._storage.numItems(item);
-      var max = $gameParty.maxItems(item) - $gameParty.numItems(item);
-      this._max = numItems.clamp(numItems, max);
+      this._max = this._storage.numItems(item);
+
+      if (this._max > $gameParty.maxItems(item)) {
+        this._max = $gameParty.maxItems(item);
+      }
     }
 
-    this._number = 1;
+    if (this._max < 0) {
+      this._max = 0;
+    }
+
     this.placeButtons();
     this.updateButtonsVisiblity();
     this.refresh();
