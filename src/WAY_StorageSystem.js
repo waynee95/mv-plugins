@@ -3,7 +3,7 @@
 // WAY_StorageSystem.js
 //===========================================================================
 /*:
-@plugindesc v2.3.3 This plugin allows you create different storage systems where
+@plugindesc v2.3.4 This plugin allows you create different storage systems where
 the player can store his items. <WAY_StorageSystem>
 
 @param config
@@ -239,7 +239,7 @@ if (typeof WAY === "undefined") {
   }
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.3.3", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.3.4", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -323,7 +323,7 @@ window.$gameStorageSystems = null;
   DataManager.extractSaveContents = function(contents) {
     _DataManager_extractSaveContents.call(this, contents);
     $gameStorageSystems = contents.storageSystems;
-    if ($gameStorageSystems == undefined) {
+    if ($gameStorageSystems === undefined) {
       $gameStorageSystems = new Game_StorageSystems();
     }
   };
@@ -506,9 +506,8 @@ window.$gameStorageSystems = null;
   Game_StorageSystem.prototype.maxItems = function(item) {
     if (this._stackSize === "none") {
       return this.maxCapacity() - this.capacity();
-    } else {
-      return Math.max(parseInt(this._stackSize, 10) - this.numItems(item), 0);
     }
+    return Math.max(parseInt(this._stackSize, 10) - this.numItems(item), 0);
   };
 
   Game_StorageSystem.prototype.itemContainer = function(item) {
@@ -876,7 +875,7 @@ window.$gameStorageSystems = null;
     if (mode === "add") {
       this._max = $gameParty.numItems(item);
       if (this._max > this._storage.maxItems(item)) {
-        this._max = this._storagemaxItems(item);
+        this._max = this._storage.maxItems(item);
       }
     } else {
       this._max = this._storage.numItems(item);
