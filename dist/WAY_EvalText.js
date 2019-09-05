@@ -4,13 +4,13 @@
 // ===========================================================================
 
 /*:
-@plugindesc v1.3.0 Use JavaScript Code in textboxes. <WAY_EvalText>
+@plugindesc v2.0.0 Use JavaScript Code in textboxes. <WAY_EvalText>
 
 @author waynee95
 
 @help
->>> If you are using YEP_X_InBattleStatus and/or YEP_X_ChangeBattleEquip,
-make sure to place this plugin below them!
+>>> To ensure compatibility with other plugins, place this one at the
+bottom of your list!
 
 =============================================================================
  ■ Usage
@@ -19,13 +19,29 @@ Inside a description or message box, you can put any JavaScript Code
 between ${}. It will replace that later with the result of your entered
 JavaScript code.
 
-a - references the current selected actor (or the leader if there is no)
+a - references the current selected actor
 p - game party
 s - game switches
 v - game variables
 p - game party
 item , skill - refers to the actual item or skill you are in.
 (If you are inside the description box of skill or item)
+
+>>> It can be possible, that it will not show the correct result. This can
+especially happen on custom scenes. This will need a compatibilty fix then.
+
+>> If you would like  to use an "if-else" inside the code block, you need
+to use the "?" operator:
+
+if (something) {
+*   stuff
+} else {
+*   other stuff
+}
+
+is the same as
+
+something ? stuff : other stuff
 
 =============================================================================
  ■ Terms of Use
@@ -49,7 +65,7 @@ if (typeof WAY === "undefined") {
   console.error("You need to install WAY_Core!"); // eslint-disable-line no-console
 
   if (Utils.isNwjs() && Utils.isOptionValid("test")) {
-    var gui = require("nw.gui"); //eslint-disable-line
+    var gui = require("nw.gui"); // eslint-disable-line
 
 
     gui.Window.get().showDevTools();
@@ -57,51 +73,71 @@ if (typeof WAY === "undefined") {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_EvalText", "1.3.0", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_EvalText", "2.0.0", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
 }
 
 (function ($) {
-  var evalText = function evalText(text) {
-    var scene = SceneManager._scene;
-    var a = $gameParty.leader();
-    var item = scene instanceof Scene_ItemBase && scene._itemWindow ? scene._itemWindow.item() : a;
-    /* eslint-disable */
+  function evalText(text) {
+    var currentScene = SceneManager._scene;
+    var item = null;
+    var skill = null;
+    var a = $gameParty.menuActor();
 
-    var skill = item;
-    var s = $gameSwitches;
-    var v = $gameVariables;
-    var p = $gameParty;
-    /* eslint-enable */
-
-    if (scene instanceof Scene_MenuBase) {
-      a = $gameParty.menuActor();
-    } else if (scene instanceof Scene_Battle) {
+    if (currentScene instanceof Scene_ItemBase) {
+      if (currentScene._itemWindow) {
+        item = currentScene._itemWindow.item();
+        skill = currentScene._itemWindow.item();
+      }
+    } else if (currentScene instanceof Scene_Equip) {
+      item = currentScene._slotWindow.item();
+    } else if (currentScene instanceof Scene_Shop) {
+      if (currentScene._sellWindow && currentScene._sellWindow.active) {
+        item = currentScene._sellWindow.item();
+      } else if (currentScene._buyWindow && currentScene._buyWindow.active) {
+        item = currentScene._buyWindow.item();
+      }
+    } else if (currentScene instanceof Scene_Battle) {
       a = BattleManager.actor();
-      item = scene && scene._itemWindow ? scene._itemWindow.item() : a;
-      skill = scene && scene._skillWindow ? scene._skillWindow.item() : a;
-    } // Fix for YEP_X_InBattleStatusWindow
+
+      if (currentScene._itemWindow) {
+        item = currentScene._itemWindow.item();
+      }
+
+      if (currentScene._skillWindow) {
+        skill = currentScene._skillWindow.item();
+      } // Fix for YEP_X_InBattleStatus
 
 
-    if (Imported.YEP_X_InBattleStatus && $gameParty.inBattle() && scene._inBattleStatusWindow && scene._inBattleStatusWindow.visible) {
-      a = scene._inBattleStatusWindow._battler;
-    } // Fix for YEP_X_ChangeEquip
+      if (Imported.YEP_X_InBattleStatus && currentScene._inBattleStatusWindow && currentScene._inBattleStatusWindow.active) {
+        a = currentScene._inBattleStatusWindow._battler;
+
+        if (currentScene._inBattleStateList) {
+          item = currentScene._inBattleStateList.item();
+        }
+      }
+    } // Fix for WAY_StorageSystem
 
 
-    if (Imported.YEP_X_ChangeBattleEquip && $gameParty.inBattle() && scene instanceof Scene_Equip) {
-      item = scene._slotWindow.item();
+    if (Imported.WAY_StorageSystem && currentScene instanceof Scene_Storage) {
+      if (currentScene._storageWindow) {
+        item = currentScene._storageWindow.item();
+      }
     }
 
     return text.replace(/\${[^{}\\]+(?=\})}/g, function (code) {
       try {
+        var s = $gameSwitches;
+        var v = $gameVariables;
+        var p = $gameParty;
         return eval(code.substring(2, code.length - 1)); // eslint-disable-line no-eval
       } catch (e) {
-        return "";
+        return e;
       }
     });
-  }; // Fix for YEP_X_InBattleStatusWindow
+  } // Fix for YEP_X_InBattleStatusWindow
 
 
   if (Imported.YEP_X_InBattleStatus) {
