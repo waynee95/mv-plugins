@@ -4,7 +4,7 @@
 // ===========================================================================
 
 /*:
-@plugindesc v2.0.0 Use JavaScript Code in textboxes. <WAY_EvalText>
+@plugindesc v2.0.1 Use JavaScript Code in textboxes. <WAY_EvalText>
 
 @author waynee95
 
@@ -73,7 +73,7 @@ if (typeof WAY === "undefined") {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_EvalText", "2.0.0", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_EvalText", "2.0.1", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -86,7 +86,9 @@ if (typeof WAY === "undefined") {
     var skill = null;
     var a = $gameParty.menuActor();
 
-    if (currentScene instanceof Scene_ItemBase) {
+    if (currentScene instanceof Scene_Map) {
+      a = $gameParty.leader();
+    } else if (currentScene instanceof Scene_ItemBase) {
       if (currentScene._itemWindow) {
         item = currentScene._itemWindow.item();
         skill = currentScene._itemWindow.item();
