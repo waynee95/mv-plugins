@@ -4,7 +4,7 @@
 // ===========================================================================
 
 /*:
-@plugindesc v2.0.1 Use JavaScript Code in textboxes. <WAY_EvalText>
+@plugindesc v2.0.2 Use JavaScript Code in textboxes. <WAY_EvalText>
 
 @author waynee95
 
@@ -73,7 +73,7 @@ if (typeof WAY === "undefined") {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_EvalText", "2.0.1", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_EvalText", "2.0.2", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -113,7 +113,7 @@ if (typeof WAY === "undefined") {
       } // Fix for YEP_X_InBattleStatus
 
 
-      if (Imported.YEP_X_InBattleStatus && currentScene._inBattleStatusWindow && currentScene._inBattleStatusWindow.active) {
+      if (Imported.YEP_X_InBattleStatus && currentScene._inBattleStatusWindow && currentScene._inBattleStateList && currentScene._inBattleStateList.active) {
         a = currentScene._inBattleStatusWindow._battler;
 
         if (currentScene._inBattleStateList) {
