@@ -4,7 +4,7 @@
 // ===========================================================================
 
 /*:
-@plugindesc v2.0.2 Use JavaScript Code in textboxes. <WAY_EvalText>
+@plugindesc v2.1.0 Use JavaScript Code in textboxes. <WAY_EvalText>
 
 @author waynee95
 
@@ -73,7 +73,7 @@ if (typeof WAY === "undefined") {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_EvalText", "2.0.2", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_EvalText", "2.1.0", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -160,4 +160,12 @@ if (typeof WAY === "undefined") {
   Window_Base.prototype.convertEscapeCharacters = function (text) {
     return $.alias.WindowBase_convertEscapeCharacters.call(this, evalText(text));
   };
+
+  if (Imported.YEP_X_MessageMacros1) {
+    $.alias.Window_Base_convertMacroText = Window_Base.prototype.convertMacroText;
+
+    Window_Base.prototype.convertMacroText = function (text) {
+      return evalText($.alias.Window_Base_convertMacroText.call(this, text));
+    };
+  }
 })(WAYModuleLoader.getModule("WAY_EvalText"));
