@@ -28,9 +28,9 @@
   },
   "homepage": "https://github.com/waynee95/mv-plugins#readme",
   "devDependencies": {
-    "@babel/cli": "^7.1.2",
-    "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
     "eslint": "^5.16.0",
     "eslint-config-recommended": "^4.0.0",
     "eslint-plugin-rpgmaker": "^1.0.2",
