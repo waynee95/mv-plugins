@@ -4,7 +4,7 @@
 // ===========================================================================
 
 /*:
-@plugindesc v1.0.0 Add custom commands to Options Menu. <WAY_OptionsMenuCustomActions>
+@plugindesc v1.0.1 Add custom commands to Options Menu. <WAY_OptionsMenuCustomActions>
 
 @param actions
 @text Custom Actions
@@ -72,7 +72,7 @@ if (typeof WAY === "undefined") {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_OptionsMenuCustomActions", "1.0.0", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_OptionsMenuCustomActions", "1.0.1", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -106,9 +106,9 @@ if (typeof WAY === "undefined") {
 
     if (symbol === "custom_action") {
       return "";
-    } else {
-      return $.alias.Window_Optionss_statusText.call(this, index);
     }
+
+    return $.alias.Window_Optionss_statusText.call(this, index);
   };
 
   $.alias.Window_Optionss_processOk = Window_Options.prototype.processOk;

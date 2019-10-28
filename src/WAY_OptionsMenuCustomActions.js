@@ -3,7 +3,7 @@
 // WAY_OptionsMenuCustomActions.js
 // ===========================================================================
 /*:
-@plugindesc v1.0.0 Add custom commands to Options Menu. <WAY_OptionsMenuCustomActions>
+@plugindesc v1.0.1 Add custom commands to Options Menu. <WAY_OptionsMenuCustomActions>
 
 @param actions
 @text Custom Actions
@@ -70,7 +70,7 @@ if (typeof WAY === "undefined") {
 } else {
   WAYModuleLoader.registerPlugin(
     "WAY_OptionsMenuCustomActions",
-    "1.0.0",
+    "1.0.1",
     "waynee95",
     {
       name: "WAY_Core",
@@ -96,20 +96,20 @@ if (typeof WAY === "undefined") {
 
   $.alias.Window_Optionss_statusText = Window_Options.prototype.statusText;
   Window_Options.prototype.statusText = function(index) {
-    var symbol = this.commandSymbol(index);
+    const symbol = this.commandSymbol(index);
     if (symbol === "custom_action") {
       return "";
-    } else {
-      return $.alias.Window_Optionss_statusText.call(this, index);
     }
+
+    return $.alias.Window_Optionss_statusText.call(this, index);
   };
 
   $.alias.Window_Optionss_processOk = Window_Options.prototype.processOk;
   Window_Options.prototype.processOk = function() {
-    var index = this.index();
-    var symbol = this.commandSymbol(index);
+    const index = this.index();
+    const symbol = this.commandSymbol(index);
     if (symbol === "custom_action") {
-      var f = this.currentExt();
+      const f = this.currentExt();
       try {
         eval(f);
       } catch (e) {
