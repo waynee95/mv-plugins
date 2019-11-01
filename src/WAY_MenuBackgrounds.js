@@ -59,7 +59,7 @@ if (typeof WAY === "undefined") {
   }
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_MenuBackgrounds", "1.0.1", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_MenuBackgrounds", "1.0.0", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
