@@ -128,6 +128,9 @@ How to add an achievement to the game:
 *              $gameSwitches.value(1) && !$gameSwitches.value(2) (You can also chain conditions)
 *              $gameVariables.value(2) >= 340
 *              $gameActors.actor(1).level >= 20
+*              $gameParty.hasItem($dataItems[ID])
+*              $gameParty.hasItem($dataWeapons[ID])
+*              $gameParty.hasItem($dataArmors[ID])
 *              ... etc
 *
 *   On Complete Common Event: Specify a common event that will be executed once
