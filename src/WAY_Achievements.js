@@ -517,9 +517,7 @@ var $gameAchievements = null; //eslint-disable-line
     }
     text() {
       if (this._achievement) {
-        const name = `\x1bI[${this._achievement.completeIcon}]${
-          this._achievement.name
-        }`;
+        const name = `\x1bI[${this._achievement.completeIcon}]${this._achievement.name}`;
         return notifyMessage.format(name, this._achievement.points);
       }
       return "";
@@ -668,7 +666,6 @@ var $gameAchievements = null; //eslint-disable-line
       disablePopups = true;
     }
   });
-
 })(WAYModuleLoader.getModule("WAY_Achievements"));
 
 //-----------------------------------------------------------------------------
