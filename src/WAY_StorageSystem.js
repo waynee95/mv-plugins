@@ -3,7 +3,7 @@
 // WAY_StorageSystem.js
 //===========================================================================
 /*:
-@plugindesc v2.3.4 This plugin allows you create different storage systems where
+@plugindesc v2.3.5 This plugin allows you create different storage systems where
 the player can store his items. <WAY_StorageSystem>
 
 @param config
@@ -239,7 +239,7 @@ if (typeof WAY === "undefined") {
   }
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.3.4", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.3.5", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -257,15 +257,9 @@ window.$gameStorageSystems = null;
       "WAY_StorageSystem\nPlugin Parameters are not setup properly!"
     );
     if (Utils.isNwjs() && Utils.isOptionValid("test")) {
-      if (
-        !require("nw.gui")
-          .Window.get()
-          .isDevToolsOpen()
-      ) {
-        require("nw.gui")
-          .Window.get()
-          .showDevTools();
-      }
+      require("nw.gui")
+        .Window.get()
+        .showDevTools();
     }
   }
 
