@@ -4,7 +4,7 @@
 // ===========================================================================
 
 /*:
-@plugindesc v2.1.2 Use JavaScript Code in textboxes. <WAY_EvalText>
+@plugindesc v2.2.0 Use JavaScript Code in textboxes. <WAY_EvalText>
 
 @author waynee95
 
@@ -73,7 +73,7 @@ if (typeof WAY === "undefined") {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_EvalText", "2.1.2", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_EvalText", "2.2.0", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -132,6 +132,13 @@ if (typeof WAY === "undefined") {
     if (Imported.WAY_StorageSystem && currentScene instanceof Scene_Storage) {
       if (currentScene._storageWindow) {
         item = currentScene._storageWindow.item();
+      }
+    } // Fix for YEP_X_EquipCustomize
+
+
+    if (Imported.YEP_X_EquipCustomize && currentScene instanceof Scene_EquipCustomize) {
+      if (currentScene._itemActionWindow) {
+        item = currentScene.item();
       }
     }
 
