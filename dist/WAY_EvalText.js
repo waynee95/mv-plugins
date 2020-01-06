@@ -4,13 +4,16 @@
 // ===========================================================================
 
 /*:
-@plugindesc v2.2.0 Use JavaScript Code in textboxes. <WAY_EvalText>
+@plugindesc v2.3.0 Use JavaScript Code in textboxes. <WAY_EvalText>
 
 @author waynee95
 
 @help
 >>> To ensure compatibility with other plugins, place this one at the
 bottom of your list!
+
+If you are using CGMV_Encyclopedia you also need to install the VE_ControlText
+plugin!
 
 =============================================================================
  ■ Usage
@@ -73,7 +76,7 @@ if (typeof WAY === "undefined") {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_EvalText", "2.2.0", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_EvalText", "2.3.0", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -139,6 +142,29 @@ if (typeof WAY === "undefined") {
     if (Imported.YEP_X_EquipCustomize && currentScene instanceof Scene_EquipCustomize) {
       if (currentScene._itemActionWindow) {
         item = currentScene.item();
+      }
+    } // Fix for CGMV_Encyclopedia. This also needs VE_ControlText to be installed
+
+
+    if (Imported.CGMV_Encyclopedia && currentScene instanceof CGMV_Scene_Encyclopedia) {
+      if (currentScene._listWindow && currentScene._listWindow.item()) {
+        var symbol = currentScene._listWindow._symbol;
+
+        var id = currentScene._listWindow.item()._id;
+
+        if (symbol === "bestiary") {
+          item = $dataEnemies[id];
+        } else if (symbol === "items") {
+          item = $dataItems[id];
+        } else if (symbol === "armors") {
+          item = $dataArmors[id];
+        } else if (symbol === "weapons") {
+          item = $dataWeapons[id];
+        } else if (symbol === "skills") {
+          item = $dataSkills[id];
+        } else if (symbol === "states") {
+          item = $dataSkills[id];
+        }
       }
     }
 
