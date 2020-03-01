@@ -4,9 +4,15 @@
 //=============================================================================
 
 /*:
-@plugindesc v1.3.0 This plugin allows you to create Achievements to your game. <WAY_Achievements>
+@plugindesc v1.4.0 This plugin allows you to create Achievements to your game. <WAY_Achievements>
 
 @author waynee95
+
+@param frameInterval
+@text Frame Interval
+@desc This interval specifies how often all achievements will be checked in the background.
+@type number
+@default 120
 
 @param achievementList
 @text Achievement List
@@ -223,7 +229,7 @@ if (typeof WAY === "undefined") {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_Achievements", "1.3.0", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_Achievements", "1.4.0", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -234,6 +240,7 @@ var $gameAchievements = null; //eslint-disable-line
 (function ($) {
   var TitleWindow = WAY.Window.TitleWindow;
   var _$$parameters = $.parameters,
+      frameInterval = _$$parameters.frameInterval,
       background = _$$parameters.background,
       commandName = _$$parameters.commandName,
       categories = _$$parameters.categories,
@@ -820,7 +827,10 @@ var $gameAchievements = null; //eslint-disable-line
 
   Scene_Battle.prototype.update = function () {
     $.alias.Scene_Battle_update.call(this);
-    $gameAchievements.update();
+
+    if (Graphics.frameCount % frameInterval === 0) {
+      $gameAchievements.update();
+    }
   };
 
   $.alias.Scene_Battle_createAllWindows = Scene_Battle.prototype.createAllWindows;
@@ -837,7 +847,10 @@ var $gameAchievements = null; //eslint-disable-line
 
   Scene_Map.prototype.update = function () {
     $.alias.Scene_Map_update.call(this);
-    $gameAchievements.update();
+
+    if (Graphics.frameCount % frameInterval === 0) {
+      $gameAchievements.update();
+    }
   };
 
   $.alias.Scene_Map_createAllWindows = Scene_Map.prototype.createAllWindows;
