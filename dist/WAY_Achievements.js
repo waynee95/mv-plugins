@@ -169,7 +169,7 @@ You can use this command to disable popups.
 ===============================================================================
  ■ YEP MainMenuManager
 ===============================================================================
-      Name: Achievements
+      Name: "Achievements"
     Symbol: achievements
       Show:
    Enabled:
