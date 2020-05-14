@@ -3,7 +3,7 @@
 // WAY_StorageSystem.js
 //===========================================================================
 /*:
-@plugindesc v2.3.5 This plugin allows you create different storage systems where
+@plugindesc v2.4.0 This plugin allows you create different storage systems where
 the player can store his items. <WAY_StorageSystem>
 
 @param config
@@ -239,7 +239,7 @@ if (typeof WAY === "undefined") {
   }
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.3.5", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.4.0", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -921,6 +921,7 @@ window.$gameStorageSystems = null;
   Scene_Storage.prototype.setup = function() {
     const data = $gameStorageSystems.current().data();
     this._background = data.background;
+    this._blurredBackground = data.blurredBackground;
     this._displayCategories = data.displayCategories;
     this._helpData = data.help;
     this._titleData = data.title;
@@ -932,7 +933,11 @@ window.$gameStorageSystems = null;
   };
 
   Scene_Storage.prototype.createBackground = function() {
-    if (this._background !== "") {
+    if (this._blurredBackground)  {
+      this._backgroundSprite = new Sprite();
+      this._backgroundSprite.bitmap = SceneManager.backgroundBitmap();
+      this.addChild(this._backgroundSprite);
+    } else if (this._background !== "") {
       this._backgroundSprite = new Sprite();
       this._backgroundSprite.bitmap = ImageManager.loadPicture(
         this._background
@@ -1180,6 +1185,11 @@ function Game_StorageSystem() {
 //-----------------------------------------------------------------------------
 
 /*~struct~storage:
+@param blurredBackground
+@text Use blurred transparent background
+@type boolean
+@default false
+
 @param background
 @text Menu Background
 @type file
