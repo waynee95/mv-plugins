@@ -4,13 +4,13 @@
 // ===========================================================================
 
 /*:
-@plugindesc v1.0.1 Add custom commands to Options Menu. <WAY_OptionsMenuCustomActions>
+@plugindesc v2.0.0 Add custom commands to Options Menu. <WAY_OptionsMenuCustomActions>
 
 @param actions
 @text Custom Actions
 @desc Add custom actions to the Options Menu
 @type struct<CustomAction>[]
-@default []
+@default ["{\"commandName\":\"Toggle Switch 1\",\"displayText\":\"\\\"$gameSwitches.value(1) ? \\\\\\\"ON\\\\\\\" : \\\\\\\"OFF\\\\\\\"\\\"\",\"action\":\"\\\"$gameSwitches.setValue(1, !$gameSwitches.value(1))\\\"\",\"show\":\"true\"}","{\"commandName\":\"Print hello world\",\"displayText\":\"\\\"\\\"\",\"action\":\"\\\"console.log(\\\\\\\"hello world\\\\\\\");\\\"\",\"show\":\"true\"}"]
 
 @author waynee95
 
@@ -18,29 +18,63 @@
 This plugin allows you to add custom commands to the Options Menu, which will
 run any JavaScript code specified.
 
-Example:
+To create new commands, go to the plugin settings  for this plugin. The
+parameters consist of a list of custom commands, called actions.
+
+For a custom action, you have to specify a few parameters:
+
+1. Command Name
+This is the name that will show up in the options window for this command.
+
+2. Display Text (optional)
+You can specify any text that will show on the right-hand side of the
+command name. This can be anything. You can take a look at the examples below.
+If you do not want to display any text, leave this blank.
+
+3. Custom Action
+This can be any JavaScript code you want. This code will be executed when
+the command is clicked inside the options menu.
+
+4. Show Condition
+This determines whether the command will show up in the options menu. If it
+should be visible all the time, just input true.
+
+Examples:
+
+1) This shows how to add a command  that will toggle the switch with id 1 on
+and off. It will display the current status of that switch on the right.
 
 ----------------------------------------
-commandName: Say Hello
-action     : console.log("hello world");
-show       : true
+commandName : Toggle Switch 1
+action      : $gameSwitches.setValue(1, !$gameSwitches.value(1))
+displayText : $gameSwitches.value(1) ? "ON" : "OFF"
+show        : true
 ----------------------------------------
 
-This plugin was built because someone wanted to have a command to delte all
-save files in one blow. Be careful with this!!!
+2) Here, the command will print "hello world" to the console. Since
+displayText is left blank, this command will have no text displayed
+on the right.
 
 ----------------------------------------
-commandName: Delete Savefiles
-action     :  for (var i = 1; i < DataManager.maxSavefiles(); i++) {
+commandName : Say Hello
+action      : console.log("hello world");
+displayText :
+show        : true
+----------------------------------------
+
+3) This plugin was built because someone wanted to have a command to delete
+all save files in one blow. Be careful with this!!!
+
+----------------------------------------
+commandName : Delete Savefiles
+action      :  for (var i = 1; i < DataManager.maxSavefiles(); i++) {
 *                 if (StorageManager.exists(i)) {
 *                   StorageManager.remove(i);
 *                 }
 *               }
-show: $gameSwitches.value(1)
+displayText :
+show        : $gameSwitches.value(1)
 ----------------------------------------
-
-If the show condition evaluates to true, the command will appear in the
-Options Menu.
 
 =============================================================================
  ■ Terms of Use
@@ -72,7 +106,7 @@ if (typeof WAY === "undefined") {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_OptionsMenuCustomActions", "1.0.1", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_OptionsMenuCustomActions", "2.0.0", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -90,25 +124,30 @@ if (typeof WAY === "undefined") {
     $.alias.Window_Options_makeCommandList.call(this);
     $.parameters.actions.forEach(function (_ref) {
       var commandName = _ref.commandName,
+          displayText = _ref.displayText,
           action = _ref.action,
           show = _ref.show;
 
       if (eval(show)) {
-        _this.addCommand(commandName, "custom_action", true, action);
+        _this.addCommand(commandName, "custom_action", true, {
+          displayText: displayText,
+          action: action
+        });
       }
     });
   };
 
-  $.alias.Window_Optionss_statusText = Window_Options.prototype.statusText;
+  $.alias.Window_Options_statusText = Window_Options.prototype.statusText;
 
   Window_Options.prototype.statusText = function (index) {
     var symbol = this.commandSymbol(index);
 
     if (symbol === "custom_action") {
-      return "";
+      var ext = this._list[index].ext;
+      return ext.displayText ? eval(ext.displayText) : "";
     }
 
-    return $.alias.Window_Optionss_statusText.call(this, index);
+    return $.alias.Window_Options_statusText.call(this, index);
   };
 
   $.alias.Window_Optionss_processOk = Window_Options.prototype.processOk;
@@ -118,10 +157,12 @@ if (typeof WAY === "undefined") {
     var symbol = this.commandSymbol(index);
 
     if (symbol === "custom_action") {
-      var f = this.currentExt();
+      var f = this.currentExt().action;
 
       try {
         eval(f);
+        this.redrawCurrentItem();
+        SoundManager.playCursor();
       } catch (e) {
         console.error(e);
       }
@@ -136,6 +177,11 @@ if (typeof WAY === "undefined") {
 @param commandName
 @text Command Name
 @type text
+@default
+
+@param displayText
+@text Display Text
+@type note
 @default
 
 @param action
