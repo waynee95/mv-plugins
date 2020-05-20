@@ -9,8 +9,7 @@
 @text Custom Actions
 @desc Add custom actions to the Options Menu
 @type struct<CustomAction>[]
-@default ["{\"commandName\":\"Toggle Switch 1\",\"displayText\":\"\\\"$gameSwitches.value(1) ? \\\\\\\"ON\\\\\\\" : \\\\\\\"OFF\\\\\\\"\\\"\",\"action\":\"\\\"$gameSwitches.setValue(1, !$gameSwitches.value(1))\\\"\",\"show\":\"true\"}","{\"commandName\":\"Print hello world\",\"displayText\":\"\\\"\\\"\",\"action\":\"\\\"console.log(\\\\\\\"hello world\\\\\\\");\\\"\",\"show\":\"true\"}"]
-
+@default ["{\"commandName\":\"Toggle Switch 1\",\"displayText\":\"\\\"$gameSwitches.value(1) ? \\\\\\\"ON\\\\\\\" : \\\\\\\"OFF\\\\\\\"\\\"\",\"action\":\"\\\"$gameSwitches.setValue(1, !$gameSwitches.value(1))\\\"\",\"show\":\"true\"}","{\"commandName\":\"Print hello world\",\"displayText\":\"\\\"\\\"\",\"action\":\"\\\"console.log(\\\\\\\"hello world\\\\\\\");\\\"\",\"show\":\"true\"}","{\"commandName\":\"Difficulty\",\"displayText\":\"\\\"$gameVariables.value(1)\\\"\",\"action\":\"\\\"$gameVariables.setValue(1, ($gameVariables.value(1) + 1) % 3);\\\"\",\"show\":\"true\"}"]
 @author waynee95
 
 @help
@@ -50,7 +49,20 @@ displayText : $gameSwitches.value(1) ? "ON" : "OFF"
 show        : true
 ----------------------------------------
 
-2) Here, the command will print "hello world" to the console. Since
+2) Or you can use it to display variables. This could be used for some kind of
+difficulty modifier or something like that.
+
+----------------------------------------
+commandName : Difficulty
+action      : $gameVariables.value(1)
+displayText : $gameVariables.setValue(1, ($gameVariables.value(1) + 1) % 3)
+show        : true
+----------------------------------------
+
+When you click on the difficulty setting, it would cycle through the values 0
+to 3.
+
+3) Here, the command will print "hello world" to the console. Since
 displayText is left blank, this command will have no text displayed
 on the right.
 
@@ -61,7 +73,7 @@ displayText :
 show        : true
 ----------------------------------------
 
-3) This plugin was built because someone wanted to have a command to delete
+4) This plugin was built because someone wanted to have a command to delete
 all save files in one blow. Be careful with this!!!
 
 ----------------------------------------
