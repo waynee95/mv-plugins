@@ -9,9 +9,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var WAYCore = {};
 
 (function () {
-  var EventEmitter =
-  /*#__PURE__*/
-  function () {
+  var EventEmitter = /*#__PURE__*/function () {
     function EventEmitter() {
       _classCallCheck(this, EventEmitter);
 

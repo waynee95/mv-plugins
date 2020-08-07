@@ -133,11 +133,16 @@ if (typeof WAY === "undefined") {
     Window_Options.prototype.makeCommandList;
   Window_Options.prototype.makeCommandList = function() {
     $.alias.Window_Options_makeCommandList.call(this);
-    $.parameters.actions.forEach(({ commandName, displayText, action, show }) => {
-      if (eval(show)) {
-        this.addCommand(commandName, "custom_action", true, { displayText, action });
+    $.parameters.actions.forEach(
+      ({ commandName, displayText, action, show }) => {
+        if (eval(show)) {
+          this.addCommand(commandName, "custom_action", true, {
+            displayText,
+            action
+          });
+        }
       }
-    });
+    );
   };
 
   $.alias.Window_Options_statusText = Window_Options.prototype.statusText;

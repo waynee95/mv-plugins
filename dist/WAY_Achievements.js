@@ -195,21 +195,25 @@ You can support me at https://ko-fi.com/waynee
 */
 "use strict";
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
 
 function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -261,9 +265,7 @@ var $gameAchievements = null; //eslint-disable-line
   // Game_Achievement
   //===========================================================================
 
-  var Game_Achievement =
-  /*#__PURE__*/
-  function () {
+  var Game_Achievement = /*#__PURE__*/function () {
     function Game_Achievement(id) {
       _classCallCheck(this, Game_Achievement);
 
@@ -294,9 +296,7 @@ var $gameAchievements = null; //eslint-disable-line
   //===========================================================================
 
 
-  var Game_Achievements =
-  /*#__PURE__*/
-  function () {
+  var Game_Achievements = /*#__PURE__*/function () {
     function Game_Achievements(data) {
       _classCallCheck(this, Game_Achievements);
 
@@ -372,17 +372,17 @@ var $gameAchievements = null; //eslint-disable-line
   //===========================================================================
 
 
-  var Window_AchievementCategories =
-  /*#__PURE__*/
-  function (_Window_Command) {
+  var Window_AchievementCategories = /*#__PURE__*/function (_Window_Command) {
     _inherits(Window_AchievementCategories, _Window_Command);
+
+    var _super = _createSuper(Window_AchievementCategories);
 
     function Window_AchievementCategories(y) {
       var _this2;
 
       _classCallCheck(this, Window_AchievementCategories);
 
-      _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Window_AchievementCategories).call(this, 0, y));
+      _this2 = _super.call(this, 0, y);
 
       _this2.select(0);
 
@@ -450,17 +450,17 @@ var $gameAchievements = null; //eslint-disable-line
   //===========================================================================
 
 
-  var Window_AchievementList =
-  /*#__PURE__*/
-  function (_Window_ItemList) {
+  var Window_AchievementList = /*#__PURE__*/function (_Window_ItemList) {
     _inherits(Window_AchievementList, _Window_ItemList);
+
+    var _super2 = _createSuper(Window_AchievementList);
 
     function Window_AchievementList(x, y, width, height) {
       var _this4;
 
       _classCallCheck(this, Window_AchievementList);
 
-      _this4 = _possibleConstructorReturn(this, _getPrototypeOf(Window_AchievementList).call(this, x, y, width, height));
+      _this4 = _super2.call(this, x, y, width, height);
       _this4._category = "";
       return _this4;
     }
@@ -546,15 +546,15 @@ var $gameAchievements = null; //eslint-disable-line
   //===========================================================================
 
 
-  var Scene_Achievements =
-  /*#__PURE__*/
-  function (_Scene_MenuBase) {
+  var Scene_Achievements = /*#__PURE__*/function (_Scene_MenuBase) {
     _inherits(Scene_Achievements, _Scene_MenuBase);
+
+    var _super3 = _createSuper(Scene_Achievements);
 
     function Scene_Achievements() {
       _classCallCheck(this, Scene_Achievements);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(Scene_Achievements).apply(this, arguments));
+      return _super3.apply(this, arguments);
     }
 
     _createClass(Scene_Achievements, [{
@@ -664,17 +664,17 @@ var $gameAchievements = null; //eslint-disable-line
   // Window_AchievementNotification
   //===========================================================================
 
-  var Window_AchievementNotification =
-  /*#__PURE__*/
-  function (_Window_Base) {
+  var Window_AchievementNotification = /*#__PURE__*/function (_Window_Base) {
     _inherits(Window_AchievementNotification, _Window_Base);
+
+    var _super4 = _createSuper(Window_AchievementNotification);
 
     function Window_AchievementNotification(x, y, width, height) {
       var _this6;
 
       _classCallCheck(this, Window_AchievementNotification);
 
-      _this6 = _possibleConstructorReturn(this, _getPrototypeOf(Window_AchievementNotification).call(this, x, y, width, height));
+      _this6 = _super4.call(this, x, y, width, height);
       _this6.opacity = 0;
       _this6.contentsOpacity = 0;
       _this6._showCount = 0;

@@ -174,7 +174,10 @@ if (typeof WAY === "undefined") {
 
     // Fix for YEP_EquipBattleSkills
     if (Imported.YEP_EquipBattleSkills && currentScene instanceof Scene_Skill) {
-      if (currentScene._skillEquipWindow && currentScene._skillEquipWindow.active) {
+      if (
+        currentScene._skillEquipWindow &&
+        currentScene._skillEquipWindow.active
+      ) {
         item = currentScene._skillEquipWindow.item();
         skill = item;
       }
