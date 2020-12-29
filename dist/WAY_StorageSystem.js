@@ -227,7 +227,7 @@ More info here: https://github.com/waynee95/mv-plugins/blob/master/LICENSE
 Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
-Ko-fi: https://ko-fi.com/waynee
+Ko-fi: https://ko-fi.com/waynee95
 */
 "use strict";
 

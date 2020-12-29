@@ -60,7 +60,7 @@ Forum Link: https://forums.rpgmakerweb.com/index.php?members/waynee95.88436/
 Website: http://waynee95.me/
 Discord Name: waynee95#4261
 
-You can support me on https://ko-fi.com/waynee.
+You can support me on https://ko-fi.com/waynee95
 */
 "use strict";
 
