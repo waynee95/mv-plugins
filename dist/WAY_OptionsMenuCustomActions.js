@@ -17,6 +17,11 @@
 This plugin allows you to add custom commands to the Options Menu, which will
 run any JavaScript code specified.
 
+!!!
+Setting options in the title screen does not persist into the game unfortunately
+at the moment. I will eventually fix this in further versions. Sorry.
+!!!
+
 To create new commands, go to the plugin settings  for this plugin. The
 parameters consist of a list of custom commands, called actions.
 
