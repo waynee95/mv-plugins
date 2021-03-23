@@ -4,7 +4,7 @@
 //===========================================================================
 
 /*:
-@plugindesc v2.4.1 This plugin allows you create different storage systems where
+@plugindesc v2.5.0 This plugin allows you create different storage systems where
 the player can store his items. <WAY_StorageSystem>
 
 @param config
@@ -72,6 +72,9 @@ You can use the following types:
  - weapons
  - armors
  - keyitems
+
+Show Loot All Button - Shows a loot all button inside the storage system. When
+pressed you loot all items at once.
 
 If you want more categories, you can use YEP_X_ItemCategories. Just add the
 category name to the allowed types list.
@@ -245,7 +248,7 @@ if (typeof WAY === "undefined") {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.4.1", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.5.0", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -604,6 +607,7 @@ window.$gameStorageSystems = null;
   Window_StorageCommand.prototype.setup = function () {
     var data = $gameStorageSystems.current().data();
     this._storageMode = data.storageMode;
+    this._lootAllButton = data.lootAllButton;
     data = data.command;
     this._align = data.align;
     this._rows = data.rows;
@@ -626,7 +630,7 @@ window.$gameStorageSystems = null;
   };
 
   Window_StorageCommand.prototype.maxCols = function () {
-    return this._cols;
+    return this._cols + this._lootAllButton;
   };
 
   Window_StorageCommand.prototype.makeCommandList = function () {
@@ -637,6 +641,10 @@ window.$gameStorageSystems = null;
     } else {
       this.addCommand(this._addText, "add");
       this.addCommand(this._removeText, "remove");
+    }
+
+    if (this._lootAllButton) {
+      this.addCommand("Loot All", "loot_all", !$gameStorageSystems.current().isEmpty());
     }
   };
 
@@ -974,6 +982,7 @@ window.$gameStorageSystems = null;
     this._infoData = data.info;
     this._itemData = data.item;
     this._numberData = data.number;
+    this._lootAllButton = data.lootAllButton;
   };
 
   Scene_Storage.prototype.createBackground = function () {
@@ -1034,6 +1043,10 @@ window.$gameStorageSystems = null;
       this._commandWindow.setHandler("add", this.onCategoryOk.bind(this));
 
       this._commandWindow.setHandler("remove", this.onCategoryOk.bind(this));
+    }
+
+    if (this._lootAllButton) {
+      this._commandWindow.setHandler("loot_all", this.lootAll.bind(this));
     }
 
     this._commandWindow.setHandler("cancel", this.onCommandCancel.bind(this));
@@ -1192,6 +1205,26 @@ window.$gameStorageSystems = null;
     $gameParty.gainItem(this.item(), amount);
   };
 
+  Scene_Storage.prototype.lootAll = function () {
+    var _this = this;
+
+    this._storage.allItems().forEach(function (item) {
+      var amount = _this._storage.numItems(item);
+
+      $gameParty.gainItem(item, amount);
+
+      _this._storage.removeItem(item, amount);
+    });
+
+    this._itemWindow.refresh();
+
+    this._infoWindow.refresh();
+
+    this._commandWindow.refresh();
+
+    this._commandWindow.activate();
+  };
+
   Scene_Storage.prototype.onItemCancel = function () {
     this._itemWindow.deselect();
 
@@ -1337,6 +1370,11 @@ function Game_StorageSystem() {
 @option "Add"
 @option "Remove"
 @default "Add/Remove"
+
+@param lootAllButton
+@text Show Loot All Button
+@type boolean
+@default false
 
 @param Scene Settings
 @default Customize window parameters.
