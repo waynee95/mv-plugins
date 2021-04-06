@@ -3,7 +3,7 @@
 // WAY_StorageSystem.js
 //===========================================================================
 /*:
-@plugindesc v2.5.0 This plugin allows you create different storage systems where
+@plugindesc v2.5.1 This plugin allows you create different storage systems where
 the player can store his items. <WAY_StorageSystem>
 
 @param config
@@ -242,7 +242,7 @@ if (typeof WAY === "undefined") {
   }
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.5.0", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.5.1", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0",
   });
@@ -1100,6 +1100,7 @@ window.$gameStorageSystems = null;
     this._categoryWindow.deselect();
     this._categoryWindow.deactivate();
     this._categoryWindow.hide();
+    this._commandWindow.refresh();
     this._commandWindow.show();
     this._commandWindow.activate();
     this.showWholeStorage();
@@ -1137,6 +1138,7 @@ window.$gameStorageSystems = null;
 
   Scene_Storage.prototype.onItemCancel = function () {
     this._itemWindow.deselect();
+    this._commandWindow.refresh();
     this._helpWindow.clear();
     if (this._displayCategories) {
       this._categoryWindow.activate();
