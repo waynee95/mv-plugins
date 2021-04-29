@@ -4,7 +4,7 @@
 //===========================================================================
 
 /*:
-@plugindesc v2.5.1 This plugin allows you create different storage systems where
+@plugindesc v2.5.2 This plugin allows you create different storage systems where
 the player can store his items. <WAY_StorageSystem>
 
 @param config
@@ -248,7 +248,7 @@ if (typeof WAY === "undefined") {
 
   SceneManager.stop();
 } else {
-  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.5.1", "waynee95", {
+  WAYModuleLoader.registerPlugin("WAY_StorageSystem", "2.5.2", "waynee95", {
     name: "WAY_Core",
     version: ">= 2.0.0"
   });
@@ -923,8 +923,8 @@ window.$gameStorageSystems = null;
     } else {
       this._max = this._storage.numItems(item);
 
-      if (this._max > $gameParty.maxItems(item)) {
-        this._max = $gameParty.maxItems(item);
+      if (this._max + $gameParty.numItems(item) > $gameParty.maxItems(item)) {
+        this._max = $gameParty.maxItems(item) - $gameParty.numItems(item);
       }
     }
 
@@ -1212,6 +1212,10 @@ window.$gameStorageSystems = null;
 
     this._storage.allItems().forEach(function (item) {
       var amount = _this._storage.numItems(item);
+
+      if (amount > $gameParty.maxItems(item) - $gameParty.numItems(item)) {
+        amount = $gameParty.maxItems(item) - $gameParty.numItems(item);
+      }
 
       $gameParty.gainItem(item, amount);
 
