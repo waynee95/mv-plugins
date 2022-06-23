@@ -79,7 +79,7 @@ if (typeof WAY === "undefined") {
 } else {
   WAYModuleLoader.registerPlugin("WAY_YEP_SkillCore", "1.2.0", "waynee95", {
     name: "WAY_Core",
-    version: ">= 2.0.0"
+    version: ">= 2.0.1"
   });
 }
 
