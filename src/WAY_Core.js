@@ -3,7 +3,7 @@
 // WAY_Core.js
 // ===========================================================================
 /*:
-@plugindesc v2.0.0 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
+@plugindesc v2.0.1 WAY Core Utility Plugin. Place it above all WAY plugins. <WAY_Core>
 @author waynee95
 
 @help
@@ -145,7 +145,7 @@ const WAYModuleLoader = (function() {
   };
 })();
 
-WAYModuleLoader.registerPlugin("WAY_Core", "2.0.0", "waynee95");
+WAYModuleLoader.registerPlugin("WAY_Core", "2.0.1", "waynee95");
 
 const WAYCore = window.WAYCore || {};
 const WAY = WAYCore;
@@ -300,10 +300,10 @@ const WAY = WAYCore;
     },
     toArray(str) {
       if (str.contains("to")) {
-        let [from, to] = str.split("to");
-        to = parseInt(to, 10);
-        from = parseInt(from, 10);
-        return WAY.Util.arrayFromRange(from, to);
+        let [start, end] = str.split("to");
+        start = parseInt(start, 10);
+        end = parseInt(end, 10);
+        return Array.from(Array((end + 1) - start), (e, index) => start + index);
       }
       return JSON.parse(`[${str}]`);
     },
